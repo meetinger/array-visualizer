@@ -14,8 +14,9 @@ const colors = {
 export class ArrayManager {
     array = []
     arrayVisualizer
-    delay = 50
 
+    delay = 0
+    delayInc = 100
 
     constructor(arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer
@@ -36,13 +37,13 @@ export class ArrayManager {
         let type = "Default"
         let color = colors["Default"]
 
-        //Additional
-        if (args.type === "Additional" || (!args.type || args.color)) {
+        // Additional
+        if (args.type === "Additional" || (!args.type && args.color)) {
             type = "Additional"
             color = args.color
         }
         //Default
-        else if (!args.type) {
+        else if (!args.type || args.type === "Default") {
             type = "Default"
             color = colors["Default"]
         } else {
@@ -52,30 +53,38 @@ export class ArrayManager {
 
         this.array[index].setType(type)
         this.array[index].setColor(color)
+        // console.log(color);
     }
 
 
     unmark(index) {
         this.array[index].setColor(colors["Default"])
+        this.array[index].setType("Unmarked")
+        this.setArray(false)
     }
+
 
     swap(a, b) {
         let tmp = this.array[a]
         this.array[a] = this.array[b]
         this.array[b] = tmp
         this.mark(a, b, {type: "Default"})
-        this.setArray(true)
-        sleep(this.delay);
+        this.setArray(false)
     }
+
 
     getArray() {
         return this.array
     }
 
     shuffleArray() {
+        console.log(this.array)
         for (let i = 0; i < this.array.length; ++i) {
             this.swap(i, randomInt(0, this.array.length))
+            // setTimeout(this.swap, this.delay+=this.delayInc, 0, this.array.length))
+            sleep(50)
         }
+
     }
 
 
@@ -85,6 +94,7 @@ export class ArrayManager {
             this.array.push(element)
         }
         this.setArray(true)
+        console.log(this.array)
     }
 
 
