@@ -20,11 +20,11 @@ export class ArrayVisualizer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            array: this.initArray(linear, 128)
+            array: this.initArray(linear, 32)
         }
         this.delaySwap = 0;
         this.delayUnmark = 0;
-        this.delayInc = 50;
+        this.delayInc = 100;
     }
 
     mark(index, args, saveArr = true) {
@@ -105,15 +105,21 @@ export class ArrayVisualizer extends React.Component {
 
     swap(a, b, mark = true) {
         let tmpArr = this.state.array
+        // console.log("SWAPPING:" + tmpArr[a].getValue()+"<->"+tmpArr[b].getValue())
         let tmp = tmpArr[a]
         tmpArr[a] = tmpArr[b]
         tmpArr[b] = tmp
-
         if (mark) {
             this.mark(a, {type: "Default"}, true)
             this.mark(b, {type: "Default"}, true)
             setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc/100, [a, b], false, true)
         }
+    }
+
+    compare(a, b){
+        // this.markMany([a, b], {type: "Default"})
+        // console.log(this.state.array[a] > this.state.array[b])
+        return (this.state.array[a].getValue() > this.state.array[b].getValue())
     }
 
     resetDelay() {
@@ -139,21 +145,44 @@ export class ArrayVisualizer extends React.Component {
             if (this.delayInc === 0) {
                 this.swap(i, randomInt(0, this.state.array.length))
             } else {
-                setTimeout(this.swap.bind(this), this.delaySwap += this.delayInc, i, randomInt(0, this.state.array.length))
+                setTimeout(this.swap.bind(this), this.delaySwap += this.delayInc/5, i, randomInt(0, this.state.array.length))
             }
             // sleep(50)
         }
     }
 
-    handleClickEvent() {
+    shuffleClickEvent() {
         this.shuffleArray()
     }
+
+    BubbleSort(){
+        let len = this.state.array.length
+        console.log("SORTING!")
+        for (let i = 0; i < len ; i++) {
+            for(let j = 0 ; j < len - i - 1; j++){
+                if (this.compare(j, j+1)) {
+                    this.swap(j, j+1)
+                    // console.log("Пизже")
+                    // setTimeout(this.swap.bind(this), this.delaySwap += this.delayInc, j, j+1)
+
+                }
+            }
+        }
+    }
+
+    sortClickEvent(){
+        this.delayUnmark = 0
+        this.delaySwap = 0
+        this.BubbleSort()
+    }
+
 
     render() {
         return (
             <div>
                 <ArrayWindow array={this.state.array}/>
-                <button onClick={this.handleClickEvent.bind(this)}>Shuffle</button>
+                <button onClick={this.shuffleClickEvent.bind(this)}>Shuffle</button>
+                <button onClick={this.sortClickEvent.bind(this)}>Sort</button>
             </div>
 
         )
