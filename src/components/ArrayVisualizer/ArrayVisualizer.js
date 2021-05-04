@@ -17,6 +17,7 @@ export class ArrayVisualizer extends React.Component {
     delayUnmark;
     delayInc;
     instruction;
+    pseudoArray;
 
 
     constructor(props) {
@@ -28,6 +29,7 @@ export class ArrayVisualizer extends React.Component {
         this.delayUnmark = 0;
         this.delayInc = 100;
         this.instruction = [];
+        this.pseudoArray = Object.assign({}, this.state.array);
     }
 
     mark(index, args, saveArr = true) {
@@ -107,12 +109,12 @@ export class ArrayVisualizer extends React.Component {
     }
 
 
-    swap(a, b, mark, delay = this.delayInc) {
-        setTimeout(this.swapInArr.bind(this), this.delaySwap += delay, a, b)
+    swapWithDelay(a, b, mark, delay = this.delayInc, arr = this.pseudoArray) {
+        setTimeout(this.swapInArr.bind(this), this.delaySwap += delay, a, b, true, arr)
     }
 
 
-    swapInArr(a, b, mark = true, arr=this.state.array) {
+    swapInArr(a, b, mark = true, arr = this.pseudoArray) {
         let tmpArr = arr
         // console.log("SWAPPING:" + tmpArr[a].getValue()+"<->"+tmpArr[b].getValue())
         let tmp = tmpArr[a]
@@ -127,9 +129,11 @@ export class ArrayVisualizer extends React.Component {
 
     swapLog(a, b) {
         this.instruction.push([a, b])
+        this.swapInArr(a, b, false)
+
     }
 
-    compare(a, b, arr=this.state.array) {
+    compare(a, b, arr = this.pseudoArray) {
         // this.markMany([a, b], {type: "Default"})
         // console.log(this.state.array[a] > this.state.array[b])
         return (arr[a].getValue() > arr[b].getValue())
@@ -157,9 +161,9 @@ export class ArrayVisualizer extends React.Component {
         for (let i = 0; i < this.state.array.length; ++i) {
             // this.swap(i, randomInt(0, this.state.array.length))
             if (this.delayInc === 0) {
-                this.swap(i, randomInt(0, this.state.array.length), true, this.delayInc / 5)
+                this.swapWithDelay(i, randomInt(0, this.state.array.length), true, this.delayInc / 5, this.state.array)
             } else {
-                setTimeout(this.swapInArr.bind(this), this.delaySwap += this.delayInc / 5, i, randomInt(0, this.state.array.length))
+                setTimeout(this.swapInArr.bind(this), this.delaySwap += this.delayInc / 5, i, randomInt(0, this.state.array.length), true, this.state.array)
             }
             // sleep(50)
         }
@@ -171,27 +175,27 @@ export class ArrayVisualizer extends React.Component {
 
     BubbleSort() {
         // let tmpArr = this.state.array
-        let tmpArr = Object.assign({}, this.state.array)
+        // let tmpArr = Object.assign({}, this.state.array)
         let len = this.state.array.length
         console.log("SORTING!")
         for (let i = 0; i < len; i++) {
             for (let j = 0; j < len - i - 1; j++) {
-                if (this.compare(j, j + 1, tmpArr)) {
+                if (this.compare(j, j + 1)) {
                     this.swapLog(j, j + 1)
-                    this.swapInArr(j, j+1, false, tmpArr)
                 }
             }
         }
         this.play()
     }
 
-    play(){
-        for(let i of this.instruction){
-            this.swap(i[0], i[1])
+    play() {
+        for (let i of this.instruction) {
+            this.swapWithDelay(i[0], i[1], true, this.delayInc, this.state.array)
         }
     }
 
     sortClickEvent() {
+        this.pseudoArray = Object.assign({}, this.state.array);
         this.instruction = []
         this.delayUnmark = 0
         this.delaySwap = 0
