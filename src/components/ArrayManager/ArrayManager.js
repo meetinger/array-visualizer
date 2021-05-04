@@ -21,6 +21,7 @@ export class ArrayManager {
     constructor(arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer
         console.log("ID Manager:" + randomInt(0, 100))
+        this.array = []
     }
 
     setArray(isDirectly) {
@@ -78,13 +79,14 @@ export class ArrayManager {
     }
 
     shuffleArray() {
+        let array = []
         console.log(this.array)
         for (let i = 0; i < this.array.length; ++i) {
-            this.swap(i, randomInt(0, this.array.length))
-            // setTimeout(this.swap, this.delay+=this.delayInc, 0, this.array.length))
-            sleep(50)
+            // this.swap(i, randomInt(0, this.array.length))
+            setTimeout(this.swap.bind(this), this.delay+=this.delayInc, 0, this.array.length)
+            // sleep(50)
         }
-
+        return array
     }
 
 
