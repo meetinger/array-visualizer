@@ -16,6 +16,8 @@ export class ArrayVisualizer extends React.Component {
     delaySwap;
     delayUnmark;
     delayInc;
+    instruction;
+
 
     constructor(props) {
         super(props);
@@ -25,6 +27,7 @@ export class ArrayVisualizer extends React.Component {
         this.delaySwap = 0;
         this.delayUnmark = 0;
         this.delayInc = 100;
+        this.instruction = [];
     }
 
     mark(index, args, saveArr = true) {
@@ -103,8 +106,14 @@ export class ArrayVisualizer extends React.Component {
         }
     }
 
-    swap(a, b, mark = true) {
-        let tmpArr = this.state.array
+
+    swap(a, b, mark, delay = this.delayInc) {
+        setTimeout(this.swapInArr.bind(this), this.delaySwap += delay, a, b)
+    }
+
+
+    swapInArr(a, b, mark = true, arr=this.state.array) {
+        let tmpArr = arr
         // console.log("SWAPPING:" + tmpArr[a].getValue()+"<->"+tmpArr[b].getValue())
         let tmp = tmpArr[a]
         tmpArr[a] = tmpArr[b]
@@ -112,14 +121,18 @@ export class ArrayVisualizer extends React.Component {
         if (mark) {
             this.mark(a, {type: "Default"}, true)
             this.mark(b, {type: "Default"}, true)
-            setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc/100, [a, b], false, true)
+            setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [a, b], false, true)
         }
     }
 
-    compare(a, b){
+    swapLog(a, b) {
+        this.instruction.push([a, b])
+    }
+
+    compare(a, b, arr=this.state.array) {
         // this.markMany([a, b], {type: "Default"})
         // console.log(this.state.array[a] > this.state.array[b])
-        return (this.state.array[a].getValue() > this.state.array[b].getValue())
+        return (arr[a].getValue() > arr[b].getValue())
     }
 
     resetDelay() {
@@ -140,12 +153,13 @@ export class ArrayVisualizer extends React.Component {
     }
 
     shuffleArray() {
+        this.delaySwap = 0
         for (let i = 0; i < this.state.array.length; ++i) {
             // this.swap(i, randomInt(0, this.state.array.length))
             if (this.delayInc === 0) {
-                this.swap(i, randomInt(0, this.state.array.length))
+                this.swap(i, randomInt(0, this.state.array.length), true, this.delayInc / 5)
             } else {
-                setTimeout(this.swap.bind(this), this.delaySwap += this.delayInc/5, i, randomInt(0, this.state.array.length))
+                setTimeout(this.swapInArr.bind(this), this.delaySwap += this.delayInc / 5, i, randomInt(0, this.state.array.length))
             }
             // sleep(50)
         }
@@ -155,22 +169,30 @@ export class ArrayVisualizer extends React.Component {
         this.shuffleArray()
     }
 
-    BubbleSort(){
+    BubbleSort() {
+        // let tmpArr = this.state.array
+        let tmpArr = Object.assign({}, this.state.array)
         let len = this.state.array.length
         console.log("SORTING!")
-        for (let i = 0; i < len ; i++) {
-            for(let j = 0 ; j < len - i - 1; j++){
-                if (this.compare(j, j+1)) {
-                    this.swap(j, j+1)
-                    // console.log("Пизже")
-                    // setTimeout(this.swap.bind(this), this.delaySwap += this.delayInc, j, j+1)
-
+        for (let i = 0; i < len; i++) {
+            for (let j = 0; j < len - i - 1; j++) {
+                if (this.compare(j, j + 1, tmpArr)) {
+                    this.swapLog(j, j + 1)
+                    this.swapInArr(j, j+1, false, tmpArr)
                 }
             }
         }
+        this.play()
     }
 
-    sortClickEvent(){
+    play(){
+        for(let i of this.instruction){
+            this.swap(i[0], i[1])
+        }
+    }
+
+    sortClickEvent() {
+        this.instruction = []
         this.delayUnmark = 0
         this.delaySwap = 0
         this.BubbleSort()
