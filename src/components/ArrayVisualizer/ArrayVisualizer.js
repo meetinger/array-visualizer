@@ -1,7 +1,7 @@
 import React from 'react';
 import {randomInt, sleep} from "../utils/utils";
 import {linear} from "../utils/initFunctions"
-import {BubbleSort} from "../Sorts/BubbleSort"
+import {BubbleSort} from "../Sorts/Sorts"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
 import {Element} from "../classes/Element";
 
