@@ -18,6 +18,7 @@ export class ArrayVisualizer extends React.Component {
     delaySwap;
     delayUnmark;
     delayInc;
+    delayComp;
     instruction;
     pseudoArray;
 
@@ -33,6 +34,7 @@ export class ArrayVisualizer extends React.Component {
         this.delaySwap = 0;
         this.delayUnmark = 0;
         this.delayInc = 100;
+        this.delayComp = 100;
         this.instruction = [];
         this.pseudoArray = Object.assign({}, this.state.array);
     }
@@ -40,6 +42,7 @@ export class ArrayVisualizer extends React.Component {
     nullify() {
         this.delaySwap = 0;
         this.delayUnmark = 0;
+        this.delayComp = 0;
         this.setState(
             {
                 comparisons: 0,
@@ -149,15 +152,32 @@ export class ArrayVisualizer extends React.Component {
     }
 
     swap(a, b) {
-        this.instruction.push([a, b])
+        this.instruction.push(["swap", a, b])
         this.swapInArr(a, b, false)
-
     }
 
     compare(a, b, arr = this.pseudoArray) {
         // this.markMany([a, b], {type: "Default"})
         // console.log(this.state.array[a] > this.state.array[b])
+        this.instruction.push(["compare", a, b])
         return (arr[a].getValue() > arr[b].getValue())
+    }
+
+    compMainArr(a, b, mark = false){
+        let curComparisons = this.state.comparisons;
+        this.setState({
+            comparisons: curComparisons + 1
+        })
+        console.log("Comparisons: " + this.state.comparisons )
+        if (mark) {
+            this.mark(a, {type: "Default"}, true)
+            this.mark(b, {type: "Default"}, true)
+            setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [a, b], false, true)
+        }
+    }
+
+    compMainArrWithDelay(a, b, mark=false){
+        setTimeout(this.compMainArr.bind(this), this.delayComp += this.delayInc, a, b,mark)
     }
 
     resetDelay() {
@@ -203,8 +223,15 @@ export class ArrayVisualizer extends React.Component {
 
     play() {
         this.nullify()
+        // console.log(this.instruction)
         for (let i of this.instruction) {
-            this.swapWithDelay(i[0], i[1], true, this.delayInc, this.state.array)
+            if(i[0]==="swap") {
+                this.swapWithDelay(i[1], i[2], true, this.delayInc, this.state.array)
+            }
+            if(i[0]==="compare"){
+                this.compMainArrWithDelay(i[1], i[2], false)
+                // console.log(i)
+            }
         }
     }
 
