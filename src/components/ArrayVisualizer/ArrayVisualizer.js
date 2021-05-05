@@ -1,6 +1,7 @@
 import React from 'react';
 import {randomInt, sleep} from "../utils/utils";
 import {linear} from "../utils/initFunctions"
+import {BubbleSort} from "../Sorts/BubbleSort"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
 import {Element} from "../classes/Element";
 
@@ -127,10 +128,9 @@ export class ArrayVisualizer extends React.Component {
         }
     }
 
-    swapLog(a, b) {
+    swap(a, b) {
         this.instruction.push([a, b])
         this.swapInArr(a, b, false)
-
     }
 
     compare(a, b, arr = this.pseudoArray) {
@@ -173,21 +173,6 @@ export class ArrayVisualizer extends React.Component {
         this.shuffleArray()
     }
 
-    BubbleSort() {
-        // let tmpArr = this.state.array
-        // let tmpArr = Object.assign({}, this.state.array)
-        let len = this.state.array.length
-        console.log("SORTING!")
-        for (let i = 0; i < len; i++) {
-            for (let j = 0; j < len - i - 1; j++) {
-                if (this.compare(j, j + 1)) {
-                    this.swapLog(j, j + 1)
-                }
-            }
-        }
-        this.play()
-    }
-
     play() {
         for (let i of this.instruction) {
             this.swapWithDelay(i[0], i[1], true, this.delayInc, this.state.array)
@@ -199,7 +184,9 @@ export class ArrayVisualizer extends React.Component {
         this.instruction = []
         this.delayUnmark = 0
         this.delaySwap = 0
-        this.BubbleSort()
+        BubbleSort(this)
+        this.play()
+
     }
 
 
