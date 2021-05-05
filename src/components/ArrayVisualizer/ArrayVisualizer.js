@@ -1,9 +1,10 @@
 import React from 'react';
 import {randomInt, sleep} from "../utils/utils";
 import {linear} from "../utils/initFunctions"
-import {BubbleSort} from "../Sorts/Sorts"
+import {BubbleSort, LLQuickSort} from "../Sorts/Sorts"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
 import {Element} from "../classes/Element";
+import {Stats} from "../Stats/Stats";
 
 const colors = {
     "Unmarked": [255, 255, 255],
@@ -24,7 +25,10 @@ export class ArrayVisualizer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            array: this.initArray(linear, 32)
+            array: this.initArray(linear, 32),
+            sortName: "",
+            comparisons: 0,
+            writes: 0
         }
         this.delaySwap = 0;
         this.delayUnmark = 0;
@@ -32,6 +36,18 @@ export class ArrayVisualizer extends React.Component {
         this.instruction = [];
         this.pseudoArray = Object.assign({}, this.state.array);
     }
+
+    nullify() {
+        this.delaySwap = 0;
+        this.delayUnmark = 0;
+        this.setState(
+            {
+                comparisons: 0,
+                writes: 0
+            }
+        )
+    }
+
 
     mark(index, args, saveArr = true) {
         let type = "Default"
@@ -126,11 +142,16 @@ export class ArrayVisualizer extends React.Component {
             this.mark(b, {type: "Default"}, true)
             setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [a, b], false, true)
         }
+        let curWrites = this.state.writes;
+        this.setState({
+            writes: curWrites + 2
+        })
     }
 
     swap(a, b) {
         this.instruction.push([a, b])
         this.swapInArr(a, b, false)
+
     }
 
     compare(a, b, arr = this.pseudoArray) {
@@ -147,6 +168,10 @@ export class ArrayVisualizer extends React.Component {
         return this;
     }
 
+    getPseudoArray() {
+        return this.pseudoArray;
+    }
+
     initArray(func, length) {
         let arr = []
         for (let i = 0; i < length; ++i) {
@@ -157,7 +182,10 @@ export class ArrayVisualizer extends React.Component {
     }
 
     shuffleArray() {
-        this.delaySwap = 0
+        this.nullify()
+        this.setState({
+            sortName: "Shuffle"
+        })
         for (let i = 0; i < this.state.array.length; ++i) {
             // this.swap(i, randomInt(0, this.state.array.length))
             if (this.delayInc === 0) {
@@ -174,28 +202,32 @@ export class ArrayVisualizer extends React.Component {
     }
 
     play() {
+        this.nullify()
         for (let i of this.instruction) {
             this.swapWithDelay(i[0], i[1], true, this.delayInc, this.state.array)
         }
     }
 
-    sortClickEvent() {
+    sortClickEvent(sort) {
         this.pseudoArray = Object.assign({}, this.state.array);
         this.instruction = []
-        this.delayUnmark = 0
-        this.delaySwap = 0
-        BubbleSort(this)
+        this.nullify()
+        this.setState({
+            sortName: sort.name
+        })
+        sort(this, 0, this.state.array.length - 1)
         this.play()
-
     }
 
 
     render() {
         return (
             <div>
+                <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes}/>
                 <ArrayWindow array={this.state.array}/>
                 <button onClick={this.shuffleClickEvent.bind(this)}>Shuffle</button>
-                <button onClick={this.sortClickEvent.bind(this)}>Sort</button>
+                <button onClick={this.sortClickEvent.bind(this, BubbleSort)}>BubbleSort</button>
+                <button onClick={this.sortClickEvent.bind(this, LLQuickSort)}>LLQuickSort</button>
             </div>
 
         )

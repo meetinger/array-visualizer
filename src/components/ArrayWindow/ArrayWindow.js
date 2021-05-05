@@ -1,7 +1,4 @@
 import React from 'react';
-import {randomInt} from "../utils/utils";
-import {ArrayManager} from "../ArrayManager/ArrayManager";
-import {linear} from "../utils/initFunctions";
 import styles from "./ArrayWindow.module.scss";
 
 export function ArrayWindow(props){
