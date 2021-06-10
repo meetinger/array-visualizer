@@ -57,9 +57,10 @@ export class ArrayVisualizer extends React.Component {
         let color = colors["Default"]
         let tmpArr = this.state.array
         // Additional
-        if (args.type === "Additional" || (!args.type && args.color)) {
+        if (args.type === "Additional") {
             type = "Additional"
             color = args.color
+            // console.log(color)
         }
         //Default
         else if (!args.type || args.type === "Default") {
@@ -130,7 +131,7 @@ export class ArrayVisualizer extends React.Component {
 
 
     swapWithDelay(a, b, mark, delay = this.delayInc, arr = this.pseudoArray) {
-        setTimeout(this.swapInArr.bind(this), this.delaySwap += delay, a, b, true, arr)
+        setTimeout(this.swapInArr.bind(this), this.delaySwap += delay, a, b, mark, arr)
     }
 
 
@@ -163,21 +164,21 @@ export class ArrayVisualizer extends React.Component {
         return (arr[a].getValue() > arr[b].getValue())
     }
 
-    compMainArr(a, b, mark = false){
+    compMainArr(a, b, mark = false) {
         let curComparisons = this.state.comparisons;
         this.setState({
             comparisons: curComparisons + 1
         })
-        console.log("Comparisons: " + this.state.comparisons )
+        console.log("Comparisons: " + this.state.comparisons + " " + a + " " + b)
         if (mark) {
-            this.mark(a, {type: "Default"}, true)
-            this.mark(b, {type: "Default"}, true)
+            this.mark(a, {type: "Additional", color:[0, 0, 255]}, true)
+            this.mark(b, {type: "Additional", color:[0, 0, 255]}, true)
             setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [a, b], false, true)
         }
     }
 
-    compMainArrWithDelay(a, b, mark=false){
-        setTimeout(this.compMainArr.bind(this), this.delayComp += this.delayInc, a, b,mark)
+    compMainArrWithDelay(a, b, mark = false) {
+        setTimeout(this.compMainArr.bind(this), this.delayComp += this.delayInc, a, b, mark)
     }
 
     resetDelay() {
@@ -225,11 +226,11 @@ export class ArrayVisualizer extends React.Component {
         this.nullify()
         // console.log(this.instruction)
         for (let i of this.instruction) {
-            if(i[0]==="swap") {
+            if (i[0] === "swap") {
                 this.swapWithDelay(i[1], i[2], true, this.delayInc, this.state.array)
             }
-            if(i[0]==="compare"){
-                this.compMainArrWithDelay(i[1], i[2], false)
+            if (i[0] === "compare") {
+                this.compMainArrWithDelay(i[1], i[2], true)
                 // console.log(i)
             }
         }
