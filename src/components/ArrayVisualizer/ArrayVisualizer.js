@@ -26,7 +26,7 @@ export class ArrayVisualizer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            array: this.initArray(linear, 16),
+            array: this.initArray(linear, 128),
             sortName: "",
             comparisons: 0,
             writes: 0
@@ -34,7 +34,7 @@ export class ArrayVisualizer extends React.Component {
         this.delaySwap = 0;
         this.delayUnmark = 0;
         this.delayInc = 100;
-        this.delayComp = 100;
+        this.delayComp = 0;
         this.instruction = [];
         this.pseudoArray = Object.assign({}, this.state.array);
     }
@@ -193,6 +193,7 @@ export class ArrayVisualizer extends React.Component {
 
     resetDelay() {
         this.delaySwap = 0
+        this.delayComp = 0
     }
 
     getArrayVisualizer() {
