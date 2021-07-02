@@ -1,7 +1,7 @@
 import React from 'react';
 import {randomInt, sleep} from "../utils/utils";
 import {linear} from "../utils/initFunctions"
-import {BubbleSort, LLQuickSort} from "../Sorts/Sorts"
+import {BubbleSort, LLQuickSort, SlowSort} from "../Sorts/Sorts"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
 import {Element} from "../classes/Element";
 import {Stats} from "../Stats/Stats";
@@ -26,7 +26,7 @@ export class ArrayVisualizer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            array: this.initArray(linear, 32),
+            array: this.initArray(linear, 16),
             sortName: "",
             comparisons: 0,
             writes: 0
@@ -157,11 +157,21 @@ export class ArrayVisualizer extends React.Component {
         this.swapInArr(a, b, false)
     }
 
-    compare(a, b, arr = this.pseudoArray) {
+    compare(a, b, sign = "<",arr = this.pseudoArray) {
         // this.markMany([a, b], {type: "Default"})
         // console.log(this.state.array[a] > this.state.array[b])
         this.instruction.push(["compare", a, b])
-        return (arr[a].getValue() > arr[b].getValue())
+        if(sign === "<"){
+            return arr[a].getValue() < arr[b].getValue()
+        }else if(sign === "<="){
+            return arr[a].getValue() <= arr[b].getValue()
+        }else if(sign === ">"){
+            return arr[a].getValue() > arr[b].getValue()
+        }else if(sign === ">="){
+            return arr[a].getValue() >= arr[b].getValue()
+        }else{
+            return arr[a].getValue() === arr[b].getValue()
+        }
     }
 
     compMainArr(a, b, mark = false) {
@@ -256,6 +266,7 @@ export class ArrayVisualizer extends React.Component {
                 <button onClick={this.shuffleClickEvent.bind(this)}>Shuffle</button>
                 <button onClick={this.sortClickEvent.bind(this, BubbleSort)}>BubbleSort</button>
                 <button onClick={this.sortClickEvent.bind(this, LLQuickSort)}>LLQuickSort</button>
+                <button onClick={this.sortClickEvent.bind(this, SlowSort)}>SlowSort</button>
             </div>
 
         )

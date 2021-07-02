@@ -4,7 +4,7 @@ export function BubbleSort(arrayVisualizer) {
     let len = arrayVisualizer.state.array.length
     for (let i = 0; i < len; i++) {
         for (let j = 0; j < len - i - 1; j++) {
-            if (arrayVisualizer.compare(j, j + 1)) {
+            if (arrayVisualizer.compare(j, j + 1, ">")) {
                 arrayVisualizer.swap(j, j + 1)
             }
         }
@@ -17,7 +17,7 @@ function partition(arrayVisualizer, lo, hi){
 
     for(let j = lo; j < hi; j++) {
         // ArrayVisualizer.markArray(1, j);
-        if(!arrayVisualizer.compare(j, pivot)) {
+        if(arrayVisualizer.compare(j, pivot, "<")) {
             arrayVisualizer.swap(i, j);
             i++;
         }
@@ -33,3 +33,19 @@ export function LLQuickSort(arrayVisualizer, lo, hi){
         LLQuickSort(arrayVisualizer, p + 1, hi);
     }
 }
+
+export function SlowSort(arrayVisualizer, i, j){
+    console.log("SlowSort Started!")
+    if(arrayVisualizer.compare(i,j,">=")){
+        return;
+    }
+    let m = Math.floor((i+j)/2);
+    SlowSort(arrayVisualizer, i, m);
+    SlowSort(arrayVisualizer, m+1, j);
+    if(arrayVisualizer.compare(j, m, "<")){
+        arrayVisualizer.swap(j, m)
+    }
+    SlowSort(arrayVisualizer, i, j-1)
+}
+
+
