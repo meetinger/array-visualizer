@@ -48,6 +48,7 @@ export class ArrayVisualizer extends React.Component {
         let osc = this.ctx.createOscillator();
         osc.type = 'sine';
         let k = value/this.arrLength
+
         osc.frequency.value = 2000*k;
 
         let gainNode = this.ctx.createGain()
@@ -168,7 +169,7 @@ export class ArrayVisualizer extends React.Component {
 
 
     swapInArr(a, b, mark = true, arr = this.pseudoArray) {
-        // this.playSound(b)
+        this.playSound(arr[b].getValue());
         let tmpArr = arr
         // console.log("SWAPPING:" + tmpArr[a].getValue()+"<->"+tmpArr[b].getValue())
         let tmp = tmpArr[a]
@@ -187,12 +188,13 @@ export class ArrayVisualizer extends React.Component {
 
     swap(a, b) {
         // this.instruction.push(["swap", a, b])
-        this.playSound(a)
+        // this.playSound(a)
         this.swapInArr(a, b, false)
         this.swapWithDelay(a, b, true, this.delayInc, this.state.array)
     }
 
     writeInArr(index, value, mark = true, arr = this.pseudoArray){
+        this.playSound(value)
         arr[index].setValue(value)
         if(mark) {
             this.mark(index, {type: "Default"}, true)
@@ -209,7 +211,6 @@ export class ArrayVisualizer extends React.Component {
     }
 
     write(index, value){
-        this.playSound(value)
         this.writeInArr(index, value, false)
         this.writeWithDelay(index, value, true, this.delayInc, this.state.array)
     }
