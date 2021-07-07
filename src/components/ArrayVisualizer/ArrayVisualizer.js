@@ -16,32 +16,62 @@ const colors = {
 
 export class ArrayVisualizer extends React.Component {
     delaySwap;
-    delayUnmark;
+    delaySwapUnmark;
+    delayCompUnmark;
     delayInc;
     delayComp;
     pseudoArray;
-
+    arrLength
+    ctx
 
     constructor(props) {
         super(props);
+        this.arrLength = 128
         this.state = {
-            array: this.initArray(linear, 128),
+            array: this.initArray(linear, this.arrLength),
             sortName: "",
             comparisons: 0,
             writes: 0
         }
         this.delaySwap = 0;
-        this.delayUnmark = 0;
-        this.delayInc = 100;
+        this.delaySwapUnmark = 0;
+        this.delayCompUnmark = 0;
+        this.delayInc = 50;
         this.delayComp = 0;
         this.instruction = [];
         this.pseudoArray = Object.assign({}, this.state.array);
+
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    playSound(value){
+        let osc = this.ctx.createOscillator();
+        osc.type = 'sine';
+        let k = value/this.arrLength
+        osc.frequency.value = 2000*k;
+
+        let gain = this.ctx.createGain()
+        osc.connect(gain)
+        // gain.gain.exponentialRampToValueAtTime(0.1,this.ctx.currentTime+this.delayInc/1000/2)
+        // gain.gain.exponentialRampToValueAtTime(0.1,this.ctx.currentTime+this.delayInc/1000)
+        osc.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + this.delayInc/1000);
+        // setTimeout(
+        //     function() {
+        //         osc.stop();
+        //     },
+        //     this.delayInc
+        // );
+    }
+
+    resetDelay() {
+        this.delaySwap = 0
+        this.delayComp = 0
     }
 
     nullify() {
-        this.delaySwap = 0;
-        this.delayUnmark = 0;
-        this.delayComp = 0;
+        this.resetDelay()
         this.setState(
             {
                 comparisons: 0,
@@ -135,6 +165,8 @@ export class ArrayVisualizer extends React.Component {
 
 
     swapInArr(a, b, mark = true, arr = this.pseudoArray) {
+        this.playSound(a)
+        // this.playSound(b)
         let tmpArr = arr
         // console.log("SWAPPING:" + tmpArr[a].getValue()+"<->"+tmpArr[b].getValue())
         let tmp = tmpArr[a]
@@ -161,7 +193,7 @@ export class ArrayVisualizer extends React.Component {
         // this.markMany([a, b], {type: "Default"})
         // console.log(this.state.array[a] > this.state.array[b])
         // this.instruction.push(["compare", a, b])
-        this.compMainArrWithDelay(a, b, true)
+        this.compMainArrWithDelay(a, b, false)
         if(sign === "<"){
             return arr[a].getValue() < arr[b].getValue()
         }else if(sign === "<="){
@@ -190,11 +222,6 @@ export class ArrayVisualizer extends React.Component {
 
     compMainArrWithDelay(a, b, mark = false) {
         setTimeout(this.compMainArr.bind(this), this.delayComp += this.delayInc, a, b, mark)
-    }
-
-    resetDelay() {
-        this.delaySwap = 0
-        this.delayComp = 0
     }
 
     getArrayVisualizer() {
