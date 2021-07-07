@@ -50,11 +50,14 @@ export class ArrayVisualizer extends React.Component {
         let k = value/this.arrLength
         osc.frequency.value = 2000*k;
 
-        let gain = this.ctx.createGain()
-        osc.connect(gain)
-        // gain.gain.exponentialRampToValueAtTime(0.1,this.ctx.currentTime+this.delayInc/1000/2)
-        // gain.gain.exponentialRampToValueAtTime(0.1,this.ctx.currentTime+this.delayInc/1000)
-        osc.connect(this.ctx.destination);
+        let gainNode = this.ctx.createGain()
+        gainNode.gain.value = 0.01;
+        osc.connect(gainNode)
+        gainNode.connect(this.ctx.destination)
+
+        gainNode.gain.exponentialRampToValueAtTime(0.1,this.ctx.currentTime+this.delayInc/1000/2)
+        gainNode.gain.exponentialRampToValueAtTime(0.01,this.ctx.currentTime+this.delayInc/1000)
+
         osc.start();
         osc.stop(this.ctx.currentTime + this.delayInc/1000);
         // setTimeout(
