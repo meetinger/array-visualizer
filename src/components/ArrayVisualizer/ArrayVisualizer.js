@@ -19,7 +19,6 @@ export class ArrayVisualizer extends React.Component {
     delayUnmark;
     delayInc;
     delayComp;
-    instruction;
     pseudoArray;
 
 
@@ -153,14 +152,16 @@ export class ArrayVisualizer extends React.Component {
     }
 
     swap(a, b) {
-        this.instruction.push(["swap", a, b])
+        // this.instruction.push(["swap", a, b])
+        this.swapWithDelay(a, b, true, this.delayInc, this.state.array)
         this.swapInArr(a, b, false)
     }
 
     compare(a, b, sign = "<",arr = this.pseudoArray) {
         // this.markMany([a, b], {type: "Default"})
         // console.log(this.state.array[a] > this.state.array[b])
-        this.instruction.push(["compare", a, b])
+        // this.instruction.push(["compare", a, b])
+        this.compMainArrWithDelay(a, b, true)
         if(sign === "<"){
             return arr[a].getValue() < arr[b].getValue()
         }else if(sign === "<="){
@@ -233,19 +234,6 @@ export class ArrayVisualizer extends React.Component {
         this.shuffleArray()
     }
 
-    play() {
-        this.nullify()
-        // console.log(this.instruction)
-        for (let i of this.instruction) {
-            if (i[0] === "swap") {
-                this.swapWithDelay(i[1], i[2], true, this.delayInc, this.state.array)
-            }
-            if (i[0] === "compare") {
-                this.compMainArrWithDelay(i[1], i[2], true)
-                // console.log(i)
-            }
-        }
-    }
 
     sortClickEvent(sort) {
         this.pseudoArray = Object.assign({}, this.state.array);
@@ -254,8 +242,8 @@ export class ArrayVisualizer extends React.Component {
         this.setState({
             sortName: sort.name
         })
+        this.nullify()
         sort(this, 0, this.state.array.length - 1)
-        this.play()
     }
 
 
