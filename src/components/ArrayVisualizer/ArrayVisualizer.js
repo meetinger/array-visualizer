@@ -1,6 +1,6 @@
 import React from 'react';
 import {randomInt} from "../utils/utils";
-import {linear} from "../utils/initFunctions"
+import {linear, reverse} from "../utils/initFunctions"
 import {sorts} from "../Sorts/Sorts"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
 import {Element} from "../classes/Element";
@@ -16,6 +16,8 @@ const colors = {
 
 export class ArrayVisualizer extends React.Component {
     delaySwap;
+    delayWrite;
+    delayWriteUnmark;
     delaySwapUnmark;
     delayCompUnmark;
     delayInc;
@@ -36,7 +38,10 @@ export class ArrayVisualizer extends React.Component {
         this.delaySwap = 0;
         this.delaySwapUnmark = 0;
         this.delayCompUnmark = 0;
-        this.delayInc = 50;
+        this.delayWrite = 0;
+        this.delayWriteUnmark = 0;
+        // this.delayInc = 5000/this.arrLength;
+        this.delayInc = 10;
         this.delayComp = 0;
         this.instruction = [];
         this.pseudoArray = Object.assign({}, this.state.array);
@@ -44,23 +49,25 @@ export class ArrayVisualizer extends React.Component {
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
     }
 
-    playSound(value){
+    playSound(value) {
         let osc = this.ctx.createOscillator();
         osc.type = 'sine';
-        let k = value/this.arrLength
+        let k = value / this.arrLength
 
-        osc.frequency.value = 2000*k;
+        osc.frequency.value = 2000 * k + 200;
+
+        let addTime = 50
 
         let gainNode = this.ctx.createGain()
         gainNode.gain.value = 0;
         osc.connect(gainNode)
         gainNode.connect(this.ctx.destination)
 
-        gainNode.gain.linearRampToValueAtTime(0.05,this.ctx.currentTime+this.delayInc/1000/2)
-        gainNode.gain.linearRampToValueAtTime(0,this.ctx.currentTime+this.delayInc/1000)
+        gainNode.gain.linearRampToValueAtTime(0.05, this.ctx.currentTime + (this.delayInc + addTime) / 1000 / 2)
+        gainNode.gain.linearRampToValueAtTime(0, this.ctx.currentTime + (this.delayInc + addTime) / 1000)
 
         osc.start();
-        osc.stop(this.ctx.currentTime + this.delayInc/1000);
+        osc.stop(this.ctx.currentTime + (this.delayInc + addTime) / 1000);
         // setTimeout(
         //     function() {
         //         osc.stop();
@@ -72,6 +79,10 @@ export class ArrayVisualizer extends React.Component {
     resetDelay() {
         this.delaySwap = 0
         this.delayComp = 0
+        this.delayWrite = 0;
+        this.delayWriteUnmark = 0;
+        this.delayCompUnmark = 0;
+        this.delaySwapUnmark = 0;
     }
 
     nullify() {
@@ -193,10 +204,13 @@ export class ArrayVisualizer extends React.Component {
         this.swapWithDelay(a, b, true, this.delayInc, this.state.array)
     }
 
-    writeInArr(index, value, mark = true, arr = this.pseudoArray){
+    writeInArr(index, value, mark = true, arr = this.pseudoArray) {
         this.playSound(value)
-        arr[index].setValue(value)
-        if(mark) {
+        let tmpArr = arr
+        // console.log("INDEX in arr: "+index)
+        // console.log("VALUE in arr: "+value)
+        tmpArr[index].setValue(value)
+        if (mark) {
             this.mark(index, {type: "Default"}, true)
             setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [index], false, true)
         }
@@ -206,35 +220,37 @@ export class ArrayVisualizer extends React.Component {
         })
     }
 
-    writeWithDelay(index, value, mark, delay = this.delayInc, arr = this.pseudoArray){
-        setTimeout(this.writeInArr.bind(this), this.delaySwap += delay, index, value, mark, arr)
+    writeWithDelay(index, value, mark, delay = this.delayInc, arr = this.pseudoArray) {
+        setTimeout(this.writeInArr.bind(this), this.delayWrite += delay, index, value, mark, arr)
     }
 
-    write(index, value){
-        this.writeInArr(index, value, false)
+    write(index, value) {
+        // console.log("INDEX in write: "+index)
+        // console.log("VALUE in write: "+value)
+        this.writeInArr(index, value, false, this.pseudoArray)
         this.writeWithDelay(index, value, true, this.delayInc, this.state.array)
     }
 
-    read(index){
+    read(index, arr = this.pseudoArray) {
         this.mark(index, {type: "Default"}, true)
         setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [index], false, true)
-        return this.state.array[index]
+        return arr[index].getValue()
     }
 
-    compare(a, b, sign = "<",arr = this.pseudoArray) {
+    compare(a, b, sign = "<", arr = this.pseudoArray) {
         // this.markMany([a, b], {type: "Default"})
         // console.log(this.state.array[a] > this.state.array[b])
         // this.instruction.push(["compare", a, b])
         this.compMainArrWithDelay(a, b, false)
-        if(sign === "<"){
+        if (sign === "<") {
             return arr[a].getValue() < arr[b].getValue()
-        }else if(sign === "<="){
+        } else if (sign === "<=") {
             return arr[a].getValue() <= arr[b].getValue()
-        }else if(sign === ">"){
+        } else if (sign === ">") {
             return arr[a].getValue() > arr[b].getValue()
-        }else if(sign === ">="){
+        } else if (sign === ">=") {
             return arr[a].getValue() >= arr[b].getValue()
-        }else{
+        } else {
             return arr[a].getValue() === arr[b].getValue()
         }
     }
@@ -246,8 +262,8 @@ export class ArrayVisualizer extends React.Component {
         })
         console.log("Comparisons: " + this.state.comparisons + " " + a + " " + b)
         if (mark) {
-            this.mark(a, {type: "Additional", color:[0, 0, 255]}, true)
-            this.mark(b, {type: "Additional", color:[0, 0, 255]}, true)
+            this.mark(a, {type: "Additional", color: [0, 0, 255]}, true)
+            this.mark(b, {type: "Additional", color: [0, 0, 255]}, true)
             setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [a, b], false, true)
         }
     }
@@ -296,33 +312,144 @@ export class ArrayVisualizer extends React.Component {
 
     sortClickEvent(sort) {
         this.pseudoArray = Object.assign({}, this.state.array);
-        this.instruction = []
         this.nullify()
         this.setState({
             sortName: sort.name
         })
         this.nullify()
-        sort(this, 0, this.state.array.length - 1)
+        // sort(0, this.state.array.length - 1)
+
+        let sortBind = sort.bind(this, 0, this.state.array.length-1)
+        sortBind()
     }
 
     genSorts() {
         let tmp = []
-        for(let i in sorts){
+        for (let i in sorts) {
             tmp.push(
                 <button key={i} onClick={this.sortClickEvent.bind(this, sorts[i])}>{i}</button>
             )
         }
         return tmp;
     }
+
+
+    partition(lo, hi) {
+        let pivot = hi;
+        let i = lo;
+
+        for (let j = lo; j < hi; j++) {
+            // ArrayVisualizer.markArray(1, j);
+            if (this.compare(j, pivot, "<")) {
+                this.swap(i, j);
+                i++;
+            }
+        }
+        this.swap(i, hi);
+        return i;
+    }
+
+    BubbleSort() {
+        let len = this.state.array.length
+        for (let i = 0; i < len; i++) {
+            for (let j = 0; j < len - i - 1; j++) {
+                if (this.compare(j, j + 1, ">")) {
+                    this.swap(j, j + 1)
+                }
+            }
+        }
+    }
+
+
+    LLQuickSort(lo, hi) {
+        if (lo < hi) {
+            let p = this.partition(lo, hi);
+            this.LLQuickSort(lo, p - 1);
+            this.LLQuickSort(p + 1, hi);
+        }
+    }
+
+
+    SlowSort(i, j) {
+        if (this.compare(i, j, ">=")) {
+            return;
+        }
+        let m = Math.floor((i + j) / 2);
+        this.SlowSort(i, m);
+        this.SlowSort(m + 1, j);
+        if (this.compare(j, m, "<")) {
+            this.swap(j, m)
+        }
+        this.SlowSort(i, j - 1)
+    }
+
+    merge(low, mid, high) {
+        // Creating temporary subarrays
+        let leftArray = new Array(mid - low + 1);
+        let rightArray = new Array(high - mid);
+
+        // Copying our subarrays into temporaries
+        for (let i = 0; i < leftArray.length; i++) {
+            // leftArray[i] = array[low + i];
+            leftArray[i] = this.read(low + i)
+        }
+        for (let i = 0; i < rightArray.length; i++){
+            // rightArray[i] = array[mid + i + 1];
+            rightArray[i] = this.read(mid + i + 1);
+        }
+
+        // Iterators containing current index of temp subarrays
+        let leftIndex = 0;
+        let rightIndex = 0;
+
+        // Copying from leftArray and rightArray back into array
+        for (let i = low; i < high + 1; i++) {
+            // If there are still uncopied elements in R and L, copy minimum of the two
+            if (leftIndex < leftArray.length && rightIndex < rightArray.length) {
+                if (leftArray[leftIndex] < rightArray[rightIndex]) {
+                    // array[i] = leftArray[leftIndex];
+                    this.write(i, leftArray[leftIndex])
+                    leftIndex++;
+                } else {
+                    // array[i] = rightArray[rightIndex];
+                    this.write(i, rightArray[rightIndex])
+                    rightIndex++;
+                }
+            } else if (leftIndex < leftArray.length) {
+                // If all elements have been copied from rightArray, copy rest of leftArray
+                // array[i] = leftArray[leftIndex];
+                this.write(i, leftArray[leftIndex])
+                leftIndex++;
+            } else if (rightIndex < rightArray.length) {
+                // If all elements have been copied from leftArray, copy rest of rightArray
+                // array[i] = rightArray[rightIndex];
+                this.write(i, rightArray[rightIndex])
+                rightIndex++;
+            }
+        }
+    }
+
+    MergeSort(low, high) {
+        if (high <= low) return;
+
+        let mid = Math.trunc((low + high) / 2)
+        this.MergeSort(low, mid);
+        this.MergeSort(mid + 1, high);
+        this.merge(low, mid, high);
+    }
+
     render() {
         return (
             <div>
                 <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes}/>
                 <ArrayWindow array={this.state.array}/>
                 <button onClick={this.shuffleClickEvent.bind(this)}>Shuffle</button>
-                {this.genSorts()}
+                {/*{this.genSorts()}*/}
+                <button onClick={this.sortClickEvent.bind(this, this.BubbleSort)}>BubbleSort</button>
+                <button onClick={this.sortClickEvent.bind(this, this.LLQuickSort)}>LLQuickSort</button>
+                <button onClick={this.sortClickEvent.bind(this, this.SlowSort)}>SlowSort</button>
+                <button onClick={this.sortClickEvent.bind(this, this.MergeSort)}>MergeSort</button>
             </div>
-
         )
     }
 }
