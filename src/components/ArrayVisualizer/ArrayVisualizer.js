@@ -1,5 +1,5 @@
 import React from 'react';
-import {randomInt, sleep} from "../utils/utils";
+import {randomInt} from "../utils/utils";
 import {linear} from "../utils/initFunctions"
 import {sorts} from "../Sorts/Sorts"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
@@ -168,7 +168,6 @@ export class ArrayVisualizer extends React.Component {
 
 
     swapInArr(a, b, mark = true, arr = this.pseudoArray) {
-        this.playSound(a)
         // this.playSound(b)
         let tmpArr = arr
         // console.log("SWAPPING:" + tmpArr[a].getValue()+"<->"+tmpArr[b].getValue())
@@ -188,8 +187,37 @@ export class ArrayVisualizer extends React.Component {
 
     swap(a, b) {
         // this.instruction.push(["swap", a, b])
-        this.swapWithDelay(a, b, true, this.delayInc, this.state.array)
+        this.playSound(a)
         this.swapInArr(a, b, false)
+        this.swapWithDelay(a, b, true, this.delayInc, this.state.array)
+    }
+
+    writeInArr(index, value, mark = true, arr = this.pseudoArray){
+        arr[index].setValue(value)
+        if(mark) {
+            this.mark(index, {type: "Default"}, true)
+            setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [index], false, true)
+        }
+        let curWrites = this.state.writes;
+        this.setState({
+            writes: curWrites + 1
+        })
+    }
+
+    writeWithDelay(index, value, mark, delay = this.delayInc, arr = this.pseudoArray){
+        setTimeout(this.writeInArr.bind(this), this.delaySwap += delay, index, value, mark, arr)
+    }
+
+    write(index, value){
+        this.playSound(value)
+        this.writeInArr(index, value, false)
+        this.writeWithDelay(index, value, true, this.delayInc, this.state.array)
+    }
+
+    read(index){
+        this.mark(index, {type: "Default"}, true)
+        setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [index], false, true)
+        return this.state.array[index]
     }
 
     compare(a, b, sign = "<",arr = this.pseudoArray) {
