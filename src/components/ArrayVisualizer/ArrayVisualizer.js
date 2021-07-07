@@ -1,7 +1,7 @@
 import React from 'react';
 import {randomInt, sleep} from "../utils/utils";
 import {linear} from "../utils/initFunctions"
-import {BubbleSort, LLQuickSort, SlowSort} from "../Sorts/Sorts"
+import {sorts} from "../Sorts/Sorts"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
 import {Element} from "../classes/Element";
 import {Stats} from "../Stats/Stats";
@@ -51,12 +51,12 @@ export class ArrayVisualizer extends React.Component {
         osc.frequency.value = 2000*k;
 
         let gainNode = this.ctx.createGain()
-        gainNode.gain.value = 0.01;
+        gainNode.gain.value = 0;
         osc.connect(gainNode)
         gainNode.connect(this.ctx.destination)
 
-        gainNode.gain.exponentialRampToValueAtTime(0.1,this.ctx.currentTime+this.delayInc/1000/2)
-        gainNode.gain.exponentialRampToValueAtTime(0.01,this.ctx.currentTime+this.delayInc/1000)
+        gainNode.gain.linearRampToValueAtTime(0.05,this.ctx.currentTime+this.delayInc/1000/2)
+        gainNode.gain.linearRampToValueAtTime(0,this.ctx.currentTime+this.delayInc/1000)
 
         osc.start();
         osc.stop(this.ctx.currentTime + this.delayInc/1000);
@@ -276,16 +276,22 @@ export class ArrayVisualizer extends React.Component {
         sort(this, 0, this.state.array.length - 1)
     }
 
-
+    genSorts() {
+        let tmp = []
+        for(let i in sorts){
+            tmp.push(
+                <button key={i} onClick={this.sortClickEvent.bind(this, sorts[i])}>{i}</button>
+            )
+        }
+        return tmp;
+    }
     render() {
         return (
             <div>
                 <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes}/>
                 <ArrayWindow array={this.state.array}/>
                 <button onClick={this.shuffleClickEvent.bind(this)}>Shuffle</button>
-                <button onClick={this.sortClickEvent.bind(this, BubbleSort)}>BubbleSort</button>
-                <button onClick={this.sortClickEvent.bind(this, LLQuickSort)}>LLQuickSort</button>
-                <button onClick={this.sortClickEvent.bind(this, SlowSort)}>SlowSort</button>
+                {this.genSorts()}
             </div>
 
         )
