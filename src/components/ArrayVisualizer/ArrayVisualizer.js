@@ -15,35 +15,32 @@ const colors = {
 }
 
 export class ArrayVisualizer extends React.Component {
-    delaySwap;
-    delayWrite;
-    delayWriteUnmark;
-    delaySwapUnmark;
-    delayCompUnmark;
+    delays;
     delayInc;
-    delayComp;
     pseudoArray;
     arrLength
     ctx
+    timeoutMarkArray
+
 
     constructor(props) {
         super(props);
-        this.arrLength = 128
+        this.arrLength = 100
         this.state = {
             array: this.initArray(linear, this.arrLength),
             sortName: "",
             comparisons: 0,
             writes: 0
         }
-        this.delaySwap = 0;
-        this.delaySwapUnmark = 0;
-        this.delayCompUnmark = 0;
-        this.delayWrite = 0;
-        this.delayWriteUnmark = 0;
-        // this.delayInc = 5000/this.arrLength;
+        this.delays = {
+            Swap: 0,
+            Write: 0,
+            Comp: 0,
+            Unmark: 0
+        }
         this.delayInc = 10;
-        this.delayComp = 0;
         this.instruction = [];
+        this.timeoutMarkArray = [];
         this.pseudoArray = Object.assign({}, this.state.array);
 
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -68,21 +65,20 @@ export class ArrayVisualizer extends React.Component {
 
         osc.start();
         osc.stop(this.ctx.currentTime + (this.delayInc + addTime) / 1000);
-        // setTimeout(
-        //     function() {
-        //         osc.stop();
-        //     },
-        //     this.delayInc
-        // );
+
     }
 
     resetDelay() {
-        this.delaySwap = 0
-        this.delayComp = 0
-        this.delayWrite = 0;
-        this.delayWriteUnmark = 0;
-        this.delayCompUnmark = 0;
-        this.delaySwapUnmark = 0;
+        this.delays = {
+            Swap: 0,
+            Write: 0,
+            Comp: 0,
+            Unmark: 0
+        }
+        for(let i of this.timeoutMarkArray){
+            clearTimeout(i);
+        }
+        this.timeoutMarkArray = []
     }
 
     nullify() {
@@ -94,7 +90,6 @@ export class ArrayVisualizer extends React.Component {
             }
         )
     }
-
 
     mark(index, args, saveArr = true) {
         let type = "Default"
@@ -174,8 +169,13 @@ export class ArrayVisualizer extends React.Component {
     }
 
 
+    markUnmarkMany(markIndexes, markArgs) {
+        this.markMany(markIndexes, markArgs, true)
+        this.timeoutMarkArray.push(setTimeout(this.unmarkMany.bind(this), this.delays.Unmark += this.delayInc / 100, markIndexes, false, true))
+    }
+
     swapWithDelay(a, b, mark, delay = this.delayInc, arr = this.pseudoArray) {
-        setTimeout(this.swapInArr.bind(this), this.delaySwap += delay, a, b, mark, arr)
+        setTimeout(this.swapInArr.bind(this), this.delays.Swap += delay, a, b, mark, arr)
     }
 
 
@@ -187,9 +187,7 @@ export class ArrayVisualizer extends React.Component {
         tmpArr[a] = tmpArr[b]
         tmpArr[b] = tmp
         if (mark) {
-            this.mark(a, {type: "Default"}, true)
-            this.mark(b, {type: "Default"}, true)
-            setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [a, b], false, true)
+            this.markUnmarkMany([a, b], {type: "Default"})
         }
         let curWrites = this.state.writes;
         this.setState({
@@ -198,8 +196,6 @@ export class ArrayVisualizer extends React.Component {
     }
 
     swap(a, b) {
-        // this.instruction.push(["swap", a, b])
-        // this.playSound(a)
         this.swapInArr(a, b, false)
         this.swapWithDelay(a, b, true, this.delayInc, this.state.array)
     }
@@ -211,8 +207,7 @@ export class ArrayVisualizer extends React.Component {
         // console.log("VALUE in arr: "+value)
         tmpArr[index].setValue(value)
         if (mark) {
-            this.mark(index, {type: "Default"}, true)
-            setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [index], false, true)
+            this.markUnmarkMany([index], {type: "Default"})
         }
         let curWrites = this.state.writes;
         this.setState({
@@ -221,26 +216,20 @@ export class ArrayVisualizer extends React.Component {
     }
 
     writeWithDelay(index, value, mark, delay = this.delayInc, arr = this.pseudoArray) {
-        setTimeout(this.writeInArr.bind(this), this.delayWrite += delay, index, value, mark, arr)
+        setTimeout(this.writeInArr.bind(this), this.delays.Write += delay, index, value, mark, arr)
     }
 
     write(index, value) {
-        // console.log("INDEX in write: "+index)
-        // console.log("VALUE in write: "+value)
         this.writeInArr(index, value, false, this.pseudoArray)
         this.writeWithDelay(index, value, true, this.delayInc, this.state.array)
     }
 
     read(index, arr = this.pseudoArray) {
-        this.mark(index, {type: "Default"}, true)
-        setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [index], false, true)
+        this.markUnmarkMany([index], {type: "Default"})
         return arr[index].getValue()
     }
 
     compare(a, b, sign = "<", arr = this.pseudoArray) {
-        // this.markMany([a, b], {type: "Default"})
-        // console.log(this.state.array[a] > this.state.array[b])
-        // this.instruction.push(["compare", a, b])
         this.compMainArrWithDelay(a, b, false)
         if (sign === "<") {
             return arr[a].getValue() < arr[b].getValue()
@@ -262,14 +251,12 @@ export class ArrayVisualizer extends React.Component {
         })
         console.log("Comparisons: " + this.state.comparisons + " " + a + " " + b)
         if (mark) {
-            this.mark(a, {type: "Additional", color: [0, 0, 255]}, true)
-            this.mark(b, {type: "Additional", color: [0, 0, 255]}, true)
-            setTimeout(this.unmarkMany.bind(this), this.delayUnmark += this.delayInc / 100, [a, b], false, true)
+            this.markUnmarkMany([a, b], {type: "Additional", color: [0, 0, 255]})
         }
     }
 
     compMainArrWithDelay(a, b, mark = false) {
-        setTimeout(this.compMainArr.bind(this), this.delayComp += this.delayInc, a, b, mark)
+        setTimeout(this.compMainArr.bind(this), this.delays.Comp += this.delayInc, a, b, mark)
     }
 
     getArrayVisualizer() {
@@ -299,7 +286,7 @@ export class ArrayVisualizer extends React.Component {
             if (this.delayInc === 0) {
                 this.swapWithDelay(i, randomInt(0, this.state.array.length), true, this.delayInc / 5, this.state.array)
             } else {
-                setTimeout(this.swapInArr.bind(this), this.delaySwap += this.delayInc / 5, i, randomInt(0, this.state.array.length), true, this.state.array)
+                setTimeout(this.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i, randomInt(0, this.state.array.length), true, this.state.array)
             }
             // sleep(50)
         }
@@ -319,7 +306,7 @@ export class ArrayVisualizer extends React.Component {
         this.nullify()
         // sort(0, this.state.array.length - 1)
 
-        let sortBind = sort.bind(this, 0, this.state.array.length-1)
+        let sortBind = sort.bind(this, 0, this.state.array.length - 1)
         sortBind()
     }
 
@@ -393,7 +380,7 @@ export class ArrayVisualizer extends React.Component {
             // leftArray[i] = array[low + i];
             leftArray[i] = this.read(low + i)
         }
-        for (let i = 0; i < rightArray.length; i++){
+        for (let i = 0; i < rightArray.length; i++) {
             // rightArray[i] = array[mid + i + 1];
             rightArray[i] = this.read(mid + i + 1);
         }
