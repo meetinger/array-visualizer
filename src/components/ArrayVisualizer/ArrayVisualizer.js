@@ -45,6 +45,7 @@ export class ArrayVisualizer extends React.Component {
         this.sorts = new Sorts(this);
 
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this.updateArrLength();
     }
 
     playSound(value) {
@@ -333,7 +334,7 @@ export class ArrayVisualizer extends React.Component {
         return tmp;
     }
 
-    onSliderChange(){
+    updateArrLength(){
         let slider = document.getElementById("slider")
 
         if(slider !== null){
@@ -343,8 +344,8 @@ export class ArrayVisualizer extends React.Component {
             })
             this.pseudoArray = deepArrayCopy(this.state.array)
         }
-        this.arrLength = slider.value
         this.sorts.arrLength = this.getArrLength()
+        this.delayInc = 5000/this.arrLength;
     }
 
     render() {
@@ -352,14 +353,10 @@ export class ArrayVisualizer extends React.Component {
             <div>
                 <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes} arrLength={this.arrLength}/>
                 <ArrayWindow array={this.state.array}/>
-                <div><input id="slider" type="range" min="10" max="300" defaultValue={this.arrLength} step="10" onChange={this.onSliderChange.bind(this)}/>
+                <div><input id="slider" type="range" min="10" max="300" defaultValue={this.arrLength} step="10" onChange={this.updateArrLength.bind(this)}/>
                 </div>
                 <button onClick={this.shuffleClickEvent.bind(this)}>Shuffle</button>
                 {this.genSorts()}
-                {/*<button onClick={this.sortClickEvent.bind(this, this.sorts.BubbleSort)}>BubbleSort</button>*/}
-                {/*<button onClick={this.sortClickEvent.bind(this, this.sorts.LLQuickSort)}>LLQuickSort</button>*/}
-                {/*<button onClick={this.sortClickEvent.bind(this, this.sorts.SlowSort)}>SlowSort</button>*/}
-                {/*<button onClick={this.sortClickEvent.bind(this, this.sorts.MergeSort)}>MergeSort</button>*/}
             </div>
         )
     }
