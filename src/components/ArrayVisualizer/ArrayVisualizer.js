@@ -1,6 +1,6 @@
 import React from 'react';
-import {getAllFuncs, getAllMethods, randomInt} from "../utils/utils";
-import {linear, reverse} from "../utils/initFunctions"
+import {deepArrayCopy, getAllMethods, randomInt} from "../utils/utils";
+import {linear} from "../utils/initFunctions"
 import {Sorts} from "../Sorts/Sorts"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
 import {Element} from "../classes/Element";
@@ -41,7 +41,7 @@ export class ArrayVisualizer extends React.Component {
         this.delayInc = 10;
         this.instruction = [];
         this.timeoutMarkArray = [];
-        this.pseudoArray = Object.assign({}, this.state.array);
+        this.pseudoArray = deepArrayCopy(this.state.array)
         this.sorts = new Sorts(this);
 
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -203,10 +203,8 @@ export class ArrayVisualizer extends React.Component {
 
     writeInArr(index, value, mark = true, arr = this.pseudoArray) {
         this.playSound(value)
-        let tmpArr = arr
-        // console.log("INDEX in arr: "+index)
-        // console.log("VALUE in arr: "+value)
-        tmpArr[index].setValue(value)
+
+        arr[index].setValue(value)
         if (mark) {
             this.markUnmarkMany([index], {type: "Default"})
         }
@@ -307,7 +305,7 @@ export class ArrayVisualizer extends React.Component {
 
 
     sortClickEvent(sort) {
-        this.pseudoArray = Object.assign({}, this.state.array);
+        this.pseudoArray = deepArrayCopy(this.state.array)
         this.nullify()
         this.setState({
             sortName: sort.name
@@ -339,7 +337,7 @@ export class ArrayVisualizer extends React.Component {
             this.setState({
                 array: this.initArray(linear, this.arrLength)
             })
-            this.pseudoArray = Object.assign({}, this.state.array);
+            this.pseudoArray = deepArrayCopy(this.state.array)
         }
         this.arrLength = slider.value
         this.sorts.arrLength = this.getArrLength()

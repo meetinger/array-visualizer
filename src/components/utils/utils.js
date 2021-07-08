@@ -1,3 +1,4 @@
+import {Element} from "../classes/Element";
 export function random(a, b) {
     return Math.random() * (b - a) + a;
 }
@@ -30,4 +31,15 @@ export function getAllMethods(toCheck) {
     return props.sort().filter((e, i, arr) => {
         if (e!=arr[i+1] && typeof toCheck[e] == 'function') return true;
     });
+}
+
+export function deepArrayCopy(arr){
+    let out = [];
+    for(let i of arr){
+        let value = i.getValue();
+        let type = i.getType();
+        let color = i.getColor();
+        out.push(new Element(value, type, color))
+    }
+    return out;
 }
