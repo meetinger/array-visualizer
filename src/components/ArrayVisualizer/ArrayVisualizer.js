@@ -90,6 +90,10 @@ export class ArrayVisualizer extends React.Component {
                 writes: 0
             }
         )
+        // eslint-disable-next-line react/no-direct-mutation-state
+        this.state.writes = 0;
+        // eslint-disable-next-line react/no-direct-mutation-state
+        this.state.comparisons = 0;
     }
 
     mark(index, args, saveArr = true) {
@@ -348,7 +352,7 @@ export class ArrayVisualizer extends React.Component {
             <div>
                 <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes} arrLength={this.arrLength}/>
                 <ArrayWindow array={this.state.array}/>
-                <div><input id="slider" type="range" min="10" max="300" defaultValue="100" step="10" onChange={this.onSliderChange.bind(this)}/>
+                <div><input id="slider" type="range" min="10" max="300" defaultValue={this.arrLength} step="10" onChange={this.onSliderChange.bind(this)}/>
                 </div>
                 <button onClick={this.shuffleClickEvent.bind(this)}>Shuffle</button>
                 {this.genSorts()}
