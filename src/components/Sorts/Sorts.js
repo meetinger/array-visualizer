@@ -6,7 +6,6 @@ export class Sorts {
     compare;
     swap;
     write;
-    state;
 
     arrLength;
 
@@ -36,7 +35,7 @@ export class Sorts {
     }
 
     BubbleSort() {
-        let len = this.state.array.length
+        let len = this.arrLength;
         for (let i = 0; i < len; i++) {
             for (let j = 0; j < len - i - 1; j++) {
                 if (this.compare(j, j + 1, ">")) {
