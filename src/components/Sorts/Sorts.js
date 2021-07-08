@@ -57,7 +57,7 @@ export class Sorts {
 
 
     SlowSort(i, j) {
-        if (this.compare(i, j, ">=")) {
+        if (i >= j) {
             return;
         }
         let m = Math.floor((i + j) / 2);
