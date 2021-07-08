@@ -231,7 +231,7 @@ export class ArrayVisualizer extends React.Component {
     }
 
     compare(a, b, sign = "<", arr = this.pseudoArray) {
-        this.compMainArrWithDelay(a, b, false)
+        // this.compMainArrWithDelay(a, b, false)
         if (sign === "<") {
             return arr[a].getValue() < arr[b].getValue()
         } else if (sign === "<=") {
@@ -270,6 +270,10 @@ export class ArrayVisualizer extends React.Component {
 
     getState(){
         return this.state
+    }
+
+    getArrLength(){
+        return this.arrLength;
     }
 
     initArray(func, length) {
@@ -327,18 +331,18 @@ export class ArrayVisualizer extends React.Component {
         return tmp;
     }
 
-    updateLenIndicator(){
-        let element = document.getElementById("slider")
+    onSliderChange(){
+        let slider = document.getElementById("slider")
 
-        if(element !== null){
-            this.arrLength = element.value
+        if(slider !== null){
+            this.arrLength = slider.value
             this.setState({
                 array: this.initArray(linear, this.arrLength)
             })
-
+            this.pseudoArray = Object.assign({}, this.state.array);
         }
-
-        console.log(this.arrLength)
+        this.arrLength = slider.value
+        this.sorts.arrLength = this.getArrLength()
     }
 
     render() {
@@ -346,9 +350,7 @@ export class ArrayVisualizer extends React.Component {
             <div>
                 <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes} arrLength={this.arrLength}/>
                 <ArrayWindow array={this.state.array}/>
-                <div><input id="slider" type="range" min="10" max="300" defaultValue="100" step="10" onChange={this.updateLenIndicator.bind(this)}/>
-                    <div id="lenIndicator">
-                    </div>
+                <div><input id="slider" type="range" min="10" max="300" defaultValue="100" step="10" onChange={this.onSliderChange.bind(this)}/>
                 </div>
                 <button onClick={this.shuffleClickEvent.bind(this)}>Shuffle</button>
                 {this.genSorts()}
