@@ -67,7 +67,6 @@ export class Sorts{
     }
 
     merge(low, mid, high) {
-        // Creating temporary subarrays
         let leftArray = new Array(mid - low + 1);
         let rightArray = new Array(high - mid);
 

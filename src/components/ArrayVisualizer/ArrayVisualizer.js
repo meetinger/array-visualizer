@@ -226,7 +226,7 @@ export class ArrayVisualizer extends React.Component {
     }
 
     read(index, arr = this.pseudoArray) {
-        this.markUnmarkMany([index], {type: "Default"})
+        // this.markUnmarkMany([index], {type: "Default"})
         return arr[index].getValue()
     }
 
@@ -257,7 +257,7 @@ export class ArrayVisualizer extends React.Component {
     }
 
     compMainArrWithDelay(a, b, mark = false) {
-        setTimeout(this.compMainArr.bind(this), this.delays.Comp += this.delayInc, a, b, mark)
+        // setTimeout(this.compMainArr.bind(this), this.delays.Comp += this.delayInc, a, b, mark)
     }
 
     getArrayVisualizer() {
@@ -318,7 +318,6 @@ export class ArrayVisualizer extends React.Component {
     genSorts() {
         let tmp = []
         let methods = getAllMethods(this.sorts)
-        console.log(methods)
         for (let i of methods) {
             if(i.includes("Sort"))
                 tmp.push(
@@ -328,11 +327,29 @@ export class ArrayVisualizer extends React.Component {
         return tmp;
     }
 
+    updateLenIndicator(){
+        let element = document.getElementById("slider")
+
+        if(element !== null){
+            this.arrLength = element.value
+            this.setState({
+                array: this.initArray(linear, this.arrLength)
+            })
+
+        }
+
+        console.log(this.arrLength)
+    }
+
     render() {
         return (
             <div>
-                <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes}/>
+                <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes} arrLength={this.arrLength}/>
                 <ArrayWindow array={this.state.array}/>
+                <div><input id="slider" type="range" min="10" max="300" defaultValue="100" step="10" onChange={this.updateLenIndicator.bind(this)}/>
+                    <div id="lenIndicator">
+                    </div>
+                </div>
                 <button onClick={this.shuffleClickEvent.bind(this)}>Shuffle</button>
                 {this.genSorts()}
                 {/*<button onClick={this.sortClickEvent.bind(this, this.sorts.BubbleSort)}>BubbleSort</button>*/}
