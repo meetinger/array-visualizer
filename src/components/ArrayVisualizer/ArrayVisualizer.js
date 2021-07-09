@@ -1,5 +1,5 @@
 import React from 'react';
-import {deepArrayCopy, getAllMethods, randomInt} from "../utils/utils";
+import {arraysEquals, deepArrayCopy, getAllMethods, randomInt} from "../utils/utils";
 import {Sorts} from "../Sorts/Sorts"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
 import {Element} from "../classes/Element";
@@ -19,7 +19,7 @@ export class ArrayVisualizer extends React.Component {
     delays;
     delayInc;
     pseudoArray;
-    pseudoAuxArray;
+    pseudoAuxArrays;
     arrLength
     ctx
     timeoutArray
@@ -34,7 +34,7 @@ export class ArrayVisualizer extends React.Component {
             sortName: "",
             comparisons: 0,
             writes: 0,
-            auxArray: []
+            auxArrays: []
         }
         this.delays = {
             Swap: 0,
@@ -46,7 +46,7 @@ export class ArrayVisualizer extends React.Component {
         this.instructions = [];
         this.timeoutArray = [];
         this.pseudoArray = deepArrayCopy(this.state.array)
-        this.pseudoAuxArray = []
+        this.pseudoAuxArrays = []
         this.sorts = new Sorts(this);
         this.arrLength = this.state.length
         this.delayInc = this.delayIncConst/this.arrLength;
@@ -214,7 +214,7 @@ export class ArrayVisualizer extends React.Component {
         this.swapInArr(a, b, arr, false, false)
         // console.log(getVarName(this.state.array.name))
         this.instructions.push(
-            ["swap", a, b, arr]
+            ["swap", arr, a, b]
         )
         // this.swapWithDelay(a, b, this.state.array, true, this.delayInc, true)
     }
@@ -240,7 +240,7 @@ export class ArrayVisualizer extends React.Component {
     write(index, value, arr = this.pseudoArray) {
         this.writeInArr(index, value, this.pseudoArray, false, false)
         this.instructions.push(
-            ["write", index, value, arr]
+            ["write", arr, index, value]
         )
         // this.writeWithDelay(index, value, this.state.array, true, this.delayInc, true)
     }
@@ -248,7 +248,7 @@ export class ArrayVisualizer extends React.Component {
     read(index, arr = this.pseudoArray) {
         // this.markUnmarkMany([index], {type: "Default"})
         this.instructions.push(
-            ["read", index, arr]
+            ["read", arr, index]
         )
         return arr[index].getValue()
     }
@@ -281,6 +281,58 @@ export class ArrayVisualizer extends React.Component {
 
     compMainArrWithDelay(a, b, mark = false) {
         // setTimeout(this.compMainArr.bind(this), this.delays.Comp += this.delayInc, a, b, mark)
+    }
+
+    createAuxArray(len){
+        let auxArrIndex = this.pseudoAuxArrays.length
+        this.pseudoAuxArrays.push(this.initArray(()=>0, len,false))
+        this.instructions.push(
+            ["createAuxArray", auxArrIndex]
+        )
+        return this.pseudoAuxArrays[auxArrIndex]
+    }
+
+    removeAuxArray(index){
+        this.pseudoAuxArrays.splice(index, 1)
+        this.instructions.push(
+            ["removeAuxArray", index]
+        )
+    }
+
+    getArrayByName(name, index=0){
+        if (name==="mainArray"){
+            return this.state.array
+        }
+        if(name==="pseudoArray"){
+            return this.pseudoArray
+        }
+        if(name==="auxArray"){
+            return this.state.auxArrays[index]
+        }
+        if(name==="pseudoAuxArray"){
+            return this.pseudoAuxArrays[index]
+        }
+        return []
+    }
+
+    getNameByArray(arr){
+        if(arraysEquals(arr, this.state.array)){
+            return "mainArray"
+        }
+        if(arraysEquals(arr, this.pseudoArray)){
+            return "pseudoArray"
+        }
+        for(let i = 0; i < this.pseudoAuxArrays.length;++i){
+            if (arraysEquals(arr, this.pseudoAuxArrays[i])){
+                return ["pseudoAuxArray", i]
+            }
+        }
+        for(let i = 0; i < this.state.auxArrays.length;++i){
+            if (arraysEquals(arr, this.state.auxArrays[i])){
+                return ["auxArray", i]
+            }
+        }
+        return "NotFound"
     }
 
     getArrayVisualizer() {
@@ -359,10 +411,23 @@ export class ArrayVisualizer extends React.Component {
         sortBind()
 
         for(let i of this.instructions){
-            // let arr = this.state.array
-            // for(let j = 0;)
+            let arrName = this.getNameByArray(i[1])
+            let arr = []
+            if(Array.isArray(arrName)){
+                arr=this.getArrayByName(arrName[0], arrName[1])
+            }else {
+                arr=this.getArrayByName(arrName)
+            }
+            if(arrName==="pseudoArray") {
+                arr = this.getArrayByName("mainArray")
+            }
+            if(arrName[0]==="pseudoAuxArray"){
+                arr = this.getArrayByName("auxArray", arrName[1])
+            }
             if(i[0] === "swap"){
-                this.swapWithDelay(i[1], i[2], this.state.array, true, this.delayInc, true)
+                this.swapWithDelay(i[2], i[3], arr, true, this.delayInc, true)
+            }else if(i[0] === "write"){
+                this.writeWithDelay(i[2], i[3], arr, true, this.delayInc, true)
             }
         }
     }
