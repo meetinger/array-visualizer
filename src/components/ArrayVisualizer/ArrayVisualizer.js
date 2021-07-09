@@ -45,7 +45,7 @@ export class ArrayVisualizer extends React.Component {
         this.pseudoArray = deepArrayCopy(this.state.array)
         this.sorts = new Sorts(this);
         this.arrLength = this.state.length
-        this.delayInc = 3000/this.state.length;
+        this.delayInc = 3000/this.arrLength;
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         // this.updateArrLength(this.arrLength);
     }
@@ -310,7 +310,7 @@ export class ArrayVisualizer extends React.Component {
         this.setState({
             sortName: "Shuffle"
         })
-        for (let i = 0; i < this.state.array.length; ++i) {
+        for (let i = 0; i < this.arrLength; ++i) {
             let randomIndex = randomInt(i, this.arrLength)
             if (this.delayInc === 0) {
                 this.swapWithDelay(i, randomIndex, true, this.delayInc / 5, this.state.array, false)
@@ -334,7 +334,7 @@ export class ArrayVisualizer extends React.Component {
         this.nullify()
         // sort(0, this.state.array.length - 1)
 
-        let sortBind = sort.bind(this.sorts, 0, this.state.array.length - 1)
+        let sortBind = sort.bind(this.sorts, 0, this.arrLength - 1)
         sortBind()
     }
 

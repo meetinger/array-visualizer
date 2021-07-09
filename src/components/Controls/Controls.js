@@ -113,8 +113,8 @@ export class Controls extends React.Component {
                         <div className={styles.textCenter}>
                             <div>Sort control</div>
                             <div>
-                                <button onClick={this.stopSort.bind(this)}>Stop Sort(Not Recommended)</button>
                                 <button onClick={this.abortSort.bind(this)}>Abort Sort(Recommended)</button>
+                                <button onClick={this.stopSort.bind(this)}>Stop Sort(Not Recommended)</button>
                             </div>
                         </div>
                         <div className={styles.textCenter}>
