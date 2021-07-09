@@ -19,6 +19,7 @@ export class ArrayVisualizer extends React.Component {
     delays;
     delayInc;
     pseudoArray;
+    pseudoAuxArray;
     arrLength
     ctx
     timeoutArray
@@ -32,7 +33,8 @@ export class ArrayVisualizer extends React.Component {
             array: this.initArray(initFunctions.linear, this.arrLength),
             sortName: "",
             comparisons: 0,
-            writes: 0
+            writes: 0,
+            auxArray: []
         }
         this.delays = {
             Swap: 0,
@@ -41,9 +43,10 @@ export class ArrayVisualizer extends React.Component {
             Unmark: 0
         }
         this.delayIncConst = 3000
-        this.instruction = [];
+        this.instructions = [];
         this.timeoutArray = [];
         this.pseudoArray = deepArrayCopy(this.state.array)
+        this.pseudoAuxArray = []
         this.sorts = new Sorts(this);
         this.arrLength = this.state.length
         this.delayInc = this.delayIncConst/this.arrLength;
@@ -207,9 +210,13 @@ export class ArrayVisualizer extends React.Component {
         })
     }
 
-    swap(a, b) {
-        this.swapInArr(a, b, this.pseudoArray, false, false)
-        this.swapWithDelay(a, b, this.state.array, true, this.delayInc, true)
+    swap(a, b, arr = this.pseudoArray) {
+        this.swapInArr(a, b, arr, false, false)
+        // console.log(getVarName(this.state.array.name))
+        this.instructions.push(
+            ["swap", a, b, arr]
+        )
+        // this.swapWithDelay(a, b, this.state.array, true, this.delayInc, true)
     }
 
     writeInArr(index, value, arr = this.pseudoArray, mark = true, playSound = false) {
@@ -230,13 +237,19 @@ export class ArrayVisualizer extends React.Component {
         this.timeoutArray.push(setTimeout(this.writeInArr.bind(this), this.delays.Write += delay, index, value, arr, mark, playSound))
     }
 
-    write(index, value) {
+    write(index, value, arr = this.pseudoArray) {
         this.writeInArr(index, value, this.pseudoArray, false, false)
-        this.writeWithDelay(index, value, this.state.array, true, this.delayInc, true)
+        this.instructions.push(
+            ["write", index, value, arr]
+        )
+        // this.writeWithDelay(index, value, this.state.array, true, this.delayInc, true)
     }
 
     read(index, arr = this.pseudoArray) {
         // this.markUnmarkMany([index], {type: "Default"})
+        this.instructions.push(
+            ["read", index, arr]
+        )
         return arr[index].getValue()
     }
 
@@ -344,6 +357,14 @@ export class ArrayVisualizer extends React.Component {
 
         let sortBind = sort.bind(this.sorts, 0, this.arrLength - 1)
         sortBind()
+
+        for(let i of this.instructions){
+            // let arr = this.state.array
+            // for(let j = 0;)
+            if(i[0] === "swap"){
+                this.swapWithDelay(i[1], i[2], this.state.array, true, this.delayInc, true)
+            }
+        }
     }
 
 
