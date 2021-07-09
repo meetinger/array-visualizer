@@ -21,7 +21,7 @@ export class Sorts {
         this.arrLength = this.arrayVisualizer.getArrLength();
     }
 
-    partition(lo, hi) {
+    LLQuickPartition(lo, hi) {
         let pivot = hi;
         let i = lo;
         for (let j = lo; j < hi; j++) {
@@ -34,6 +34,14 @@ export class Sorts {
         return i;
     }
 
+    LLQuickSort(lo, hi) {
+        if (lo < hi) {
+            let p = this.LLQuickPartition(lo, hi);
+            this.LLQuickSort(lo, p - 1);
+            this.LLQuickSort(p + 1, hi);
+        }
+    }
+
     BubbleSort() {
         let len = this.arrLength;
         for (let i = 0; i < len; i++) {
@@ -42,15 +50,6 @@ export class Sorts {
                     this.swap(j, j + 1)
                 }
             }
-        }
-    }
-
-
-    LLQuickSort(lo, hi) {
-        if (lo < hi) {
-            let p = this.partition(lo, hi);
-            this.LLQuickSort(lo, p - 1);
-            this.LLQuickSort(p + 1, hi);
         }
     }
 
@@ -68,45 +67,33 @@ export class Sorts {
         this.SlowSort(i, j - 1)
     }
 
-    merge(low, mid, high) {
+    classicMerge(low, mid, high) {
         let leftArray = new Array(mid - low + 1);
         let rightArray = new Array(high - mid);
 
-        // Copying our subarrays into temporaries
         for (let i = 0; i < leftArray.length; i++) {
-            // leftArray[i] = array[low + i];
             leftArray[i] = this.read(low + i)
         }
         for (let i = 0; i < rightArray.length; i++) {
-            // rightArray[i] = array[mid + i + 1];
             rightArray[i] = this.read(mid + i + 1);
         }
 
-        // Iterators containing current index of temp subarrays
         let leftIndex = 0;
         let rightIndex = 0;
 
-        // Copying from leftArray and rightArray back into array
         for (let i = low; i < high + 1; i++) {
-            // If there are still uncopied elements in R and L, copy minimum of the two
             if (leftIndex < leftArray.length && rightIndex < rightArray.length) {
                 if (leftArray[leftIndex] < rightArray[rightIndex]) {
-                    // array[i] = leftArray[leftIndex];
                     this.write(i, leftArray[leftIndex])
                     leftIndex++;
                 } else {
-                    // array[i] = rightArray[rightIndex];
                     this.write(i, rightArray[rightIndex])
                     rightIndex++;
                 }
             } else if (leftIndex < leftArray.length) {
-                // If all elements have been copied from rightArray, copy rest of leftArray
-                // array[i] = leftArray[leftIndex];
                 this.write(i, leftArray[leftIndex])
                 leftIndex++;
             } else if (rightIndex < rightArray.length) {
-                // If all elements have been copied from leftArray, copy rest of rightArray
-                // array[i] = rightArray[rightIndex];
                 this.write(i, rightArray[rightIndex])
                 rightIndex++;
             }
@@ -119,7 +106,7 @@ export class Sorts {
         let mid = Math.trunc((low + high) / 2)
         this.MergeSort(low, mid);
         this.MergeSort(mid + 1, high);
-        this.merge(low, mid, high);
+        this.classicMerge(low, mid, high);
     }
 
     heapify(n, i) {
@@ -149,22 +136,36 @@ export class Sorts {
             this.heapify(n, i);
         }
 
-        for(let i = n-1; i >= 0; i--){
+        for (let i = n - 1; i >= 0; i--) {
             this.swap(0, i);
             this.heapify(i, 0)
         }
     }
 
-    InsertionSort(){
+    InsertionSort() {
         let length = this.arrLength;
         for (let i = 1; i < length; i++) {
             let key = this.read(i);
             let j = i - 1;
             while (j >= 0 && this.read(j) > key) {
-                this.write(j+1, this.read(j))
+                this.write(j + 1, this.read(j))
                 j = j - 1;
             }
-            this.write(j+1, key)
+            this.write(j + 1, key)
+        }
+    }
+
+    StoogeSort(i, j) {
+        console.log(i)
+        console.log(j)
+        if (this.compare(i, j, ">")) {
+            this.swap(i, j)
+        }
+        if (j - i > 1) {
+            let t = Math.trunc((j - i + 1) / 3)
+            this.StoogeSort(i, j - t)
+            this.StoogeSort(i + t, j)
+            this.StoogeSort(i, j - t)
         }
     }
 
