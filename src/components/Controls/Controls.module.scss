@@ -1,0 +1,31 @@
+#controlsContainer {
+  width: 20rem;
+}
+
+.textCenter {
+  text-align: center;
+}
+
+#controls {
+  padding: 1rem;
+  width: 20rem;
+}
+
+#showToggleBtn {
+  background-color: rgba(0,0,0,0.5);
+  margin: 1rem;
+  font-size: 3rem;
+  bottom:0;
+  right: 0;
+  position: fixed;
+  color: rgba(255, 255, 255, 0.5);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.5rem 0.75rem;
+  cursor: pointer;
+}
+#slider{
+  width: 90%;
+}
+button{
+  margin: 0.5rem
+}

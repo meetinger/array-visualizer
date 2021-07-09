@@ -5,6 +5,7 @@ import {Sorts} from "../Sorts/Sorts"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
 import {Element} from "../classes/Element";
 import {Stats} from "../Stats/Stats";
+import {Controls} from "../Controls/Controls";
 
 const colors = {
     "Unmarked": [255, 255, 255],
@@ -25,7 +26,7 @@ export class ArrayVisualizer extends React.Component {
 
     constructor(props) {
         super(props);
-        this.arrLength = 100
+        // this.arrLength = 100
         this.state = {
             array: this.initArray(linear, this.arrLength),
             sortName: "",
@@ -43,17 +44,18 @@ export class ArrayVisualizer extends React.Component {
         this.timeoutMarkArray = [];
         this.pseudoArray = deepArrayCopy(this.state.array)
         this.sorts = new Sorts(this);
-
+        this.arrLength = this.state.length
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        this.updateArrLength();
+        // this.updateArrLength(this.arrLength);
     }
 
     playSound(value) {
         let osc = this.ctx.createOscillator();
         osc.type = 'sine';
-        let k = value / this.arrLength
 
+        let k = value / this.arrLength
         osc.frequency.value = 2000 * k + 200;
+
 
         let addTime = 50
 
@@ -186,6 +188,7 @@ export class ArrayVisualizer extends React.Component {
 
 
     swapInArr(a, b, mark = true, arr = this.pseudoArray) {
+        // console.log(arr[b].getValue())
         this.playSound(arr[b].getValue());
         let tmpArr = arr
         // console.log("SWAPPING:" + tmpArr[a].getValue()+"<->"+tmpArr[b].getValue())
@@ -279,13 +282,19 @@ export class ArrayVisualizer extends React.Component {
         return this.arrLength;
     }
 
-    initArray(func, length) {
+    initArray(func, length, setToState=false) {
         let arr = []
         for (let i = 0; i < length; ++i) {
             let element = new Element(func(i, length), 0, [255, 255, 255])
             arr.push(element)
         }
-        return arr;
+        if(setToState){
+            this.setState({
+                array: arr
+            })
+        }else {
+            return arr;
+        }
     }
 
     shuffleArray() {
@@ -334,29 +343,40 @@ export class ArrayVisualizer extends React.Component {
         return tmp;
     }
 
-    updateArrLength(){
-        let slider = document.getElementById("slider")
+    // updateArrLength(){
+    //     let slider = document.getElementById("slider")
+    //
+    //     if(slider !== null){
+    //         this.arrLength = slider.value
+    //         this.setState({
+    //             array: this.initArray(linear, this.arrLength)
+    //         })
+    //         this.pseudoArray = deepArrayCopy(this.state.array)
+    //     }
+    //     this.sorts.arrLength = this.getArrLength()
+    //     this.delayInc = 5000/this.arrLength;
+    // }
 
-        if(slider !== null){
-            this.arrLength = slider.value
-            this.setState({
-                array: this.initArray(linear, this.arrLength)
-            })
-            this.pseudoArray = deepArrayCopy(this.state.array)
-        }
+    updateArrLength(len){
+        this.arrLength = len
+        this.setState({
+            array: this.initArray(linear, this.arrLength)
+        })
+        this.pseudoArray = deepArrayCopy(this.state.array)
+
         this.sorts.arrLength = this.getArrLength()
         this.delayInc = 5000/this.arrLength;
     }
+
 
     render() {
         return (
             <div>
                 <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes} arrLength={this.arrLength}/>
-                <ArrayWindow array={this.state.array}/>
-                <div><input id="slider" type="range" min="10" max="300" defaultValue={this.arrLength} step="10" onChange={this.updateArrLength.bind(this)}/>
+                <div style={{display: "flex"}}>
+                    <ArrayWindow array={this.state.array}/>
+                    <Controls arrayVisualizer={this} sorts={this.sorts}/>
                 </div>
-                <button onClick={this.shuffleClickEvent.bind(this)}>Shuffle</button>
-                {this.genSorts()}
             </div>
         )
     }

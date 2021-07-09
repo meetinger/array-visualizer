@@ -15,7 +15,7 @@ export function ArrayWindow(props){
         arr.push(<div key={i} style={styleSheet} className={styles.bar}/>);
     }
     return (
-        <div>
+        <div style={{width: "100%"}}>
             <div className={styles.arrayContainer}>
                 {arr}
             </div>
