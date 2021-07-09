@@ -413,8 +413,8 @@ export class ArrayVisualizer extends React.Component {
 
         let instructions = func(this.arrLength);
         for(let i of instructions){
-            if(i[0] === "swap"){
-                setTimeout(this.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i[1], i[2], this.state.array, true, true)
+            if(i.cmd === "swap"){
+                setTimeout(this.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i.a, i.b, this.state.array, true, true)
             }
         }
 

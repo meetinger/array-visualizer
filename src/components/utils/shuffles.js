@@ -6,7 +6,11 @@ export let shuffles = {
         for (let i = 0; i < len; ++i) {
             let randomIndex = randomInt(i, len)
             instructions.push(
-                ["swap", i, randomIndex]
+                {
+                    cmd: "swap",
+                    a: i,
+                    b:randomIndex
+                }
             )
         }
         return instructions
@@ -19,7 +23,11 @@ export let shuffles = {
             let randomIndexA = randomInt(i, len)
             let randomIndexB = randomInt(i, len)
             instructions.push(
-                ["swap", randomIndexA, randomIndexB]
+                {
+                    cmd: "swap",
+                    a: randomIndexA,
+                    b:randomIndexB
+                }
             )
         }
         return instructions
