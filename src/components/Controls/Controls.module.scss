@@ -1,5 +1,6 @@
 #controlsContainer {
-  width: 20rem;
+  //width: 20rem;
+  //height: 100%;
 }
 
 .textCenter {
@@ -9,6 +10,9 @@
 #controls {
   padding: 1rem;
   width: 20rem;
+  //display: flex;
+  //justify-content: center;
+  margin: auto;
 }
 
 #showToggleBtn {

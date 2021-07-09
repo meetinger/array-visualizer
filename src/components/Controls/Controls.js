@@ -54,6 +54,7 @@ export class Controls extends React.Component {
     }
 
     sortArray(sort){
+        // this.toggleControlShow()
         this.arrayVisualizer.sortClickEvent(sort)
     }
 
@@ -83,7 +84,7 @@ export class Controls extends React.Component {
     render() {
         return (
             <div id={styles.controlsContainer}>
-                <div onClick={this.toggleControlShow.bind(this)} id={styles.showToggleBtn}>&lt;&lt;</div>
+                {/*<div onClick={this.toggleControlShow.bind(this)} id={styles.showToggleBtn}>&lt;&lt;</div>*/}
                 <div id={styles.controls}>
                     <div>
                         <div className={styles.textCenter}>Array Size</div>

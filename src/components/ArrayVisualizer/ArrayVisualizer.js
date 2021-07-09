@@ -24,6 +24,7 @@ export class ArrayVisualizer extends React.Component {
     timeoutMarkArray
     sorts
 
+
     constructor(props) {
         super(props);
         // this.arrLength = 100
@@ -39,12 +40,12 @@ export class ArrayVisualizer extends React.Component {
             Comp: 0,
             Unmark: 0
         }
-        this.delayInc = 10;
         this.instruction = [];
         this.timeoutMarkArray = [];
         this.pseudoArray = deepArrayCopy(this.state.array)
         this.sorts = new Sorts(this);
         this.arrLength = this.state.length
+        this.delayInc = 3000/this.state.length;
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         // this.updateArrLength(this.arrLength);
     }
@@ -365,7 +366,7 @@ export class ArrayVisualizer extends React.Component {
         this.pseudoArray = deepArrayCopy(this.state.array)
 
         this.sorts.arrLength = this.getArrLength()
-        this.delayInc = 5000/this.arrLength;
+        this.delayInc = 3000/this.arrLength;
     }
 
 
@@ -375,6 +376,8 @@ export class ArrayVisualizer extends React.Component {
                 <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes} arrLength={this.arrLength}/>
                 <div style={{display: "flex"}}>
                     <ArrayWindow array={this.state.array}/>
+                </div>
+                <div>
                     <Controls arrayVisualizer={this} sorts={this.sorts}/>
                 </div>
             </div>
