@@ -45,7 +45,6 @@ export class Controls extends React.Component {
     }
 
     initArray(func){
-        // console.log(func)
         this.arrayVisualizer.initArray(func, this.arrayVisualizer.arrLength, true)
     }
 
@@ -54,8 +53,16 @@ export class Controls extends React.Component {
     }
 
     sortArray(sort){
-        // this.toggleControlShow()
         this.arrayVisualizer.sortClickEvent(sort)
+    }
+
+    stopSort(){
+        this.arrayVisualizer.stopSort()
+    }
+
+    abortSort(){
+        this.stopSort()
+        this.initArray(initFunctions.linear)
     }
 
     genInitFunctions(){
@@ -103,7 +110,13 @@ export class Controls extends React.Component {
                                 <button onClick={this.shuffleArray.bind(this)}>Random</button>
                             </div>
                         </div>
-
+                        <div className={styles.textCenter}>
+                            <div>Sort control</div>
+                            <div>
+                                <button onClick={this.stopSort.bind(this)}>Stop Sort(Not Recommended)</button>
+                                <button onClick={this.abortSort.bind(this)}>Abort Sort(Recommended)</button>
+                            </div>
+                        </div>
                         <div className={styles.textCenter}>
                             <div>Sort Array</div>
                             <div>

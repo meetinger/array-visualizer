@@ -21,7 +21,7 @@ export class ArrayVisualizer extends React.Component {
     pseudoArray;
     arrLength
     ctx
-    timeoutMarkArray
+    timeoutArray
     sorts
 
 
@@ -41,7 +41,7 @@ export class ArrayVisualizer extends React.Component {
             Unmark: 0
         }
         this.instruction = [];
-        this.timeoutMarkArray = [];
+        this.timeoutArray = [];
         this.pseudoArray = deepArrayCopy(this.state.array)
         this.sorts = new Sorts(this);
         this.arrLength = this.state.length
@@ -80,10 +80,10 @@ export class ArrayVisualizer extends React.Component {
             Comp: 0,
             Unmark: 0
         }
-        for(let i of this.timeoutMarkArray){
+        for(let i of this.timeoutArray){
             clearTimeout(i);
         }
-        this.timeoutMarkArray = []
+        this.timeoutArray = []
     }
 
     nullify() {
@@ -180,11 +180,11 @@ export class ArrayVisualizer extends React.Component {
 
     markUnmarkMany(markIndexes, markArgs) {
         this.markMany(markIndexes, markArgs, true)
-        this.timeoutMarkArray.push(setTimeout(this.unmarkMany.bind(this), this.delays.Unmark += this.delayInc / 100, markIndexes, false, true))
+        this.timeoutArray.push(setTimeout(this.unmarkMany.bind(this), this.delays.Unmark += this.delayInc / 100, markIndexes, false, true))
     }
 
     swapWithDelay(a, b, mark, delay = this.delayInc, arr = this.pseudoArray, playSound) {
-        setTimeout(this.swapInArr.bind(this), this.delays.Swap += delay, a, b, mark, arr, playSound)
+        this.timeoutArray.push(setTimeout(this.swapInArr.bind(this), this.delays.Swap += delay, a, b, mark, arr, playSound))
     }
 
 
@@ -226,7 +226,7 @@ export class ArrayVisualizer extends React.Component {
     }
 
     writeWithDelay(index, value, mark, delay = this.delayInc, arr = this.pseudoArray, playSound=true) {
-        setTimeout(this.writeInArr.bind(this), this.delays.Write += delay, index, value, mark, arr, playSound)
+        this.timeoutArray.push(setTimeout(this.writeInArr.bind(this), this.delays.Write += delay, index, value, mark, arr, playSound))
     }
 
     write(index, value) {
@@ -283,6 +283,11 @@ export class ArrayVisualizer extends React.Component {
 
     getArrLength(){
         return this.arrLength;
+    }
+
+    stopSort(){
+        this.resetDelay()
+        this.unmarkMany(Array.from(Array(this.arrLength).keys()), false, true)
     }
 
     initArray(func, length, setToState=false) {
