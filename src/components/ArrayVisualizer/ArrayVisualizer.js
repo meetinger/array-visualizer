@@ -183,14 +183,15 @@ export class ArrayVisualizer extends React.Component {
         this.timeoutMarkArray.push(setTimeout(this.unmarkMany.bind(this), this.delays.Unmark += this.delayInc / 100, markIndexes, false, true))
     }
 
-    swapWithDelay(a, b, mark, delay = this.delayInc, arr = this.pseudoArray) {
-        setTimeout(this.swapInArr.bind(this), this.delays.Swap += delay, a, b, mark, arr)
+    swapWithDelay(a, b, mark, delay = this.delayInc, arr = this.pseudoArray, playSound) {
+        setTimeout(this.swapInArr.bind(this), this.delays.Swap += delay, a, b, mark, arr, playSound)
     }
 
 
-    swapInArr(a, b, mark = true, arr = this.pseudoArray) {
-        // console.log(arr[b].getValue())
-        this.playSound(arr[b].getValue());
+    swapInArr(a, b, mark = true, arr = this.pseudoArray, playSound=false) {
+        if(playSound) {
+            this.playSound(arr[b].getValue());
+        }
         let tmpArr = arr
         // console.log("SWAPPING:" + tmpArr[a].getValue()+"<->"+tmpArr[b].getValue())
         let tmp = tmpArr[a]
@@ -206,13 +207,14 @@ export class ArrayVisualizer extends React.Component {
     }
 
     swap(a, b) {
-        this.swapInArr(a, b, false)
-        this.swapWithDelay(a, b, true, this.delayInc, this.state.array)
+        this.swapInArr(a, b, false, this.pseudoArray, false)
+        this.swapWithDelay(a, b, true, this.delayInc, this.state.array, true)
     }
 
-    writeInArr(index, value, mark = true, arr = this.pseudoArray) {
-        this.playSound(value)
-
+    writeInArr(index, value, mark = true, arr = this.pseudoArray, playSound=false) {
+        if(playSound) {
+            this.playSound(value)
+        }
         arr[index].setValue(value)
         if (mark) {
             this.markUnmarkMany([index], {type: "Default"})
@@ -223,13 +225,13 @@ export class ArrayVisualizer extends React.Component {
         })
     }
 
-    writeWithDelay(index, value, mark, delay = this.delayInc, arr = this.pseudoArray) {
-        setTimeout(this.writeInArr.bind(this), this.delays.Write += delay, index, value, mark, arr)
+    writeWithDelay(index, value, mark, delay = this.delayInc, arr = this.pseudoArray, playSound=true) {
+        setTimeout(this.writeInArr.bind(this), this.delays.Write += delay, index, value, mark, arr, playSound)
     }
 
     write(index, value) {
-        this.writeInArr(index, value, false, this.pseudoArray)
-        this.writeWithDelay(index, value, true, this.delayInc, this.state.array)
+        this.writeInArr(index, value, false, this.pseudoArray, false)
+        this.writeWithDelay(index, value, true, this.delayInc, this.state.array, true)
     }
 
     read(index, arr = this.pseudoArray) {
@@ -306,9 +308,9 @@ export class ArrayVisualizer extends React.Component {
         for (let i = 0; i < this.state.array.length; ++i) {
             // this.swap(i, randomInt(0, this.state.array.length))
             if (this.delayInc === 0) {
-                this.swapWithDelay(i, randomInt(0, this.state.array.length), true, this.delayInc / 5, this.state.array)
+                this.swapWithDelay(i, randomInt(0, this.state.array.length), true, this.delayInc / 5, this.state.array, false)
             } else {
-                setTimeout(this.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i, randomInt(0, this.state.array.length), true, this.state.array)
+                setTimeout(this.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i, randomInt(0, this.state.array.length), true, this.state.array, true)
             }
             // sleep(50)
         }
