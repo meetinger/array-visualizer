@@ -214,7 +214,12 @@ export class ArrayVisualizer extends React.Component {
         this.swapInArr(a, b, arr, false, false)
         // console.log(getVarName(this.state.array.name))
         this.instructions.push(
-            ["swap", arr, a, b]
+        {
+            cmd: "swap",
+            arr: arr,
+            a: a,
+            b: b
+        }
         )
         // this.swapWithDelay(a, b, this.state.array, true, this.delayInc, true)
     }
@@ -240,7 +245,12 @@ export class ArrayVisualizer extends React.Component {
     write(index, value, arr = this.pseudoArray) {
         this.writeInArr(index, value, this.pseudoArray, false, false)
         this.instructions.push(
-            ["write", arr, index, value]
+            {
+                cmd: "write",
+                arr: arr,
+                index: index,
+                value: value
+            }
         )
         // this.writeWithDelay(index, value, this.state.array, true, this.delayInc, true)
     }
@@ -248,7 +258,11 @@ export class ArrayVisualizer extends React.Component {
     read(index, arr = this.pseudoArray) {
         // this.markUnmarkMany([index], {type: "Default"})
         this.instructions.push(
-            ["read", arr, index]
+            {
+             cmd: "read",
+             arr: arr,
+             index: index
+            }
         )
         return arr[index].getValue()
     }
@@ -287,7 +301,10 @@ export class ArrayVisualizer extends React.Component {
         let auxArrIndex = this.pseudoAuxArrays.length
         this.pseudoAuxArrays.push(this.initArray(()=>0, len,false))
         this.instructions.push(
-            ["createAuxArray", auxArrIndex]
+            {
+                cmd: "createAuxArray",
+                index: auxArrIndex
+            }
         )
         return this.pseudoAuxArrays[auxArrIndex]
     }
@@ -295,11 +312,16 @@ export class ArrayVisualizer extends React.Component {
     removeAuxArray(index){
         this.pseudoAuxArrays.splice(index, 1)
         this.instructions.push(
-            ["removeAuxArray", index]
+            {
+                cmd: "removeAuxArray",
+                index: index
+            }
         )
     }
 
-    getArrayByName(name, index=0){
+    getArrayByName(args){
+        let name = args.name
+        let index = args.index
         if (name==="mainArray"){
             return this.state.array
         }
@@ -317,22 +339,34 @@ export class ArrayVisualizer extends React.Component {
 
     getNameByArray(arr){
         if(arraysEquals(arr, this.state.array)){
-            return "mainArray"
+            return {name:"mainArray"}
         }
         if(arraysEquals(arr, this.pseudoArray)){
-            return "pseudoArray"
+            return {name:"pseudoArray"}
         }
         for(let i = 0; i < this.pseudoAuxArrays.length;++i){
             if (arraysEquals(arr, this.pseudoAuxArrays[i])){
-                return ["pseudoAuxArray", i]
+                return {name:"pseudoAuxArray", index:i}
             }
         }
         for(let i = 0; i < this.state.auxArrays.length;++i){
             if (arraysEquals(arr, this.state.auxArrays[i])){
-                return ["auxArray", i]
+                return {name:"auxArray", index:i}
             }
         }
         return "NotFound"
+    }
+
+    getArrayByNameInversed(args){
+        let name = args.name
+        let index = args.index
+        if(name==="pseudoArray") {
+            return this.getArrayByName({name:"mainArray"})
+        }
+        if(name[0]==="pseudoAuxArray"){
+            return this.getArrayByName({name:"auxArray", index:index})
+        }
+        return this.getArrayByName(args)
     }
 
     getArrayVisualizer() {
@@ -411,23 +445,14 @@ export class ArrayVisualizer extends React.Component {
         sortBind()
 
         for(let i of this.instructions){
-            let arrName = this.getNameByArray(i[1])
-            let arr = []
-            if(Array.isArray(arrName)){
-                arr=this.getArrayByName(arrName[0], arrName[1])
-            }else {
-                arr=this.getArrayByName(arrName)
-            }
-            if(arrName==="pseudoArray") {
-                arr = this.getArrayByName("mainArray")
-            }
-            if(arrName[0]==="pseudoAuxArray"){
-                arr = this.getArrayByName("auxArray", arrName[1])
-            }
-            if(i[0] === "swap"){
-                this.swapWithDelay(i[2], i[3], arr, true, this.delayInc, true)
-            }else if(i[0] === "write"){
-                this.writeWithDelay(i[2], i[3], arr, true, this.delayInc, true)
+            let cmd = i.cmd
+            if(["swap", "read", "write"].includes(cmd)) {
+                let arr = this.getArrayByNameInversed(this.getNameByArray(i.arr))
+                if (cmd === "swap") {
+                    this.swapWithDelay(i.a, i.b, arr, true, this.delayInc, true)
+                } else if (cmd === "write") {
+                    this.writeWithDelay(i.index, i.value, arr, true, this.delayInc, true)
+                }else {}
             }
         }
     }
