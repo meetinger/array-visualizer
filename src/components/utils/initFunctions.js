@@ -11,5 +11,12 @@ export let initFunctions = {
         } else {
             return 2 * (length - x) - 1;
         }
+    },
+    inversedPipeOrgan: function inversedPipeOrgan(x, length){
+        if (x < length / 2) {
+            return (length - 2*x) - 1;
+        } else {
+            return x*2-length;
+        }
     }
 }
