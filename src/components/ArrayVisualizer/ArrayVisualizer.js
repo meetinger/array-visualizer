@@ -311,13 +311,12 @@ export class ArrayVisualizer extends React.Component {
             sortName: "Shuffle"
         })
         for (let i = 0; i < this.state.array.length; ++i) {
-            // this.swap(i, randomInt(0, this.state.array.length))
+            let randomIndex = randomInt(i, this.arrLength)
             if (this.delayInc === 0) {
-                this.swapWithDelay(i, randomInt(0, this.state.array.length), true, this.delayInc / 5, this.state.array, false)
+                this.swapWithDelay(i, randomIndex, true, this.delayInc / 5, this.state.array, false)
             } else {
-                setTimeout(this.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i, randomInt(0, this.state.array.length), true, this.state.array, true)
+                setTimeout(this.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i, randomIndex, true, this.state.array, true)
             }
-            // sleep(50)
         }
     }
 
