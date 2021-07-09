@@ -1,11 +1,11 @@
 import React from 'react';
 import {deepArrayCopy, getAllMethods, randomInt} from "../utils/utils";
-import {linear} from "../utils/initFunctions"
 import {Sorts} from "../Sorts/Sorts"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
 import {Element} from "../classes/Element";
 import {Stats} from "../Stats/Stats";
 import {Controls} from "../Controls/Controls";
+import {initFunctions} from "../utils/initFunctions";
 
 const colors = {
     "Unmarked": [255, 255, 255],
@@ -23,13 +23,13 @@ export class ArrayVisualizer extends React.Component {
     ctx
     timeoutArray
     sorts
-
+    delayIncConst
 
     constructor(props) {
         super(props);
         // this.arrLength = 100
         this.state = {
-            array: this.initArray(linear, this.arrLength),
+            array: this.initArray(initFunctions.linear, this.arrLength),
             sortName: "",
             comparisons: 0,
             writes: 0
@@ -40,12 +40,13 @@ export class ArrayVisualizer extends React.Component {
             Comp: 0,
             Unmark: 0
         }
+        this.delayIncConst = 3000
         this.instruction = [];
         this.timeoutArray = [];
         this.pseudoArray = deepArrayCopy(this.state.array)
         this.sorts = new Sorts(this);
         this.arrLength = this.state.length
-        this.delayInc = 3000/this.arrLength;
+        this.delayInc = this.delayIncConst/this.arrLength;
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         // this.updateArrLength(this.arrLength);
     }
@@ -305,19 +306,27 @@ export class ArrayVisualizer extends React.Component {
         }
     }
 
-    shuffleArray() {
+    shuffleArray(func) {
         this.nullify()
         this.setState({
             sortName: "Shuffle"
         })
-        for (let i = 0; i < this.arrLength; ++i) {
-            let randomIndex = randomInt(i, this.arrLength)
-            if (this.delayInc === 0) {
-                this.swapWithDelay(i, randomIndex, true, this.delayInc / 5, this.state.array, false)
-            } else {
-                setTimeout(this.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i, randomIndex, true, this.state.array, true)
+
+        let instructions = func(this.arrLength);
+        for(let i of instructions){
+            if(i[0] === "swap"){
+                setTimeout(this.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i[1], i[2], true, this.state.array, true)
             }
         }
+
+        // for (let i = 0; i < this.arrLength; ++i) {
+        //     let randomIndex = randomInt(i, this.arrLength)
+        //     if (this.delayInc === 0) {
+        //         this.swapWithDelay(i, randomIndex, true, this.delayInc / 5, this.state.array, false)
+        //     } else {
+        //         setTimeout(this.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i, randomIndex, true, this.state.array, true)
+        //     }
+        // }
     }
 
     shuffleClickEvent() {
@@ -332,47 +341,25 @@ export class ArrayVisualizer extends React.Component {
             sortName: sort.name
         })
         this.nullify()
-        // sort(0, this.state.array.length - 1)
 
         let sortBind = sort.bind(this.sorts, 0, this.arrLength - 1)
         sortBind()
     }
 
-    genSorts() {
-        let tmp = []
-        let methods = getAllMethods(this.sorts)
-        for (let i of methods) {
-            if(i.includes("Sort"))
-                tmp.push(
-                    <button key={i} onClick={this.sortClickEvent.bind(this, this.sorts[i])}>{i}</button>
-                )
-        }
-        return tmp;
-    }
 
-    // updateArrLength(){
-    //     let slider = document.getElementById("slider")
-    //
-    //     if(slider !== null){
-    //         this.arrLength = slider.value
-    //         this.setState({
-    //             array: this.initArray(linear, this.arrLength)
-    //         })
-    //         this.pseudoArray = deepArrayCopy(this.state.array)
-    //     }
-    //     this.sorts.arrLength = this.getArrLength()
-    //     this.delayInc = 5000/this.arrLength;
-    // }
+    updateDelayInc(val){
+        this.delayInc = val/this.arrLength;
+    }
 
     updateArrLength(len){
         this.arrLength = len
         this.setState({
-            array: this.initArray(linear, this.arrLength)
+            array: this.initArray(initFunctions.linear, this.arrLength)
         })
         this.pseudoArray = deepArrayCopy(this.state.array)
 
         this.sorts.arrLength = this.getArrLength()
-        this.delayInc = 3000/this.arrLength;
+        this.updateDelayInc(this.delayIncConst)
     }
 
 

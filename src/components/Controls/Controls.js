@@ -2,6 +2,7 @@ import React from 'react';
 import styles from "./Controls.module.scss";
 import {initFunctions} from "../utils/initFunctions";
 import {getAllMethods} from "../utils/utils";
+import {shuffles} from "../utils/shuffles";
 
 
 export class Controls extends React.Component {
@@ -48,8 +49,8 @@ export class Controls extends React.Component {
         this.arrayVisualizer.initArray(func, this.arrayVisualizer.arrLength, true)
     }
 
-    shuffleArray(){
-        this.arrayVisualizer.shuffleArray()
+    shuffleArray(func){
+        this.arrayVisualizer.shuffleArray(func)
     }
 
     sortArray(sort){
@@ -88,6 +89,16 @@ export class Controls extends React.Component {
         return tmp;
     }
 
+    getShuffles(){
+        let tmp = []
+        for(let i in shuffles){
+            tmp.push(
+                <button key={i} onClick={this.shuffleArray.bind(this, shuffles[i])}>{i}</button>
+            )
+        }
+        return tmp;
+    }
+
     render() {
         return (
             <div id={styles.controlsContainer}>
@@ -107,7 +118,8 @@ export class Controls extends React.Component {
                         <div className={styles.textCenter}>
                             <div>Shuffle Array</div>
                             <div>
-                                <button onClick={this.shuffleArray.bind(this)}>Random</button>
+                                {/*<button onClick={this.shuffleArray.bind(this)}>Random</button>*/}
+                                <div>{this.getShuffles()}</div>
                             </div>
                         </div>
                         <div className={styles.textCenter}>

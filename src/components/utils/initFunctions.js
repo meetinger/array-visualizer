@@ -6,6 +6,3 @@ export let initFunctions = {
         return length - x;
     }
 }
-export function linear(x, length) {
-    return x;
-}
