@@ -326,7 +326,7 @@ export class ArrayVisualizer extends React.Component {
     }
 
     createAuxArrayWithDelay(len, isPseudo = false, delay){
-        this.timeoutArray.push(setTimeout(this.createAuxArray.bind(this), this.delays.CreateAuxArray += delay, len, isPseudo))
+        this.timeoutArray.push(setTimeout(this.createAuxArray.bind(this), this.delays.Write += delay, len, isPseudo))
     }
 
     removeAuxArray(arr, isPseudo = true){
@@ -346,7 +346,7 @@ export class ArrayVisualizer extends React.Component {
     }
 
     removeAuxArrayWithDelay(index, isPseudo = false, delay){
-        this.timeoutArray.push(setTimeout(this.removeAuxArray.bind(this), this.delays.RemoveAuxArray += delay, index, isPseudo))
+        this.timeoutArray.push(setTimeout(this.removeAuxArray.bind(this), this.delays.Write += delay, index, isPseudo))
     }
 
     getNameByArray(arr){
@@ -489,10 +489,10 @@ export class ArrayVisualizer extends React.Component {
                 } else {}
             }
             if(cmd==="createAuxArray"){
-                this.createAuxArrayWithDelay(cmd.len, false, this.delayInc)
+                this.createAuxArrayWithDelay(i.len, false, this.delayInc)
             }
             if(cmd==="removeAuxArray"){
-                this.removeAuxArrayWithDelay(cmd.index, false, this.delayInc)
+                this.removeAuxArrayWithDelay(i.index, false, this.delayInc)
             }
         }
         this.pseudoAuxArrays = []
