@@ -15,7 +15,7 @@ export class Controls extends React.Component {
         this.isControlShow = true;
         this.arrayVisualizer = props.arrayVisualizer
         this.sorts = props.sorts
-        this.arrayVisualizer.updateArrLength(10)
+        this.arrayVisualizer.updateArrLength(100)
         this.arrayVisualizer.initArray(initFunctions.linear)
     }
 

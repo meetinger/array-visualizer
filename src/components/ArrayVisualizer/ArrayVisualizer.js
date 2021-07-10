@@ -339,11 +339,13 @@ export class ArrayVisualizer extends React.Component {
                 }
             )
         }else{
+            console.log("REMOVING AUX ARRAY: " + index)
             let tmp = this.state.auxArrays
             tmp.splice(index, 1)
             this.setState({
                 auxArrays: tmp
             })
+            console.log("LEN: " + this.state.auxArrays.length)
             // this.state.auxArrays.splice(index, 1)
         }
     }
@@ -558,7 +560,7 @@ export class ArrayVisualizer extends React.Component {
         console.log(this.state.auxArrays)
         for(let i = this.state.auxArrays.length-1; i >= 0;i--){
             tmp.push(
-                <ArrayWindow key={this.state.auxArrays.length-i} array={this.state.auxArrays[i]} mainArray={this.state.array}/>
+                <ArrayWindow key={this.state.auxArrays.length-i} array={this.state.auxArrays[i]} mainArray={this.state.array} height={100/(1+this.state.auxArrays.length)}/>
             )
         }
         return tmp
@@ -568,10 +570,10 @@ export class ArrayVisualizer extends React.Component {
         return (
             <div>
                 <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes} arrLength={this.arrLength}/>
-                <div style={{height: "100%"}}>
+                <div style={{height: "100vh"}}>
                 {/*<div>*/}
                     {this.genArrayWindows()}
-                    <ArrayWindow array={this.state.array} mainArray={this.state.array}/>
+                    <ArrayWindow array={this.state.array} mainArray={this.state.array} height={100/(1+this.state.auxArrays.length)}/>
                 </div>
                 <div>
                     <Controls arrayVisualizer={this} sorts={this.sorts}/>

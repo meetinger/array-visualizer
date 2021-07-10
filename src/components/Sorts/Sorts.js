@@ -122,8 +122,8 @@ export class Sorts {
         }
         // console.log(leftArray)
         // console.log(rightArray)
-        this.removeAuxArray(leftArrayIndex)
         this.removeAuxArray(rightArrayIndex)
+        this.removeAuxArray(leftArrayIndex)
     }
 
     MergeSort(low, high) {

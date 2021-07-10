@@ -4,6 +4,7 @@ import styles from "./ArrayWindow.module.scss";
 export function ArrayWindow(props){
     let array = props.array
     let mainArray = props.mainArray
+    let height = props.height
     // let style = props.style
     // console.log(array)
     let arr = []
@@ -26,7 +27,7 @@ export function ArrayWindow(props){
         return <div/>
     }
     return (
-        <div style={{width: "100%"}}>
+        <div style={{width: "100%", height: height+"%"}}>
             <div className={styles.arrayContainer}>
                 {arr}
             </div>
