@@ -314,7 +314,7 @@ export class ArrayVisualizer extends React.Component {
                     len: len
                 }
             )
-            return this.pseudoAuxArrays[auxArrIndex]
+            return auxArrIndex
         }else{
             let tmpArr = this.state.auxArrays
             tmpArr.push(this.initArray(() => 0, len, false))
@@ -325,14 +325,13 @@ export class ArrayVisualizer extends React.Component {
         }
     }
 
-    createAuxArrayWithDelay(len, isPseudo = false, delay){
+    createAuxArrayWithDelay(len, delay, isPseudo = false){
         this.timeoutArray.push(setTimeout(this.createAuxArray.bind(this), this.delays.Write += delay, len, isPseudo))
     }
 
-    removeAuxArray(arr, isPseudo = true){
+    removeAuxArray(index, isPseudo = true){
         if(isPseudo) {
-            let index = this.pseudoAuxArrays.indexOf(arr)
-            // this.pseudoAuxArrays.splice(index, 1)
+            this.pseudoAuxArrays.splice(index, 1)
             this.instructions.push(
                 {
                     cmd: "removeAuxArray",
@@ -340,13 +339,48 @@ export class ArrayVisualizer extends React.Component {
                 }
             )
         }else{
-            let index = this.state.auxArrays.indexOf(arr)
-            this.state.auxArrays.splice(index, 1)
+            let tmp = this.state.auxArrays
+            tmp.splice(index, 1)
+            this.setState({
+                auxArrays: tmp
+            })
+            // this.state.auxArrays.splice(index, 1)
         }
     }
 
-    removeAuxArrayWithDelay(index, isPseudo = false, delay){
+    removeAuxArrayWithDelay(index, delay, isPseudo = false){
         this.timeoutArray.push(setTimeout(this.removeAuxArray.bind(this), this.delays.Write += delay, index, isPseudo))
+    }
+
+    auxRead(index, arrIndex, isPseudo = true){
+        if(isPseudo){
+            return this.pseudoAuxArrays[arrIndex][index].getValue()
+        }else {
+            return this.state.auxArrays[arrIndex][index].getValue()
+        }
+    }
+
+    auxWrite(index, value, arrIndex, isPseudo = true, playSound = false){
+        if(playSound){
+            this.playSound(value)
+        }
+        if(isPseudo){
+            this.pseudoAuxArrays[arrIndex][index].setValue(value)
+            this.instructions.push(
+                {
+                    cmd: "auxWrite",
+                    index: index,
+                    value: value,
+                    arrIndex: arrIndex
+                }
+            )
+        }else{
+            this.state.auxArrays[arrIndex][index].setValue(value)
+        }
+    }
+
+    auxWriteWithDelay(index, value, arrIndex, delay, isPseudo = false, playSound = true, ){
+        this.timeoutArray.push(setTimeout(this.auxWrite.bind(this), this.delays.Write += delay, index, value, arrIndex, isPseudo, playSound))
     }
 
     getNameByArray(arr){
@@ -468,7 +502,8 @@ export class ArrayVisualizer extends React.Component {
 
         let sortBind = sort.bind(this.sorts, 0, this.arrLength - 1)
         sortBind()
-
+        console.log("SORTED ARRAY:")
+        console.log(this.pseudoArray)
 
         console.log("START INTERPRETATION!!")
         for(let i of this.instructions){
@@ -477,7 +512,7 @@ export class ArrayVisualizer extends React.Component {
                 let arrName = this.getNameByArray(i.arr)
                 let arrNameInv = this.inverseArrayName(arrName)
                 let arr = this.getArrayByName(arrNameInv)
-                console.log(""+arrName)
+                // console.log(arrName)
                 if (cmd === "swap") {
                     this.swapWithDelay(i.a, i.b, arr, true, this.delayInc, true)
                 } else if (cmd === "write") {
@@ -488,11 +523,14 @@ export class ArrayVisualizer extends React.Component {
                     this.writeWithDelay(i.index, i.value, arr, true, this.delayInc, true)
                 } else {}
             }
+            if(cmd==="auxWrite"){
+                this.auxWriteWithDelay(i.index, i.value, i.arrIndex, this.delayInc, false, true)
+            }
             if(cmd==="createAuxArray"){
-                this.createAuxArrayWithDelay(i.len, false, this.delayInc)
+                this.createAuxArrayWithDelay(i.len, this.delayInc, false)
             }
             if(cmd==="removeAuxArray"){
-                this.removeAuxArrayWithDelay(i.index, false, this.delayInc)
+                this.removeAuxArrayWithDelay(i.index, this.delayInc, false)
             }
         }
         this.pseudoAuxArrays = []
@@ -517,10 +555,10 @@ export class ArrayVisualizer extends React.Component {
 
     genArrayWindows(){
         let tmp = []
-        // console.log(this.state.auxArrays)
+        console.log(this.state.auxArrays)
         for(let i = this.state.auxArrays.length-1; i >= 0;i--){
             tmp.push(
-                <ArrayWindow key={this.state.auxArrays.length-i} array={this.state.auxArrays[i]}/>
+                <ArrayWindow key={this.state.auxArrays.length-i} array={this.state.auxArrays[i]} mainArray={this.state.array}/>
             )
         }
         return tmp
@@ -533,7 +571,7 @@ export class ArrayVisualizer extends React.Component {
                 <div style={{height: "100%"}}>
                 {/*<div>*/}
                     {this.genArrayWindows()}
-                    <ArrayWindow array={this.state.array}/>
+                    <ArrayWindow array={this.state.array} mainArray={this.state.array}/>
                 </div>
                 <div>
                     <Controls arrayVisualizer={this} sorts={this.sorts}/>
