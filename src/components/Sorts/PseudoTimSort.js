@@ -1,10 +1,10 @@
 import {Sort} from "./Sort";
 
-export class TimSort extends Sort {
+export class PseudoTimSort extends Sort {
     MIN_MERGE
     constructor(arrayVisualizer) {
         super(arrayVisualizer);
-        this.sortName = "TimSort"
+        this.sortName = "PseudoTimSort"
         this.MIN_MERGE = 32
     }
 
