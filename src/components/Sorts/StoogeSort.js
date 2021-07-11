@@ -7,8 +7,6 @@ export class StoogeSort extends Sort{
     }
 
     StoogeSort(i, j) {
-        console.log(i)
-        console.log(j)
         if (this.compare(i, j, ">")) {
             this.swap(i, j)
         }
