@@ -18,6 +18,8 @@ export class Sort {
 
     sortName;
 
+    warnLen;
+
     constructor(arrayVisualizer) {
         // super(arrayVisualizer)
         this.arrayVisualizer = arrayVisualizer
@@ -33,10 +35,15 @@ export class Sort {
         this.auxWrite = this.arrayVisualizer.auxWrite.bind(arrayVisualizer)
         this.arrLength = this.arrayVisualizer.getArrLength();
         this.sortName = ""
+        this.warnLen = -1;
     }
 
     getSortName(){
         return this.sortName
+    }
+
+    getWarnLen(){
+        return this.warnLen
     }
 
     runSort(low, high, bucketsNum){

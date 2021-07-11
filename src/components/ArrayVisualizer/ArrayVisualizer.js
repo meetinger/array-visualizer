@@ -524,6 +524,12 @@ export class ArrayVisualizer extends React.Component {
             sortName: sort.getSortName()
         })
 
+        let warnLen = sort.getWarnLen()
+        if(warnLen!==-1 && this.arrLength > warnLen && !window.confirm("WARNING!!!\nThe array size("+this.arrLength+") " +
+            "more than recommended("+warnLen+")\nApplication may freeze\nDo you want continue?")){
+            return
+        }
+
         sort.runSort(low, high, bucketsNum)
 
         console.log("SORTED ARRAY:")
