@@ -99,6 +99,11 @@ export class Controls extends React.Component {
         return tmp;
     }
 
+    toggleShowAuxArrays(){
+        let element = document.getElementById("auxArrShowCB")
+        this.arrayVisualizer.setShowAuxArrays(element.checked)
+    }
+
     render() {
         return (
             <div id={styles.controlsContainer}>
@@ -109,7 +114,13 @@ export class Controls extends React.Component {
                         <input id={styles.slider} type="range" min="10" max="300" defaultValue={this.arrLength}
                                step="10"
                                onChange={this.updateArrLength.bind(this)}/>
-
+                        <div className={styles.textCenter}>
+                            <div>Visuals</div>
+                            <div>
+                                <input onChange={this.toggleShowAuxArrays.bind(this)} type="checkbox" id="auxArrShowCB" name="auxArrShowCB" defaultChecked={true}/>
+                                    <label htmlFor="auxArrShowCB">Show Aux Arrays</label>
+                            </div>
+                        </div>
                         <div className={styles.textCenter}>
                             <div>Init Array</div>
                             <div>{this.genInitFunctions()}</div>

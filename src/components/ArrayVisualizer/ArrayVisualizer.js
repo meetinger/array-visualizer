@@ -25,6 +25,7 @@ export class ArrayVisualizer extends React.Component {
     timeoutArray
     sorts
     delayIncConst
+    showAuxArrays
 
     constructor(props) {
         super(props);
@@ -52,6 +53,7 @@ export class ArrayVisualizer extends React.Component {
         this.sorts = new Sorts(this);
         this.arrLength = this.state.length
         this.delayInc = this.delayIncConst/this.arrLength;
+        this.showAuxArrays = true
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         // this.updateArrLength(this.arrLength);
     }
@@ -458,6 +460,10 @@ export class ArrayVisualizer extends React.Component {
         return this.arrLength;
     }
 
+    setShowAuxArrays(val){
+        this.showAuxArrays = val
+    }
+
     stopSort(){
         this.resetDelay()
         this.unmarkMany(Array.from(Array(this.arrLength).keys()), false, true)
@@ -561,11 +567,14 @@ export class ArrayVisualizer extends React.Component {
 
     genArrayWindows(){
         let tmp = []
-        console.log(this.state.auxArrays)
-        for(let i = this.state.auxArrays.length-1; i >= 0;i--){
-            tmp.push(
-                <ArrayWindow key={this.state.auxArrays.length-i} array={this.state.auxArrays[i]} mainArray={this.state.array} height={100/(1+this.state.auxArrays.length)}/>
-            )
+        if(this.showAuxArrays) {
+            console.log(this.state.auxArrays)
+            for (let i = this.state.auxArrays.length - 1; i >= 0; i--) {
+                tmp.push(
+                    <ArrayWindow key={this.state.auxArrays.length - i} array={this.state.auxArrays[i]}
+                                 mainArray={this.state.array} height={100 / (1 + this.state.auxArrays.length)}/>
+                )
+            }
         }
         return tmp
     }
@@ -577,7 +586,7 @@ export class ArrayVisualizer extends React.Component {
                 <div style={{height: "100vh"}}>
                 {/*<div>*/}
                     {this.genArrayWindows()}
-                    <ArrayWindow array={this.state.array} mainArray={this.state.array} height={100/(1+this.state.auxArrays.length)}/>
+                    <ArrayWindow array={this.state.array} mainArray={this.state.array} height={this.showAuxArrays ? 100/(1+this.state.auxArrays.length) : 100}/>
                 </div>
                 <div>
                     <Controls arrayVisualizer={this} sorts={this.sorts}/>
