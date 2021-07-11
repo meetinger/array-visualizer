@@ -341,13 +341,11 @@ export class ArrayVisualizer extends React.Component {
                 }
             )
         }else{
-            console.log("REMOVING AUX ARRAY: " + index)
             let tmp = this.state.auxArrays
             tmp.splice(index, 1)
             this.setState({
                 auxArrays: tmp
             })
-            console.log("LEN: " + this.state.auxArrays.length)
             // this.state.auxArrays.splice(index, 1)
         }
     }
@@ -507,17 +505,27 @@ export class ArrayVisualizer extends React.Component {
         this.shuffleArray()
     }
 
+    setSortName(sortName){
+        this.setState({
+            sortName: sortName
+        })
+    }
 
-    sortClickEvent(sort) {
+    sortClickEvent(Sort, low, high, bucketsNum) {
         this.pseudoArray = deepArrayCopy(this.state.array)
         this.nullify()
-        this.setState({
-            sortName: sort.name
-        })
-        this.nullify()
 
-        let sortBind = sort.bind(this.sorts, 0, this.arrLength - 1)
-        sortBind()
+        // let sortBind = sort.bind(this.sorts, 0, this.arrLength - 1)
+        // sortBind()
+        // console.log(sort)
+        let sort = new Sort(this)
+
+        this.setState({
+            sortName: sort.getSortName()
+        })
+
+        sort.runSort(low, high, bucketsNum)
+
         console.log("SORTED ARRAY:")
         console.log(this.pseudoArray)
 

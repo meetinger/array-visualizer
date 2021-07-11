@@ -53,8 +53,8 @@ export class Controls extends React.Component {
         this.arrayVisualizer.shuffleArray(func)
     }
 
-    sortArray(sort){
-        this.arrayVisualizer.sortClickEvent(sort)
+    sortArray(sortName){
+        this.sorts.runSort(sortName, 0, this.arrayVisualizer.getArrLength()-1, 10)
     }
 
     stopSort(){
@@ -79,12 +79,10 @@ export class Controls extends React.Component {
 
     getSorts(){
         let tmp = []
-        let methods = getAllMethods(this.sorts)
-        for (let i of methods) {
-            if(i.includes("Sort"))
+        let sortsNames = this.sorts.getSortsNames()
+        for (let i of sortsNames) {
                 tmp.push(
-                    <button key={i} onClick={this.sortArray.bind(this, this.sorts[i])}>{i}</button>
-                )
+                    <button key={i} onClick={this.sortArray.bind(this, i)}>{i}</button>)
         }
         return tmp;
     }
