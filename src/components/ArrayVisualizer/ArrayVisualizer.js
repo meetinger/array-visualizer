@@ -467,6 +467,10 @@ export class ArrayVisualizer extends React.Component {
     stopSort(){
         this.resetDelay()
         this.unmarkMany(Array.from(Array(this.arrLength).keys()), false, true)
+        this.setState({
+                auxArrays: []
+            }
+        )
     }
 
     initArray(func, length, setToState=false) {
@@ -568,7 +572,6 @@ export class ArrayVisualizer extends React.Component {
     genArrayWindows(){
         let tmp = []
         if(this.showAuxArrays) {
-            console.log(this.state.auxArrays)
             for (let i = this.state.auxArrays.length - 1; i >= 0; i--) {
                 tmp.push(
                     <ArrayWindow key={this.state.auxArrays.length - i} array={this.state.auxArrays[i]}
