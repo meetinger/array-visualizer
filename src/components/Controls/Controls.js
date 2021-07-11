@@ -79,7 +79,7 @@ export class Controls extends React.Component {
 
     getSorts(){
         let tmp = []
-        let sortsNames = this.sorts.getSortsNames()
+        let sortsNames = this.sorts.getSortsPaths()
         for (let i of sortsNames) {
                 tmp.push(
                     <button key={i} onClick={this.sortArray.bind(this, i)}>{i}</button>)

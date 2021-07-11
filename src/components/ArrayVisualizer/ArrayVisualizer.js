@@ -511,26 +511,30 @@ export class ArrayVisualizer extends React.Component {
         })
     }
 
-    sortClickEvent(Sort, low, high, bucketsNum) {
+    initPseudoArray(){
         this.pseudoArray = deepArrayCopy(this.state.array)
+    }
+
+    // sortClickEvent(sortName, low, high, bucketsNum) {
+    sortClickEvent() {
         this.nullify()
 
         // let sortBind = sort.bind(this.sorts, 0, this.arrLength - 1)
         // sortBind()
         // console.log(sort)
-        let sort = new Sort(this)
+        // let sort = this.sorts.getSortObject(sortName)
+        //
+        // this.setState({
+        //     sortName: sort.getSortName()
+        // })
 
-        this.setState({
-            sortName: sort.getSortName()
-        })
+        // let warnLen = sort.getWarnLen()
+        // if(warnLen!==-1 && this.arrLength > warnLen && !window.confirm("WARNING!!!\nThe array size("+this.arrLength+") " +
+        //     "more than recommended("+warnLen+")\nApplication may freeze\nDo you want continue?")){
+        //     return
+        // }
 
-        let warnLen = sort.getWarnLen()
-        if(warnLen!==-1 && this.arrLength > warnLen && !window.confirm("WARNING!!!\nThe array size("+this.arrLength+") " +
-            "more than recommended("+warnLen+")\nApplication may freeze\nDo you want continue?")){
-            return
-        }
-
-        sort.runSort(low, high, bucketsNum)
+        // sort.runSort(low, high, bucketsNum)
 
         console.log("SORTED ARRAY:")
         console.log(this.pseudoArray)

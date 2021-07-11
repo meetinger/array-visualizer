@@ -1,7 +1,5 @@
 export class Sort {
     arrayVisualizer;
-    array;
-    pseudoArray;
 
     compare;
     swap;
@@ -17,13 +15,11 @@ export class Sort {
     arrLength;
 
     sortName;
-
     warnLen;
+    isDisabled;
 
     constructor(arrayVisualizer) {
-        // super(arrayVisualizer)
         this.arrayVisualizer = arrayVisualizer
-        this.pseudoArray = this.arrayVisualizer.getPseudoArray()
         this.state = this.arrayVisualizer.getState()
         this.compare = this.arrayVisualizer.compare.bind(arrayVisualizer)
         this.swap = this.arrayVisualizer.swap.bind(arrayVisualizer)
@@ -36,6 +32,7 @@ export class Sort {
         this.arrLength = this.arrayVisualizer.getArrLength();
         this.sortName = ""
         this.warnLen = -1;
+        this.isDisabled = false;
     }
 
     getSortName(){
