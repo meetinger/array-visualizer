@@ -378,6 +378,10 @@ export class ArrayVisualizer extends React.Component {
             )
         }else{
             this.state.auxArrays[arrIndex][index].setValue(value)
+            let tmp = this.state.auxArrays
+            this.setState({
+                auxArrays: tmp
+            })
         }
     }
 
