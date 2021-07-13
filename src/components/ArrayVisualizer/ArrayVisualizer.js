@@ -30,6 +30,8 @@ export class ArrayVisualizer extends React.Component {
     delayIncConst
     showAuxArrays
     enableBarsStroke
+    visualStyle
+    enableMarks
 
     Delays
     Sounds
@@ -37,7 +39,6 @@ export class ArrayVisualizer extends React.Component {
     Reads
     Writes
 
-    visualStyle
 
     constructor(props) {
         super(props);
@@ -60,6 +61,7 @@ export class ArrayVisualizer extends React.Component {
         this.Sorts = new Sorts(this);
         this.showAuxArrays = true
         this.enableBarsStroke = true
+        this.enableMarks = true
         this.visualStyle = {
             // style: "bars",
             style: "bars",
@@ -108,6 +110,17 @@ export class ArrayVisualizer extends React.Component {
     setVisualStyle(val){
         this.visualStyle.style = val;
         this.forceMainArrayUpdate()
+    }
+
+    setEnableMarks(val){
+        this.enableMarks = val;
+        if(!val){
+            this.Marks.clearAllMarks()
+        }
+    }
+
+    getEnableMarks(){
+        return this.enableMarks;
     }
 
     getArrayVisualizer() {
@@ -162,7 +175,7 @@ export class ArrayVisualizer extends React.Component {
     stopSort(){
         // this.resetDelay()
         this.Delays.resetDelays()
-        this.Marks.unmarkMany(Array.from(Array(this.getArrLength()).keys()), false, true)
+        this.Marks.clearAllMarks()
         this.setState({
                 auxArrays: []
             }

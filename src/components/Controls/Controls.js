@@ -107,6 +107,12 @@ export class Controls extends React.Component {
         this.arrayVisualizer.setEnableBarsStroke(element.checked)
     }
 
+    toggleEnableMarks(){
+        let element = document.getElementById("enableMarksCB")
+        console.log(element.checked)
+        this.arrayVisualizer.setEnableMarks(element.checked)
+    }
+
     toggleVisualStyle(val){
         this.arrayVisualizer.setVisualStyle(val)
     }
@@ -134,6 +140,10 @@ export class Controls extends React.Component {
                                 <input onChange={this.toggleBarsStroke.bind(this)} type="checkbox" id="enableStrokeCB"
                                        name="enableStrokeCB" defaultChecked={true}/>
                                 <label htmlFor="enableStrokeCB">Enable Bars Stroke</label>
+
+                                <input onChange={this.toggleEnableMarks.bind(this)} type="checkbox" id="enableMarksCB"
+                                       name="enableMarksCB" defaultChecked={true}/>
+                                <label htmlFor="enableMarksCB">Enable Marks</label>
                             </div>
                         </div>
                         <div>

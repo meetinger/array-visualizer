@@ -17,6 +17,9 @@ export class Marks{
     }
 
     mark(index, args, saveArr = true) {
+        if(!this.arrayVisualizer.getEnableMarks()){
+            return;
+        }
         let type = "Default"
         let color = colors["Default"]
         let tmpArr = this.arrayVisualizer.getMainArray()
@@ -99,6 +102,8 @@ export class Marks{
         this.Delays.push(setTimeout(this.unmarkMany.bind(this), this.Delays.incDelay("Unmark", this.Delays.getDelayInc() / 100), markIndexes, false, true))
     }
 
-
+    clearAllMarks(){
+        this.markUnmarkMany(Array.from(Array(this.arrayVisualizer.getArrLength()).keys()), false, true)
+    }
 
 }
