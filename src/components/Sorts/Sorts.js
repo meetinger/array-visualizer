@@ -4,7 +4,7 @@ export class Sorts {
 
     constructor(arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer
-        this.sortsPaths = ["BubbleSort", "MergeSort", "LLQuickSort", "LRQuickSort", "InsertionSort", "SelectionSort", "TimSort", "PseudoTimSort", "HeapSort", "LSDRadixSort","SlowSort", "StoogeSort"]
+        this.sortsPaths = ["BubbleSort", "MergeSort", "LLQuickSort", "LRQuickSort", "DualPivotQuickSort","InsertionSort", "SelectionSort", "TimSort", "PseudoTimSort", "HeapSort", "LSDRadixSort","SlowSort", "StoogeSort"]
     }
 
     getSortsPaths() {

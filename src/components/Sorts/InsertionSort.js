@@ -6,9 +6,9 @@ export class InsertionSort extends Sort{
         this.sortName = "InsertionSort"
     }
 
-    InsertionSort() {
-        let length = this.arrLength;
-        for (let i = 1; i < length; i++) {
+    InsertionSort(low, high) {
+        let length = high+1;
+        for (let i = low+1; i < length; i++) {
             let key = this.read(i);
             let j = i - 1;
             while (j >= 0 && this.read(j) > key) {
