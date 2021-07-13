@@ -5,10 +5,23 @@
   display: flex;
   align-items: flex-end;
   border-bottom: solid 2px black;
+  //position: relative;
 }
 .bar{
   border: solid 1px black;
   border-bottom: 0;
   width: 100%;
   background-color: white;
+}
+.dotContainer{
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.dot{
+  margin: auto;
+  float: bottom;
+  width: 0.5rem;
+  height: 0.5rem;
+  position: absolute;
 }

@@ -37,6 +37,7 @@ export class ArrayVisualizer extends React.Component {
     Reads
     Writes
 
+    visualStyle
 
     constructor(props) {
         super(props);
@@ -59,6 +60,11 @@ export class ArrayVisualizer extends React.Component {
         this.Sorts = new Sorts(this);
         this.showAuxArrays = true
         this.enableBarsStroke = true
+        this.visualStyle = {
+            // style: "bars",
+            style: "bars",
+            barsStroke: true,
+        }
     }
 
     initArray(func, length, setToState=false) {
@@ -95,7 +101,12 @@ export class ArrayVisualizer extends React.Component {
     }
 
     setEnableBarsStroke(val){
-        this.enableBarsStroke = val;
+        this.visualStyle.barsStroke = val;
+        this.forceMainArrayUpdate()
+    }
+
+    setVisualStyle(val){
+        this.visualStyle.style = val;
         this.forceMainArrayUpdate()
     }
 
@@ -213,7 +224,7 @@ export class ArrayVisualizer extends React.Component {
             for (let i = this.state.auxArrays.length - 1; i >= 0; i--) {
                 tmp.push(
                     <ArrayWindow key={this.state.auxArrays.length - i} array={this.state.auxArrays[i]}
-                                 mainArray={this.state.array} height={100 / (1 + this.state.auxArrays.length)} enableBarsStroke = {this.enableBarsStroke} />
+                                 mainArray={this.state.array} height={100 / (1 + this.state.auxArrays.length)} visualProps = {this.visualStyle} />
                 )
             }
         }
@@ -227,7 +238,7 @@ export class ArrayVisualizer extends React.Component {
                 <div style={{height: "100vh"}}>
                 {/*<div>*/}
                     {this.genArrayWindows()}
-                    <ArrayWindow array={this.state.array} mainArray={this.state.array} height={this.showAuxArrays ? 100/(1+this.state.auxArrays.length) : 100} enableBarsStroke = {this.enableBarsStroke}/>
+                    <ArrayWindow array={this.state.array} mainArray={this.state.array} height={this.showAuxArrays ? 100/(1+this.state.auxArrays.length) : 100} visualProps={this.visualStyle}/>
                 </div>
                 <div>
                     <Controls arrayVisualizer={this} sorts={this.Sorts}/>

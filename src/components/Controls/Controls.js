@@ -45,28 +45,28 @@ export class Controls extends React.Component {
         this.isControlShow = !this.isControlShow
     }
 
-    initArray(func){
+    initArray(func) {
         this.arrayVisualizer.initArray(func, this.arrayVisualizer.getArrLength(), true)
     }
 
-    shuffleArray(func){
+    shuffleArray(func) {
         this.arrayVisualizer.shuffleArray(func)
     }
 
-    sortArray(sortName){
-        this.sorts.runSort(sortName, 0, this.arrayVisualizer.getArrLength()-1)
+    sortArray(sortName) {
+        this.sorts.runSort(sortName, 0, this.arrayVisualizer.getArrLength() - 1)
     }
 
-    stopSort(){
+    stopSort() {
         this.arrayVisualizer.stopSort()
     }
 
-    abortSort(){
+    abortSort() {
         this.stopSort()
         this.initArray(initFunctions.linear)
     }
 
-    genInitFunctions(){
+    genInitFunctions() {
         // console.log(initFunctions)
         let tmp = []
         for (let i in initFunctions) {
@@ -77,19 +77,19 @@ export class Controls extends React.Component {
         return tmp;
     }
 
-    getSorts(){
+    getSorts() {
         let tmp = []
         let sortsNames = this.sorts.getSortsPaths()
         for (let i of sortsNames) {
-                tmp.push(
-                    <button key={i} onClick={this.sortArray.bind(this, i)}>{i}</button>)
+            tmp.push(
+                <button key={i} onClick={this.sortArray.bind(this, i)}>{i}</button>)
         }
         return tmp;
     }
 
-    getShuffles(){
+    getShuffles() {
         let tmp = []
-        for(let i in shuffles){
+        for (let i in shuffles) {
             tmp.push(
                 <button key={i} onClick={this.shuffleArray.bind(this, shuffles[i])}>{i}</button>
             )
@@ -97,14 +97,18 @@ export class Controls extends React.Component {
         return tmp;
     }
 
-    toggleShowAuxArrays(){
+    toggleShowAuxArrays() {
         let element = document.getElementById("auxArrShowCB")
         this.arrayVisualizer.setShowAuxArrays(element.checked)
     }
 
-    toggleBarsStroke(){
+    toggleBarsStroke() {
         let element = document.getElementById("enableStrokeCB")
         this.arrayVisualizer.setEnableBarsStroke(element.checked)
+    }
+
+    toggleVisualStyle(val){
+        this.arrayVisualizer.setVisualStyle(val)
     }
 
     render() {
@@ -113,41 +117,58 @@ export class Controls extends React.Component {
                 {/*<div onClick={this.toggleControlShow.bind(this)} id={styles.showToggleBtn}>&lt;&lt;</div>*/}
                 <div id={styles.controls}>
                     <div>
-                        <div className={styles.textCenter}>Array Size</div>
-                        <input id={styles.slider} type="range" min="10" max="500" defaultValue={this.arrayVisualizer.DEFAULT_ARR_LEN}
-                               step="10"
-                               onChange={this.updateArrLength.bind(this)}/>
-                        <div className={styles.textCenter}>
-                            <div>Visuals</div>
+                        <div>
+                            <div className={styles.sectionHeader}>Array Size</div>
+                            <input id={styles.slider} type="range" min="10" max="500"
+                                   defaultValue={this.arrayVisualizer.DEFAULT_ARR_LEN}
+                                   step="10"
+                                   onChange={this.updateArrLength.bind(this)}/>
+                        </div>
+                        <div>
+                            <div className={styles.sectionHeader}>Visuals</div>
                             <div>
-                                <input onChange={this.toggleShowAuxArrays.bind(this)} type="checkbox" id="auxArrShowCB" name="auxArrShowCB" defaultChecked={true}/>
-                                    <label htmlFor="auxArrShowCB">Show Aux Arrays</label>
+                                <input onChange={this.toggleShowAuxArrays.bind(this)} type="checkbox" id="auxArrShowCB"
+                                       name="auxArrShowCB" defaultChecked={true}/>
+                                <label htmlFor="auxArrShowCB">Show Aux Arrays</label>
 
-                                <input onChange={this.toggleBarsStroke.bind(this)} type="checkbox" id="enableStrokeCB" name="enableStrokeCB" defaultChecked={true}/>
+                                <input onChange={this.toggleBarsStroke.bind(this)} type="checkbox" id="enableStrokeCB"
+                                       name="enableStrokeCB" defaultChecked={true}/>
                                 <label htmlFor="enableStrokeCB">Enable Bars Stroke</label>
                             </div>
                         </div>
-                        <div className={styles.textCenter}>
-                            <div>Init Array</div>
+                        <div>
+                            <div className={styles.sectionHeader}>Visual Styles</div>
+                            <div>
+                                <input onChange={this.toggleVisualStyle.bind(this, "bars")} type="radio" id="barsRadioBtn"
+                                       name="visualStyle" value="bars"/>
+                                <label htmlFor="barsRadioBtn">Bars</label>
+
+                                <input onChange={this.toggleVisualStyle.bind(this, "dots")} type="radio" id="dotsRadioBtn"
+                                       name="visualStyle" value="dots"/>
+                                <label htmlFor="dotsRadioBtn">Dots</label>
+                            </div>
+                        </div>
+                        <div>
+                            <div className={styles.sectionHeader}>Init Array</div>
                             <div>{this.genInitFunctions()}</div>
                         </div>
 
-                        <div className={styles.textCenter}>
-                            <div>Shuffle Array</div>
+                        <div>
+                            <div className={styles.sectionHeader}>Shuffle Array</div>
                             <div>
                                 {/*<button onClick={this.shuffleArray.bind(this)}>Random</button>*/}
                                 <div>{this.getShuffles()}</div>
                             </div>
                         </div>
-                        <div className={styles.textCenter}>
-                            <div>Sort control</div>
+                        <div>
+                            <div className={styles.sectionHeader}>Sort control</div>
                             <div>
                                 <button onClick={this.abortSort.bind(this)}>Abort Sort(Recommended)</button>
                                 <button onClick={this.stopSort.bind(this)}>Stop Sort(Not Recommended)</button>
                             </div>
                         </div>
-                        <div className={styles.textCenter}>
-                            <div>Sort Array</div>
+                        <div>
+                            <div className={styles.sectionHeader}>Sort Array</div>
                             <div>
                                 {this.getSorts()}
                             </div>
