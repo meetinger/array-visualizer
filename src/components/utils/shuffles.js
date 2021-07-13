@@ -31,7 +31,20 @@ export let shuffles = {
             )
         }
         return instructions
-    }
+    },
 
+    reverse: function (len){
+        let instructions = []
+        for (let i = 0; i < Math.trunc(len/2); ++i){
+            instructions.push(
+                {
+                    cmd: "swap",
+                    a: i,
+                    b: len-i-1
+                }
+            )
+        }
+        return instructions
+    }
 
 }
