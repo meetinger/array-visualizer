@@ -107,13 +107,13 @@ export class Controls extends React.Component {
         this.arrayVisualizer.setEnableBarsStroke(element.checked)
     }
 
-    toggleEnableMarks(){
+    toggleEnableMarks() {
         let element = document.getElementById("enableMarksCB")
         console.log(element.checked)
         this.arrayVisualizer.setEnableMarks(element.checked)
     }
 
-    toggleVisualStyle(val){
+    toggleVisualStyle(val) {
         this.arrayVisualizer.setVisualStyle(val)
     }
 
@@ -133,27 +133,36 @@ export class Controls extends React.Component {
                         <div>
                             <div className={styles.sectionHeader}>Visuals</div>
                             <div>
-                                <input onChange={this.toggleShowAuxArrays.bind(this)} type="checkbox" id="auxArrShowCB"
-                                       name="auxArrShowCB" defaultChecked={true}/>
-                                <label htmlFor="auxArrShowCB">Show Aux Arrays</label>
-
-                                <input onChange={this.toggleBarsStroke.bind(this)} type="checkbox" id="enableStrokeCB"
-                                       name="enableStrokeCB" defaultChecked={true}/>
-                                <label htmlFor="enableStrokeCB">Enable Bars Stroke</label>
-
-                                <input onChange={this.toggleEnableMarks.bind(this)} type="checkbox" id="enableMarksCB"
-                                       name="enableMarksCB" defaultChecked={true}/>
-                                <label htmlFor="enableMarksCB">Enable Marks</label>
+                                <div>
+                                    <input onChange={this.toggleShowAuxArrays.bind(this)} type="checkbox"
+                                           id="auxArrShowCB"
+                                           name="auxArrShowCB" defaultChecked={true}/>
+                                    <label htmlFor="auxArrShowCB">Show Aux Arrays</label>
+                                </div>
+                                <div>
+                                    <input onChange={this.toggleBarsStroke.bind(this)} type="checkbox"
+                                           id="enableStrokeCB"
+                                           name="enableStrokeCB" defaultChecked={true}/>
+                                    <label htmlFor="enableStrokeCB">Enable Bars Stroke</label>
+                                </div>
+                                <div>
+                                    <input onChange={this.toggleEnableMarks.bind(this)} type="checkbox"
+                                           id="enableMarksCB"
+                                           name="enableMarksCB" defaultChecked={true}/>
+                                    <label htmlFor="enableMarksCB">Enable Marks</label>
+                                </div>
                             </div>
                         </div>
                         <div>
                             <div className={styles.sectionHeader}>Visual Styles</div>
                             <div>
-                                <input onChange={this.toggleVisualStyle.bind(this, "bars")} type="radio" id="barsRadioBtn"
-                                       name="visualStyle" value="bars"/>
+                                <input onChange={this.toggleVisualStyle.bind(this, "bars")} type="radio"
+                                       id="barsRadioBtn"
+                                       name="visualStyle" value="bars" defaultChecked={true}/>
                                 <label htmlFor="barsRadioBtn">Bars</label>
 
-                                <input onChange={this.toggleVisualStyle.bind(this, "dots")} type="radio" id="dotsRadioBtn"
+                                <input onChange={this.toggleVisualStyle.bind(this, "dots")} type="radio"
+                                       id="dotsRadioBtn"
                                        name="visualStyle" value="dots"/>
                                 <label htmlFor="dotsRadioBtn">Dots</label>
                             </div>
