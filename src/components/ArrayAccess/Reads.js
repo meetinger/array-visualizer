@@ -15,13 +15,15 @@ export class Reads{
     }
     auxRead(index, arrIndex, isPseudo = true){
         if(isPseudo){
-            return this.pseudoAuxArrays[arrIndex][index].getValue()
+            return this.arrayVisualizer.getPseudoAuxArrays()[arrIndex][index].getValue()
+            // return this.pseudoAuxArrays[arrIndex][index].getValue()
         }else {
-            return this.auxArrays[arrIndex][index].getValue()
+            return this.arrayVisualizer.getAuxArrays()[arrIndex][index].getValue()
+            // return this.auxArrays[arrIndex][index].getValue()
         }
     }
 
-    read(index, arr = this.pseudoArray) {
+    read(index, arr = this.arrayVisualizer.getPseudoArray()) {
         // this.markUnmarkMany([index], {type: "Default"})
         // this.instructions.push(
         //     {
