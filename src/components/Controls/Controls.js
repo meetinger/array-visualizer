@@ -12,12 +12,11 @@ export class Controls extends React.Component {
 
     constructor(props) {
         super(props);
-        this.DEFAULT_ARR_LEN = 100
         this.isControlShow = true;
         this.arrayVisualizer = props.arrayVisualizer
         this.sorts = props.sorts
-        this.arrayVisualizer.updateArrLength(this.DEFAULT_ARR_LEN)
-        this.arrayVisualizer.initArray(initFunctions.linear)
+        this.arrayVisualizer.updateArrLength(this.arrayVisualizer.DEFAULT_ARR_LEN)
+        // this.arrayVisualizer.initArray(initFunctions.linear)
     }
 
     updateArrLength() {
@@ -110,7 +109,7 @@ export class Controls extends React.Component {
                 <div id={styles.controls}>
                     <div>
                         <div className={styles.textCenter}>Array Size</div>
-                        <input id={styles.slider} type="range" min="10" max="300" defaultValue={this.DEFAULT_ARR_LEN}
+                        <input id={styles.slider} type="range" min="10" max="300" defaultValue={this.arrayVisualizer.DEFAULT_ARR_LEN}
                                step="10"
                                onChange={this.updateArrLength.bind(this)}/>
                         <div className={styles.textCenter}>

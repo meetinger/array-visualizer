@@ -6,6 +6,11 @@ import {Element} from "../classes/Element";
 import {Stats} from "../Stats/Stats";
 import {Controls} from "../Controls/Controls";
 import {initFunctions} from "../utils/initFunctions";
+import {Delays} from "../ArrayAccess/Delays";
+import {Sounds} from "../ArrayAccess/Sounds";
+import {Marks} from "../ArrayAccess/Marks";
+import {Reads} from "../ArrayAccess/Reads";
+import {Writes} from "../ArrayAccess/Writes";
 
 const colors = {
     "Unmarked": [255, 255, 255],
@@ -20,83 +25,68 @@ export class ArrayVisualizer extends React.Component {
     delayInc;
     pseudoArray;
     pseudoAuxArrays;
-    arrLength
     ctx
     timeoutArray
     sorts
     delayIncConst
     showAuxArrays
 
+    Delays
+    Sounds
+    Marks
+    Reads
+    Writes
+
+
     constructor(props) {
         super(props);
-        // this.arrLength = 100
+        this.DEFAULT_ARR_LEN = 100
         this.state = {
-            array: this.initArray(initFunctions.linear, this.arrLength),
+            array: this.initArray(initFunctions.linear, this.DEFAULT_ARR_LEN),
             sortName: "",
             comparisons: 0,
             writes: 0,
             auxArrays: []
         }
-        this.delays = {
-            Swap: 0,
-            Write: 0,
-            Comp: 0,
-            Unmark: 0,
-            CreateAuxArray: 0,
-            RemoveAuxArray: 0
-        }
-        this.delayIncConst = 3000
+        console.log("INIT ArrayVisualizer!!!")
+        this.Delays = new Delays(this)
+        this.Sounds = new Sounds(this)
+        this.Marks = new Marks(this)
+        this.Reads = new Reads(this)
+        this.Writes = new Writes(this)
+
+        // console.log(this)
+
         this.instructions = [];
         this.timeoutArray = [];
         this.pseudoArray = deepArrayCopy(this.state.array)
         this.pseudoAuxArrays = []
         this.sorts = new Sorts(this);
-        this.arrLength = this.state.length
-        this.delayInc = this.delayIncConst/this.arrLength;
+        // this.arrLength = this.state.length
+        // this.delayInc = this.delayIncConst/this.arrLength;
         this.showAuxArrays = true
-        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+
         // this.updateArrLength(this.arrLength);
     }
 
-    playSound(value) {
-        let osc = this.ctx.createOscillator();
-        osc.type = 'sine';
-
-        let k = value / this.arrLength
-        osc.frequency.value = 2000 * k + 200;
-
-
-        let addTime = 50
-
-        let gainNode = this.ctx.createGain()
-        gainNode.gain.value = 0;
-        osc.connect(gainNode)
-        gainNode.connect(this.ctx.destination)
-
-        gainNode.gain.linearRampToValueAtTime(0.05, this.ctx.currentTime + (this.delayInc + addTime) / 1000 / 2)
-        gainNode.gain.linearRampToValueAtTime(0, this.ctx.currentTime + (this.delayInc + addTime) / 1000)
-
-        osc.start();
-        osc.stop(this.ctx.currentTime + (this.delayInc + addTime) / 1000);
-
-    }
-    resetDelay() {
-        this.delays = {
-            Swap: 0,
-            Write: 0,
-            Comp: 0,
-            Unmark: 0,
-            CreateAuxArray: 0,
-            RemoveAuxArray: 0
+    initArray(func, length, setToState=false) {
+        console.log("INIT ARR")
+        let arr = []
+        for (let i = 0; i < length; ++i) {
+            let element = new Element(func(i, length), 0, [255, 255, 255])
+            arr.push(element)
         }
-        for(let i of this.timeoutArray){
-            clearTimeout(i);
+        if(setToState){
+            this.arrayVisualizer.setState({
+                array: arr
+            })
+        }else {
+            return arr;
         }
-        this.timeoutArray = []
     }
 
     nullify() {
-        this.resetDelay()
+        this.Delays.resetDelays()
         this.setState(
             {
                 comparisons: 0,
@@ -109,187 +99,6 @@ export class ArrayVisualizer extends React.Component {
         this.state.comparisons = 0;
     }
 
-    mark(index, args, saveArr = true) {
-        let type = "Default"
-        let color = colors["Default"]
-        let tmpArr = this.state.array
-        // Additional
-        if (args.type === "Additional") {
-            type = "Additional"
-            color = args.color
-            // console.log(color)
-        }
-        //Default
-        else if (!args.type || args.type === "Default") {
-            type = "Default"
-            color = colors["Default"]
-        } else {
-            type = args.type
-            color = args.color
-        }
-
-        tmpArr[index].setType(type)
-        tmpArr[index].setColor(color)
-        if (saveArr) {
-            this.setState({
-                array: tmpArr
-            })
-        } else {
-            return tmpArr
-        }
-        // console.log(color);
-    }
-
-    markMany(indexes, args, saveArr) {
-        let tmpArr = this.state.array
-        for (let i of indexes) {
-            if (saveArr) {
-                this.mark(i, args, saveArr)
-            } else {
-                tmpArr = this.mark(i, args, saveArr)
-            }
-        }
-        if (!saveArr) {
-            return tmpArr
-        }
-    }
-
-    unmark(index, saveArr = true) {
-        let tmpArr = this.state.array
-        tmpArr[index].setColor(colors["Unmarked"])
-        tmpArr[index].setType("Unmarked")
-        if (saveArr) {
-            this.setState({
-                array: tmpArr
-            })
-        } else {
-            return tmpArr
-        }
-    }
-
-    unmarkMany(indexes, saveArr, saveOnce) {
-        let tmpArr = this.state.array
-        for (let i of indexes) {
-            if (saveArr) {
-                this.unmark(i, saveArr)
-            } else {
-                tmpArr = this.unmark(i, saveArr)
-            }
-        }
-        if (saveOnce) {
-            this.setState({
-                array: tmpArr
-            })
-        }
-        if (!saveArr) {
-            return tmpArr
-        }
-    }
-
-
-    markUnmarkMany(markIndexes, markArgs) {
-        this.markMany(markIndexes, markArgs, true)
-        this.timeoutArray.push(setTimeout(this.unmarkMany.bind(this), this.delays.Unmark += this.delayInc / 100, markIndexes, false, true))
-    }
-
-    swapWithDelay(a, b, arr = this.pseudoArray, mark, delay = this.delayInc, playSound) {
-        this.timeoutArray.push(setTimeout(this.swapInArr.bind(this), this.delays.Swap += delay, a, b, arr, mark, playSound))
-    }
-
-
-    swapInArr(a, b, arr = this.pseudoArray, mark = true, playSound = false) {
-        if(playSound) {
-            this.playSound(arr[b].getValue());
-        }
-        let tmpArr = arr
-        // console.log("SWAPPING:" + tmpArr[a].getValue()+"<->"+tmpArr[b].getValue())
-        let tmp = tmpArr[a]
-        tmpArr[a] = tmpArr[b]
-        tmpArr[b] = tmp
-        if (mark) {
-            this.markUnmarkMany([a, b], {type: "Default"})
-        }
-        let curWrites = this.state.writes;
-        this.setState({
-            writes: curWrites + 2
-        })
-    }
-
-    swap(a, b, arr = this.pseudoArray) {
-        this.swapInArr(a, b, arr, false, false)
-        // console.log(getVarName(this.state.array.name))
-        this.instructions.push(
-        {
-            cmd: "swap",
-            arr: arr,
-            a: a,
-            b: b
-        }
-        )
-        // this.swapWithDelay(a, b, this.state.array, true, this.delayInc, true)
-    }
-
-    writeInArr(index, value, arr = this.pseudoArray, mark = true, playSound = false) {
-        // console.log("WRITING IN ")
-        // console.log(this.getNameByArray(arr))
-        // console.log("INDEX: "+index)
-        // console.log("VALUE: "+value)
-        if(playSound) {
-            this.playSound(value)
-        }
-        arr[index].setValue(value)
-        if (mark) {
-            this.markUnmarkMany([index], {type: "Default"})
-        }
-        let curWrites = this.state.writes;
-        this.setState({
-            writes: curWrites + 1
-        })
-    }
-
-    writeWithDelay(index, value, arr = this.pseudoArray, mark, delay = this.delayInc, playSound = true) {
-        this.timeoutArray.push(setTimeout(this.writeInArr.bind(this), this.delays.Write += delay, index, value, arr, mark, playSound))
-    }
-
-    write(index, value, arr = this.pseudoArray) {
-        this.writeInArr(index, value, arr, false, false)
-        this.instructions.push(
-            {
-                cmd: "write",
-                arr: arr,
-                index: index,
-                value: value
-            }
-        )
-        // this.writeWithDelay(index, value, this.state.array, true, this.delayInc, true)
-    }
-
-    read(index, arr = this.pseudoArray) {
-        // this.markUnmarkMany([index], {type: "Default"})
-        this.instructions.push(
-            {
-             cmd: "read",
-             arr: arr,
-             index: index
-            }
-        )
-        return arr[index].getValue()
-    }
-
-    compare(a, b, sign = "<", arr = this.pseudoArray) {
-        // this.compMainArrWithDelay(a, b, false)
-        if (sign === "<") {
-            return arr[a].getValue() < arr[b].getValue()
-        } else if (sign === "<=") {
-            return arr[a].getValue() <= arr[b].getValue()
-        } else if (sign === ">") {
-            return arr[a].getValue() > arr[b].getValue()
-        } else if (sign === ">=") {
-            return arr[a].getValue() >= arr[b].getValue()
-        } else {
-            return arr[a].getValue() === arr[b].getValue()
-        }
-    }
 
     compMainArr(a, b, mark = false) {
         let curComparisons = this.state.comparisons;
@@ -302,92 +111,7 @@ export class ArrayVisualizer extends React.Component {
         }
     }
 
-    compMainArrWithDelay(a, b, mark = false) {
-        // setTimeout(this.compMainArr.bind(this), this.delays.Comp += this.delayInc, a, b, mark)
-    }
 
-    createAuxArray(len, isPseudo = true){
-        if(isPseudo) {
-            let auxArrIndex = this.pseudoAuxArrays.length
-            this.pseudoAuxArrays.push(this.initArray(() => 0, len, false))
-            this.instructions.push(
-                {
-                    cmd: "createAuxArray",
-                    len: len
-                }
-            )
-            return auxArrIndex
-        }else{
-            let tmpArr = this.state.auxArrays
-            tmpArr.push(this.initArray(() => 0, len, false))
-            this.setState({
-                auxArrays: tmpArr
-                }
-            )
-        }
-    }
-
-    createAuxArrayWithDelay(len, delay, isPseudo = false){
-        this.timeoutArray.push(setTimeout(this.createAuxArray.bind(this), this.delays.Write += delay, len, isPseudo))
-    }
-
-    removeAuxArray(index, isPseudo = true){
-        if(isPseudo) {
-            this.pseudoAuxArrays.splice(index, 1)
-            this.instructions.push(
-                {
-                    cmd: "removeAuxArray",
-                    index: index
-                }
-            )
-        }else{
-            let tmp = this.state.auxArrays
-            tmp.splice(index, 1)
-            this.setState({
-                auxArrays: tmp
-            })
-            // this.state.auxArrays.splice(index, 1)
-        }
-    }
-
-    removeAuxArrayWithDelay(index, delay, isPseudo = false){
-        this.timeoutArray.push(setTimeout(this.removeAuxArray.bind(this), this.delays.Write += delay, index, isPseudo))
-    }
-
-    auxRead(index, arrIndex, isPseudo = true){
-        if(isPseudo){
-            return this.pseudoAuxArrays[arrIndex][index].getValue()
-        }else {
-            return this.state.auxArrays[arrIndex][index].getValue()
-        }
-    }
-
-    auxWrite(index, value, arrIndex, isPseudo = true, playSound = false){
-        if(playSound){
-            this.playSound(value)
-        }
-        if(isPseudo){
-            this.pseudoAuxArrays[arrIndex][index].setValue(value)
-            this.instructions.push(
-                {
-                    cmd: "auxWrite",
-                    index: index,
-                    value: value,
-                    arrIndex: arrIndex
-                }
-            )
-        }else{
-            this.state.auxArrays[arrIndex][index].setValue(value)
-            let tmp = this.state.auxArrays
-            this.setState({
-                auxArrays: tmp
-            })
-        }
-    }
-
-    auxWriteWithDelay(index, value, arrIndex, delay, isPseudo = false, playSound = true, ){
-        this.timeoutArray.push(setTimeout(this.auxWrite.bind(this), this.delays.Write += delay, index, value, arrIndex, isPseudo, playSound))
-    }
 
     getNameByArray(arr){
         // console.log(arr)
@@ -455,36 +179,75 @@ export class ArrayVisualizer extends React.Component {
     }
 
     getArrLength(){
-        return this.arrLength;
+        return this.state.array.length;
     }
 
     setShowAuxArrays(val){
         this.showAuxArrays = val
     }
 
+    getMainArray(){
+        return this.state.array
+    }
+
+    getPseudoAuxArrays(){
+        return this.pseudoAuxArrays
+    }
+
+    getDelays(){
+        return this.Delays
+    }
+
+    getSounds(){
+        return this.Sounds;
+    }
+
+    getMarks(){
+        return this.Marks;
+    }
+
+    getAuxArrays(){
+        return this.state.auxArrays
+    }
+
+    getReads(){
+        return this.Reads;
+    }
+
+    getWrites(){
+        return this.Writes
+    }
+
+    forceUpdateMainArray(array){
+        this.setState({
+            array: array
+        })
+    }
+
+    forceUpdateAuxArrays(auxArrays){
+        this.setState({
+            auxArrays: auxArrays
+        })
+    }
+
+    forceUpdateState(state){
+        this.setState(state)
+    }
+
     stopSort(){
-        this.resetDelay()
-        this.unmarkMany(Array.from(Array(this.arrLength).keys()), false, true)
+        // this.resetDelay()
+        this.Delays.resetDelays()
+        this.unmarkMany(Array.from(Array(this.getArrLength()).keys()), false, true)
         this.setState({
                 auxArrays: []
             }
         )
     }
 
-    initArray(func, length, setToState=false) {
-        let arr = []
-        for (let i = 0; i < length; ++i) {
-            let element = new Element(func(i, length), 0, [255, 255, 255])
-            arr.push(element)
-        }
-        if(setToState){
-            this.setState({
-                array: arr
-            })
-        }else {
-            return arr;
-        }
-    }
+    //
+    // shuffleClickEvent() {
+    //     this.shuffleArray()
+    // }
 
     shuffleArray(func) {
         this.nullify()
@@ -492,17 +255,15 @@ export class ArrayVisualizer extends React.Component {
             sortName: "Shuffle"
         })
 
-        let instructions = func(this.arrLength);
+        let instructions = func(this.getArrLength());
         for(let i of instructions){
             if(i.cmd === "swap"){
-                setTimeout(this.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i.a, i.b, this.state.array, true, true)
+                // setTimeout(this.Writes.swapInArr.bind(this), this.delays.Swap += this.delayInc / 5, i.a, i.b, this.state.array, true, true)
+                // setTimeout(this.Writes.swapInArr.bind(this), this.Delays.incDelay("Swap", this.Delays.getDelayInc()/5), i.a, i.b, this.state.array, true, true)
+                this.Writes.swapWithDelay(i.a, i.b, this.state.array, true, this.Delays.getDelayInc()/5, true)
             }
         }
 
-    }
-
-    shuffleClickEvent() {
-        this.shuffleArray()
     }
 
     setSortName(sortName){
@@ -573,19 +334,26 @@ export class ArrayVisualizer extends React.Component {
 
 
     updateDelayInc(val){
-        this.delayInc = val/this.arrLength;
+        this.delayInc = val/this.getArrLength();
     }
 
     updateArrLength(len){
-        this.arrLength = len
         this.setState({
-            array: this.initArray(initFunctions.linear, this.arrLength)
+            array: this.initArray(initFunctions.linear, len)
         })
         this.pseudoArray = deepArrayCopy(this.state.array)
 
         this.sorts.arrLength = this.getArrLength()
         this.updateDelayInc(this.delayIncConst)
     }
+
+    // componentDidUpdate(prevProps, prevState, snapshot) {
+    //     console.log(prevState.array)
+    //     console.log(this.state.array)
+    //     if(prevState.array.length === 10 && this.state.array.length === 100){
+    //         throw "WARNING!!!"
+    //     }
+    // }
 
     genArrayWindows(){
         let tmp = []
@@ -603,7 +371,7 @@ export class ArrayVisualizer extends React.Component {
     render() {
         return (
             <div>
-                <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes} arrLength={this.arrLength}/>
+                <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes} arrLength={this.getArrLength()}/>
                 <div style={{height: "100vh"}}>
                 {/*<div>*/}
                     {this.genArrayWindows()}

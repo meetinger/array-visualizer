@@ -1,30 +1,50 @@
+import {Element} from "../classes/Element";
+
 export class Writes{
     arrayVisualizer;
+    pseudoArray
+    pseudoAuxArrays
+    array
+    auxArrays
+    Sounds
+    Delays
+    Marks
 
     constructor(arrayVisualizer){
         this.arrayVisualizer = arrayVisualizer
+        console.log(arrayVisualizer)
+        //The object exists
+        this.pseudoArray = arrayVisualizer.getPseudoArray()
+        this.pseudoAuxArrays = arrayVisualizer.getPseudoAuxArrays()
+        this.array = arrayVisualizer.getMainArray()
+        this.auxArrays = arrayVisualizer.getAuxArrays()
+        this.Sounds = arrayVisualizer.getSounds()
+        this.Delays = arrayVisualizer.getDelays()
+        this.Marks = arrayVisualizer.getMarks()
     }
 
 
-    swapWithDelay(a, b, arr = this.pseudoArray, mark, delay = this.delayInc, playSound) {
-        this.timeoutArray.push(setTimeout(this.swapInArr.bind(this), this.delays.Swap += delay, a, b, arr, mark, playSound))
+
+    swapWithDelay(a, b, arr = this.pseudoArray, mark, delay = this.Delays.getDelayInc(), playSound) {
+        // this.Delays.push(setTimeout(this.swapInArr.bind(this), this.delays.Swap += delay, a, b, arr, mark, playSound))
+        this.Delays.push(setTimeout(this.swapInArr.bind(this), this.Delays.incDelay("Write", delay), a, b, arr, mark, playSound))
+        // this.Delays.push(setTimeout(()=>{this.swapInArr(a, b, arr, mark, playSound)}, this.Delays.incDelay("Write", delay)))
     }
 
 
     swapInArr(a, b, arr = this.pseudoArray, mark = true, playSound = false) {
         if(playSound) {
-            this.playSound(arr[b].getValue());
+            this.Sounds.playSound(arr[b].getValue());
         }
         let tmpArr = arr
-        // console.log("SWAPPING:" + tmpArr[a].getValue()+"<->"+tmpArr[b].getValue())
         let tmp = tmpArr[a]
         tmpArr[a] = tmpArr[b]
         tmpArr[b] = tmp
         if (mark) {
-            this.markUnmarkMany([a, b], {type: "Default"})
+            this.Marks.markUnmarkMany([a, b], {type: "Default"})
         }
-        let curWrites = this.state.writes;
-        this.setState({
+        let curWrites = this.arrayVisualizer.getState().writes;
+        this.arrayVisualizer.setState({
             writes: curWrites + 2
         })
     }
@@ -32,15 +52,15 @@ export class Writes{
     swap(a, b, arr = this.pseudoArray) {
         this.swapInArr(a, b, arr, false, false)
         // console.log(getVarName(this.state.array.name))
-        this.instructions.push(
-            {
-                cmd: "swap",
-                arr: arr,
-                a: a,
-                b: b
-            }
-        )
-        // this.swapWithDelay(a, b, this.state.array, true, this.delayInc, true)
+        // this.instructions.push(
+        //     {
+        //         cmd: "swap",
+        //         arr: arr,
+        //         a: a,
+        //         b: b
+        //     }
+        // )
+        this.swapWithDelay(a, b, this.array, true, this.Delays.getDelayInc(), true)
     }
 
     writeInArr(index, value, arr = this.pseudoArray, mark = true, playSound = false) {
@@ -49,32 +69,113 @@ export class Writes{
         // console.log("INDEX: "+index)
         // console.log("VALUE: "+value)
         if(playSound) {
-            this.playSound(value)
+            this.Sounds.playSound(value)
         }
         arr[index].setValue(value)
         if (mark) {
-            this.markUnmarkMany([index], {type: "Default"})
+            this.Marks.markUnmarkMany([index], {type: "Default"})
         }
-        let curWrites = this.state.writes;
-        this.setState({
+        let curWrites = this.arrayVisualizer.getState().writes;
+        this.arrayVisualizer.setState({
             writes: curWrites + 1
         })
     }
 
-    writeWithDelay(index, value, arr = this.pseudoArray, mark, delay = this.delayInc, playSound = true) {
-        this.timeoutArray.push(setTimeout(this.writeInArr.bind(this), this.delays.Write += delay, index, value, arr, mark, playSound))
+    writeWithDelay(index, value, arr = this.pseudoArray, mark, delay = this.Delays.getDelayInc(), playSound = true) {
+        // this.Delays.push(setTimeout(this.writeInArr.bind(this), this.Delays.delays.Write += delay, index, value, arr, mark, playSound))
+        this.Delays.push(setTimeout(this.writeInArr.bind(this), this.Delays.incDelay("Write", delay), index, value, arr, mark, playSound))
     }
 
     write(index, value, arr = this.pseudoArray) {
         this.writeInArr(index, value, arr, false, false)
-        this.instructions.push(
-            {
-                cmd: "write",
-                arr: arr,
-                index: index,
-                value: value
-            }
-        )
-        // this.writeWithDelay(index, value, this.state.array, true, this.delayInc, true)
+        // this.instructions.push(
+        //     {
+        //         cmd: "write",
+        //         arr: arr,
+        //         index: index,
+        //         value: value
+        //     }
+        // )
+        this.writeWithDelay(index, value, this.array, true, this.Delays.getDelayInc(), true)
     }
+
+    createAuxArray(len, isPseudo = true){
+        if(isPseudo) {
+            let auxArrIndex = this.pseudoAuxArrays.length
+            this.pseudoAuxArrays.push(this.arrayVisualizer.initArray(() => 0, len, false))
+            // this.instructions.push(
+            //     {
+            //         cmd: "createAuxArray",
+            //         len: len
+            //     }
+            // )
+            return auxArrIndex
+        }else{
+            let tmpArr = this.auxArrays
+            tmpArr.push(this.arrayVisualizer.initArray(() => 0, len, false))
+            this.arrayVisualizer.setState({
+                    auxArrays: tmpArr
+                }
+            )
+        }
+    }
+
+    createAuxArrayWithDelay(len, delay, isPseudo = false){
+        // this.timeoutArray.push(setTimeout(this.createAuxArray.bind(this), this.delays.Write += delay, len, isPseudo))
+        this.Delays.push(setTimeout(this.createAuxArray.bind(this), this.Delays.incDelay("Write", delay), len, isPseudo))
+    }
+
+    removeAuxArray(index, isPseudo = true){
+        if(isPseudo) {
+            this.pseudoAuxArrays.splice(index, 1)
+            // this.instructions.push(
+            //     {
+            //         cmd: "removeAuxArray",
+            //         index: index
+            //     }
+            // )
+            this.removeAuxArrayWithDelay(index, this.Delays.getDelayInc(), false)
+        }else{
+            let tmp = this.auxArrays
+            tmp.splice(index, 1)
+            this.arrayVisualizer.setState({
+                auxArrays: tmp
+            })
+            // this.state.auxArrays.splice(index, 1)
+        }
+    }
+
+    removeAuxArrayWithDelay(index, delay, isPseudo = false){
+        this.Delays.push(setTimeout(this.removeAuxArray.bind(this), this.Delays.incDelay("Write", delay), index, isPseudo))
+    }
+
+
+    auxWrite(index, value, arrIndex, isPseudo = true, playSound = false){
+        if(playSound){
+            this.Delays.playSound(value)
+        }
+        if(isPseudo){
+            this.pseudoAuxArrays[arrIndex][index].setValue(value)
+            // this.instructions.push(
+            //     {
+            //         cmd: "auxWrite",
+            //         index: index,
+            //         value: value,
+            //         arrIndex: arrIndex
+            //     }
+            // )
+            this.auxWriteWithDelay(index, value, arrIndex, this.Delays.incDelay("Write", this.Delays.getDelayInc()), false, true)
+        }else{
+            this.auxArrays[arrIndex][index].setValue(value)
+            let tmp = this.auxArrays
+            this.arrayVisualizer.setState({
+                auxArrays: tmp
+            })
+        }
+    }
+
+    auxWriteWithDelay(index, value, arrIndex, delay, isPseudo = false, playSound = true, ){
+        this.Delays.push(setTimeout(this.auxWrite.bind(this), this.Delays.incDelay("Write", delay), index, value, arrIndex, isPseudo, playSound))
+    }
+
 }
