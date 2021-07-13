@@ -48,18 +48,19 @@ export class ArrayVisualizer extends React.Component {
             writes: 0,
             auxArrays: []
         }
+        this.pseudoArray = deepArrayCopy(this.state.array)
         console.log("INIT ArrayVisualizer!!!")
+
         this.Delays = new Delays(this)
         this.Sounds = new Sounds(this)
         this.Marks = new Marks(this)
         this.Reads = new Reads(this)
+
         this.Writes = new Writes(this)
 
         // console.log(this)
-
         this.instructions = [];
         this.timeoutArray = [];
-        this.pseudoArray = deepArrayCopy(this.state.array)
         this.pseudoAuxArrays = []
         this.sorts = new Sorts(this);
         // this.arrLength = this.state.length
@@ -278,8 +279,7 @@ export class ArrayVisualizer extends React.Component {
 
     // sortClickEvent(sortName, low, high, bucketsNum) {
     sortClickEvent() {
-        this.nullify()
-
+        // this.nullify()
         // let sortBind = sort.bind(this.sorts, 0, this.arrLength - 1)
         // sortBind()
         // console.log(sort)
