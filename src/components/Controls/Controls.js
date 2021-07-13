@@ -132,24 +132,26 @@ export class Controls extends React.Component {
                         </div>
                         <div>
                             <div className={styles.sectionHeader}>Visuals</div>
-                            <div>
-                                <div>
-                                    <input onChange={this.toggleShowAuxArrays.bind(this)} type="checkbox"
-                                           id="auxArrShowCB"
-                                           name="auxArrShowCB" defaultChecked={true}/>
-                                    <label htmlFor="auxArrShowCB">Show Aux Arrays</label>
-                                </div>
-                                <div>
-                                    <input onChange={this.toggleBarsStroke.bind(this)} type="checkbox"
-                                           id="enableStrokeCB"
-                                           name="enableStrokeCB" defaultChecked={true}/>
-                                    <label htmlFor="enableStrokeCB">Enable Bars Stroke</label>
-                                </div>
-                                <div>
-                                    <input onChange={this.toggleEnableMarks.bind(this)} type="checkbox"
-                                           id="enableMarksCB"
-                                           name="enableMarksCB" defaultChecked={true}/>
-                                    <label htmlFor="enableMarksCB">Enable Marks</label>
+                            <div style={{display: "flex", justifyContent:"center"}}>
+                                <div style={{textAlign: "left"}}>
+                                    <div className={styles.checkBoxContainer}>
+                                        <input onChange={this.toggleShowAuxArrays.bind(this)} type="checkbox"
+                                               id="auxArrShowCB"
+                                               name="auxArrShowCB" defaultChecked={true}/>
+                                        <label htmlFor="auxArrShowCB">Show Aux Arrays</label>
+                                    </div>
+                                    <div className={styles.checkBoxContainer}>
+                                        <input onChange={this.toggleBarsStroke.bind(this)} type="checkbox"
+                                               id="enableStrokeCB"
+                                               name="enableStrokeCB" defaultChecked={true}/>
+                                        <label htmlFor="enableStrokeCB">Enable Bars Stroke</label>
+                                    </div>
+                                    <div className={styles.checkBoxContainer}>
+                                        <input onChange={this.toggleEnableMarks.bind(this)} type="checkbox"
+                                               id="enableMarksCB"
+                                               name="enableMarksCB" defaultChecked={true}/>
+                                        <label htmlFor="enableMarksCB">Enable Marks</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
