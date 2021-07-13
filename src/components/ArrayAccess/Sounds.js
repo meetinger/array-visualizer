@@ -1,8 +1,10 @@
 export class Sounds{
     arrayVisualizer
     ctx
+    Delays
     constructor(arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer
+        this.Delays = arrayVisualizer.getDelays()
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
     }
     playSound(value) {
@@ -18,11 +20,11 @@ export class Sounds{
         gainNode.gain.value = 0;
         osc.connect(gainNode)
         gainNode.connect(this.ctx.destination)
-
-        gainNode.gain.linearRampToValueAtTime(0.05, this.ctx.currentTime + (this.arrayVisualizer.getDelayInc() + addTime) / 1000 / 2)
-        gainNode.gain.linearRampToValueAtTime(0, this.ctx.currentTime + (this.arrayVisualizer.getDelayInc() + addTime) / 1000)
+        // console.log(this.Delays.getDelayInc())
+        gainNode.gain.linearRampToValueAtTime(0.05, this.ctx.currentTime + (this.Delays.getDelayInc() + addTime) / 1000 / 2)
+        gainNode.gain.linearRampToValueAtTime(0, this.ctx.currentTime + (this.Delays.getDelayInc() + addTime) / 1000)
 
         osc.start();
-        osc.stop(this.ctx.currentTime + (this.arrayVisualizer.getDelayInc() + addTime) / 1000);
+        osc.stop(this.ctx.currentTime + (this.Delays.getDelayInc() + addTime) / 1000);
     }
 }

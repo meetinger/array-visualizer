@@ -17,6 +17,7 @@ export class Sorts {
     }
 
     runSort(sortName, low, high, bucketsNum) {
+        this.arrayVisualizer.getDelays().resetDelays()
         let sort = this.getSortObject(sortName)
         let warnLen = sort.getWarnLen()
         if (warnLen !== -1 && this.arrayVisualizer.getArrLength() > warnLen && !window.confirm("WARNING!!!\nThe array size(" + this.arrayVisualizer.getArrLength() + ") " +
