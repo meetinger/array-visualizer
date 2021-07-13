@@ -102,6 +102,11 @@ export class Controls extends React.Component {
         this.arrayVisualizer.setShowAuxArrays(element.checked)
     }
 
+    toggleBarsStroke(){
+        let element = document.getElementById("enableStrokeCB")
+        this.arrayVisualizer.setEnableBarsStroke(element.checked)
+    }
+
     render() {
         return (
             <div id={styles.controlsContainer}>
@@ -109,7 +114,7 @@ export class Controls extends React.Component {
                 <div id={styles.controls}>
                     <div>
                         <div className={styles.textCenter}>Array Size</div>
-                        <input id={styles.slider} type="range" min="10" max="300" defaultValue={this.arrayVisualizer.DEFAULT_ARR_LEN}
+                        <input id={styles.slider} type="range" min="10" max="500" defaultValue={this.arrayVisualizer.DEFAULT_ARR_LEN}
                                step="10"
                                onChange={this.updateArrLength.bind(this)}/>
                         <div className={styles.textCenter}>
@@ -117,6 +122,9 @@ export class Controls extends React.Component {
                             <div>
                                 <input onChange={this.toggleShowAuxArrays.bind(this)} type="checkbox" id="auxArrShowCB" name="auxArrShowCB" defaultChecked={true}/>
                                     <label htmlFor="auxArrShowCB">Show Aux Arrays</label>
+
+                                <input onChange={this.toggleBarsStroke.bind(this)} type="checkbox" id="enableStrokeCB" name="enableStrokeCB" defaultChecked={true}/>
+                                <label htmlFor="enableStrokeCB">Enable Bars Stroke</label>
                             </div>
                         </div>
                         <div className={styles.textCenter}>

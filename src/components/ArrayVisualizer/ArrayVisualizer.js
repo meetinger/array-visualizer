@@ -29,6 +29,7 @@ export class ArrayVisualizer extends React.Component {
     Sorts
     delayIncConst
     showAuxArrays
+    enableBarsStroke
 
     Delays
     Sounds
@@ -57,10 +58,10 @@ export class ArrayVisualizer extends React.Component {
         this.pseudoAuxArrays = []
         this.Sorts = new Sorts(this);
         this.showAuxArrays = true
+        this.enableBarsStroke = true
     }
 
     initArray(func, length, setToState=false) {
-        console.log("INIT ARR")
         let arr = []
         for (let i = 0; i < length; ++i) {
             let element = new Element(func(i, length), 0, [255, 255, 255])
@@ -89,6 +90,15 @@ export class ArrayVisualizer extends React.Component {
         this.state.comparisons = 0;
     }
 
+    setShowAuxArrays(val){
+        this.showAuxArrays = val
+    }
+
+    setEnableBarsStroke(val){
+        this.enableBarsStroke = val;
+        this.forceMainArrayUpdate()
+    }
+
     getArrayVisualizer() {
         return this;
     }
@@ -103,10 +113,6 @@ export class ArrayVisualizer extends React.Component {
 
     getArrLength(){
         return this.state.array.length;
-    }
-
-    setShowAuxArrays(val){
-        this.showAuxArrays = val
     }
 
     getMainArray(){
@@ -180,6 +186,12 @@ export class ArrayVisualizer extends React.Component {
     sortClickEvent() {
     }
 
+    forceMainArrayUpdate(){
+        let tmp = this.state.array;
+        this.setState({
+            array: tmp
+        })
+    }
 
     updateDelayInc(val){
         this.delayInc = val/this.getArrLength();
@@ -201,7 +213,7 @@ export class ArrayVisualizer extends React.Component {
             for (let i = this.state.auxArrays.length - 1; i >= 0; i--) {
                 tmp.push(
                     <ArrayWindow key={this.state.auxArrays.length - i} array={this.state.auxArrays[i]}
-                                 mainArray={this.state.array} height={100 / (1 + this.state.auxArrays.length)}/>
+                                 mainArray={this.state.array} height={100 / (1 + this.state.auxArrays.length)} enableBarsStroke = {this.enableBarsStroke} />
                 )
             }
         }
@@ -215,7 +227,7 @@ export class ArrayVisualizer extends React.Component {
                 <div style={{height: "100vh"}}>
                 {/*<div>*/}
                     {this.genArrayWindows()}
-                    <ArrayWindow array={this.state.array} mainArray={this.state.array} height={this.showAuxArrays ? 100/(1+this.state.auxArrays.length) : 100}/>
+                    <ArrayWindow array={this.state.array} mainArray={this.state.array} height={this.showAuxArrays ? 100/(1+this.state.auxArrays.length) : 100} enableBarsStroke = {this.enableBarsStroke}/>
                 </div>
                 <div>
                     <Controls arrayVisualizer={this} sorts={this.Sorts}/>
