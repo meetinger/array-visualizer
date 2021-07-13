@@ -9,12 +9,12 @@ export class LLQuickSort extends Sort{
         let pivot = hi;
         let i = lo;
         for (let j = lo; j < hi; j++) {
-            if (this.compare(j, pivot, "<")) {
-                this.swap(i, j);
+            if (this.Reads.compare(j, pivot, "<")) {
+                this.Writes.swap(i, j);
                 i++;
             }
         }
-        this.swap(i, hi);
+        this.Writes.swap(i, hi);
         return i;
     }
 

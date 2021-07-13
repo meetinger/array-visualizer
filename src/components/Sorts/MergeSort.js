@@ -12,16 +12,16 @@ export class MergeSort extends Sort{
         let leftArrayLen = mid - low + 1
         let rightArrayLen = high - mid
 
-        let leftArrayIndex = this.createAuxArray(leftArrayLen);
-        let rightArrayIndex = this.createAuxArray(rightArrayLen);
+        let leftArrayIndex = this.Writes.createAuxArray(leftArrayLen);
+        let rightArrayIndex = this.Writes.createAuxArray(rightArrayLen);
 
         for (let i = 0; i < leftArrayLen; i++) {
-            // leftArray[i] = this.read(low + i)
-            this.auxWrite(i, this.read(low + i), leftArrayIndex)
+            // leftArray[i] = this.Reads.read(low + i)
+            this.Writes.auxWrite(i, this.Reads.read(low + i), leftArrayIndex)
         }
         for (let i = 0; i < rightArrayLen; i++) {
-            // rightArray[i] = this.read(mid + i + 1);
-            this.auxWrite(i, this.read(mid + i + 1), rightArrayIndex)
+            // rightArray[i] = this.Reads.read(mid + i + 1);
+            this.Writes.auxWrite(i, this.Reads.read(mid + i + 1), rightArrayIndex)
         }
 
         let leftIndex = 0;
@@ -30,25 +30,25 @@ export class MergeSort extends Sort{
         for (let i = low; i < high + 1; i++) {
             if (leftIndex < leftArrayLen && rightIndex < rightArrayLen) {
                 // if (leftArray[leftIndex] < rightArray[rightIndex]) {
-                if (this.auxRead(leftIndex, leftArrayIndex) < this.auxRead(rightIndex, rightArrayIndex)) {
-                    this.write(i, this.auxRead(leftIndex, leftArrayIndex))
+                if (this.Reads.auxRead(leftIndex, leftArrayIndex) < this.Reads.auxRead(rightIndex, rightArrayIndex)) {
+                    this.Writes.write(i, this.Reads.auxRead(leftIndex, leftArrayIndex))
                     leftIndex++;
                 } else {
-                    this.write(i, this.auxRead(rightIndex, rightArrayIndex))
+                    this.Writes.write(i, this.Reads.auxRead(rightIndex, rightArrayIndex))
                     rightIndex++;
                 }
             } else if (leftIndex < leftArrayLen) {
-                this.write(i, this.auxRead(leftIndex, leftArrayIndex))
+                this.Writes.write(i, this.Reads.auxRead(leftIndex, leftArrayIndex))
                 leftIndex++;
             } else if (rightIndex < rightArrayLen) {
-                this.write(i, this.auxRead(rightIndex, rightArrayIndex))
+                this.Writes.write(i, this.Reads.auxRead(rightIndex, rightArrayIndex))
                 rightIndex++;
             }
         }
         // console.log(leftArray)
-        this.removeAuxArray(leftArrayIndex)
+        this.Writes.removeAuxArray(leftArrayIndex)
         // console.log(rightArray)
-        this.removeAuxArray(rightArrayIndex)
+        this.Writes.removeAuxArray(rightArrayIndex)
     }
 
     MergeSort(low, high) {

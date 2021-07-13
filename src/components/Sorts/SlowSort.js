@@ -14,8 +14,8 @@ export class SlowSort extends Sort{
         let m = Math.floor((i + j) / 2);
         this.SlowSort(i, m);
         this.SlowSort(m + 1, j);
-        if (this.compare(j, m, "<")) {
-            this.swap(j, m)
+        if (this.Reads.compare(j, m, "<")) {
+            this.Writes.swap(j, m)
         }
         this.SlowSort(i, j - 1)
     }

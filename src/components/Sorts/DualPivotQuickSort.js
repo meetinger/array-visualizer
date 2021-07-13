@@ -32,17 +32,17 @@ export class DualPivotQuickSort extends Sort {
         if (med2 >= right) {
             med2 = right - 1;
         }
-        if (this.compare(med1, med2, "<")) {
-            this.swap(med1, left);
-            this.swap(med2, right);
+        if (this.Reads.compare(med1, med2, "<")) {
+            this.Writes.swap(med1, left);
+            this.Writes.swap(med2, right);
         } else {
-            this.swap(med1, right);
-            this.swap(med2, left);
+            this.Writes.swap(med1, right);
+            this.Writes.swap(med2, left);
         }
 
 // pivots
-        let pivot1 = this.read(left);
-        let pivot2 = this.read(right);
+        let pivot1 = this.Reads.read(left);
+        let pivot2 = this.Reads.read(right);
 
 // pointers
         let less = left + 1;
@@ -50,16 +50,16 @@ export class DualPivotQuickSort extends Sort {
 
 // sorting
         for (let k = less; k <= great; k++) {
-            if (this.read(k) < pivot1) {
-                this.swap(k, less++);
-            } else if (this.read(k) > pivot2) {
-                while (k < great && this.read(great) > pivot2) {
+            if (this.Reads.read(k) < pivot1) {
+                this.Writes.swap(k, less++);
+            } else if (this.Reads.read(k) > pivot2) {
+                while (k < great && this.Reads.read(great) > pivot2) {
                     great--;
                 }
-                this.swap(k, great--);
+                this.Writes.swap(k, great--);
 
-                if (this.read(k) < pivot1) {
-                    this.swap(k, less++);
+                if (this.Reads.read(k) < pivot1) {
+                    this.Writes.swap(k, less++);
                 }
             }
         }
@@ -70,8 +70,8 @@ export class DualPivotQuickSort extends Sort {
         if (dist < 13) {
             divisor++;
         }
-        this.swap(less - 1, left);
-        this.swap(great + 1, right);
+        this.Writes.swap(less - 1, left);
+        this.Writes.swap(great + 1, right);
 
 // subarrays
         this.dualPivot(left, less - 2, divisor);

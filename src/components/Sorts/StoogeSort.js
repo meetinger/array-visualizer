@@ -7,8 +7,8 @@ export class StoogeSort extends Sort{
     }
 
     StoogeSort(i, j) {
-        if (this.compare(i, j, ">")) {
-            this.swap(i, j)
+        if (this.Reads.compare(i, j, ">")) {
+            this.Writes.swap(i, j)
         }
         if (j - i > 1) {
             let t = Math.trunc((j - i + 1) / 3)

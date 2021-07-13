@@ -5,22 +5,22 @@ export class HeapSort extends Sort{
         super(arrayVisualizer);
         this.sortName = "HeapSort"
     }
-    
+
     heapify(n, i) {
         let largest = i;
 
         let l = 2 * i + 1;
         let r = 2 * i + 2;
 
-        if (l < n && this.compare(l, largest, ">")) {
+        if (l < n && this.Reads.compare(l, largest, ">")) {
             largest = l;
         }
-        if (r < n && this.compare(r, largest, ">")) {
+        if (r < n && this.Reads.compare(r, largest, ">")) {
             largest = r;
         }
 
         if (largest !== i) {
-            this.swap(i, largest);
+            this.Writes.swap(i, largest);
             this.heapify(n, largest);
         }
     }
@@ -34,7 +34,7 @@ export class HeapSort extends Sort{
         }
 
         for (let i = n - 1; i >= 0; i--) {
-            this.swap(0, i);
+            this.Writes.swap(0, i);
             this.heapify(i, 0)
         }
     }

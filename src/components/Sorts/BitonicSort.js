@@ -11,11 +11,11 @@ export class BitonicSort extends Sort{
     //     for (let i = 0; i < this.arrLength; i++) {
     //         const up = ((i >> p) & 2) === 0;
     //         // if ((i & d) === 0 && (x[i] > x[i | d]) === up) {
-    //         if ((i & d) === 0 && ((this.compare(i, i | d, ">")) === up)) {
+    //         if ((i & d) === 0 && ((this.Reads.compare(i, i | d, ">")) === up)) {
     //             // const tmp = x[i];
     //             // x[i] = x[i | d];
     //             // x[i | d] = tmp;
-    //             this.swap(i, i | d)
+    //             this.Writes.swap(i, i | d)
     //         }
     //     }
     // }
@@ -38,10 +38,10 @@ export class BitonicSort extends Sort{
                     let ij = i ^ j;
 
                     if((ij) > i && ij < sortLength) {
-                        if((((i & k) === 0) === m) && this.compare(i, ij, ">"))
-                            this.swap(i, ij);
-                        if((((i & k) !== 0) === m) && this.compare(i, ij, "<"))
-                            this.swap(i, ij);
+                        if((((i & k) === 0) === m) && this.Reads.compare(i, ij, ">"))
+                            this.Writes.swap(i, ij);
+                        if((((i & k) !== 0) === m) && this.Reads.compare(i, ij, "<"))
+                            this.Writes.swap(i, ij);
                     }
                 }
             }
