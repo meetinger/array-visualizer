@@ -1,4 +1,5 @@
 import {Element} from "../classes/Element";
+import {objLength} from "../utils/utils";
 
 export class Writes{
     arrayVisualizer;
@@ -68,13 +69,15 @@ export class Writes{
     createAuxArray(len, isPseudo = true){
         if(isPseudo) {
             let pseudoAuxArrays = this.arrayVisualizer.getPseudoAuxArrays()
-            let auxArrIndex = pseudoAuxArrays.length
-            pseudoAuxArrays.push(this.arrayVisualizer.initArray(() => -1, len, false))
+            let auxArrIndex = objLength(pseudoAuxArrays)
+            pseudoAuxArrays[auxArrIndex]=(this.arrayVisualizer.initArray(() => -1, len, false))
             this.createAuxArrayWithDelay(len, this.Delays.getDelayInc(), false)
             return auxArrIndex
         }else{
             let tmpArr = this.arrayVisualizer.getAuxArrays()
-            tmpArr.push(this.arrayVisualizer.initArray(() => -1, len, false))
+            let auxArrIndex = objLength(tmpArr)
+
+            tmpArr[auxArrIndex]=(this.arrayVisualizer.initArray(() => -1, len, false))
             this.arrayVisualizer.setState({
                     auxArrays: tmpArr
                 }
@@ -88,11 +91,13 @@ export class Writes{
 
     removeAuxArray(index, isPseudo = true){
         if(isPseudo) {
-            this.arrayVisualizer.getPseudoAuxArrays().splice(index, 1)
+            // this.arrayVisualizer.getPseudoAuxArrays().splice(index, 1)
+            delete this.arrayVisualizer.getPseudoAuxArrays()[index]
             this.removeAuxArrayWithDelay(index, this.Delays.getDelayInc(), false)
         }else{
             let tmp = this.arrayVisualizer.getAuxArrays()
-            tmp.splice(index, 1)
+            // tmp.splice(index, 1)
+            delete tmp[index]
             this.arrayVisualizer.setState({
                 auxArrays: tmp
             })

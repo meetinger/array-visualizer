@@ -46,9 +46,9 @@ export class MergeSort extends Sort{
             }
         }
         // console.log(leftArray)
+        this.removeAuxArray(leftArrayIndex)
         // console.log(rightArray)
         this.removeAuxArray(rightArrayIndex)
-        this.removeAuxArray(leftArrayIndex)
     }
 
     MergeSort(low, high) {

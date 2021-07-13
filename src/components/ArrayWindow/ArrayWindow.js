@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from "./ArrayWindow.module.scss";
+import {objLength} from "../utils/utils";
 
 export function ArrayWindow(props) {
     let array = props.array
@@ -13,7 +14,7 @@ export function ArrayWindow(props) {
 
     if (visualStyle === "bars") {
         let border = borderEnabled ? {} : {border: "none"}
-        for (let i = 0; i < array.length; ++i) {
+        for (let i = 0; i < objLength(array); ++i) {
             let styleSheet = {
                 height: array[i].getValue() / mainArray.length * 100 + "%",
                 backgroundColor: "rgb(" + array[i].getColor() + ")",
@@ -21,7 +22,7 @@ export function ArrayWindow(props) {
             }
             arr.push(<div key={i} style={styleSheet} className={styles.bar}/>);
         }
-        for (let i = array.length; i < mainArray.length; ++i) {
+        for (let i = objLength(array); i < mainArray.length; ++i) {
             let styleSheet = {
                 height: "0%",
                 backgroundColor: "rgb(255,255,255)",
@@ -29,7 +30,7 @@ export function ArrayWindow(props) {
             arr.push(<div key={i} style={styleSheet} className={styles.bar}/>);
         }
     } else if (visualStyle === "dots") {
-        for (let i = 0; i < array.length; ++i) {
+        for (let i = 0; i < objLength(array); ++i) {
             let value = array[i].getValue()
             let height = (value===-1) ? {height: 0} : {}
             let styleSheet = {
@@ -41,7 +42,7 @@ export function ArrayWindow(props) {
                 <div key={i} style={styleSheet} className={styles.dot}/>
             </div>);
         }
-        for (let i = array.length; i < mainArray.length; ++i) {
+        for (let i = objLength(array); i < mainArray.length; ++i) {
             let styleSheet = {
                 bottom: 0,
                 backgroundColor: "rgb(0, 0, 0)",
@@ -51,7 +52,7 @@ export function ArrayWindow(props) {
             </div>);
         }
     }
-    if (array.length === 0) {
+    if (objLength(array) === 0) {
         return <div/>
     }
     return (

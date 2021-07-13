@@ -1,5 +1,5 @@
 import React from 'react';
-import {arraysEquals, deepArrayCopy, getAllMethods, randomInt} from "../utils/utils";
+import {arraysEquals, deepArrayCopy, getAllMethods, objLength, randomInt} from "../utils/utils";
 import {Sorts} from "../Sorts/Sorts"
 import {ArrayWindow} from "../ArrayWindow/ArrayWindow";
 import {Element} from "../classes/Element";
@@ -48,7 +48,7 @@ export class ArrayVisualizer extends React.Component {
             sortName: "",
             comparisons: 0,
             writes: 0,
-            auxArrays: []
+            auxArrays: {}
         }
         this.pseudoArray = deepArrayCopy(this.state.array)
         this.Delays = new Delays(this)
@@ -234,10 +234,10 @@ export class ArrayVisualizer extends React.Component {
     genArrayWindows(){
         let tmp = []
         if(this.showAuxArrays) {
-            for (let i = this.state.auxArrays.length - 1; i >= 0; i--) {
+            for (let i = objLength(this.state.auxArrays) - 1; i >= 0; i--) {
                 tmp.push(
-                    <ArrayWindow key={this.state.auxArrays.length - i} array={this.state.auxArrays[i]}
-                                 mainArray={this.state.array} height={100 / (1 + this.state.auxArrays.length)} visualProps = {this.visualStyle} />
+                    <ArrayWindow key={objLength(this.state.auxArrays) - i} array={this.state.auxArrays[i]}
+                                 mainArray={this.state.array} height={100 / (1 + objLength(this.state.auxArrays))} visualProps = {this.visualStyle} />
                 )
             }
         }
@@ -251,7 +251,7 @@ export class ArrayVisualizer extends React.Component {
                 <div style={{height: "100vh"}}>
                 {/*<div>*/}
                     {this.genArrayWindows()}
-                    <ArrayWindow array={this.state.array} mainArray={this.state.array} height={this.showAuxArrays ? 100/(1+this.state.auxArrays.length) : 100} visualProps={this.visualStyle}/>
+                    <ArrayWindow array={this.state.array} mainArray={this.state.array} height={this.showAuxArrays ? 100/(1+objLength(this.state.auxArrays)) : 100} visualProps={this.visualStyle}/>
                 </div>
                 <div>
                     <Controls arrayVisualizer={this} sorts={this.Sorts}/>
