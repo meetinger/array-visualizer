@@ -18,6 +18,7 @@ export class Sorts {
 
     runSort(sortName, low, high) {
         this.arrayVisualizer.getDelays().resetDelays()
+        this.arrayVisualizer.nullify()
         let sort = this.getSortObject(sortName)
         let warnLen = sort.getWarnLen()
         let bucketsNum = 10
