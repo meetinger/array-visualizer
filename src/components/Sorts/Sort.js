@@ -20,6 +20,8 @@ export class Sort {
     sortName;
     warnLen;
     isDisabled;
+    isNeedBucketsNum;
+
 
     constructor(arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer
@@ -40,6 +42,7 @@ export class Sort {
         this.sortName = ""
         this.warnLen = -1;
         this.isDisabled = false;
+        this.isNeedBucketsNum = false;
     }
 
     getSortName(){

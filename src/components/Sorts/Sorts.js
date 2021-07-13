@@ -4,7 +4,7 @@ export class Sorts {
 
     constructor(arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer
-        this.sortsPaths = ["BubbleSort", "MergeSort", "LLQuickSort", "InsertionSort", "SelectionSort", "TimSort", "PseudoTimSort", "HeapSort", "SlowSort", "StoogeSort"]
+        this.sortsPaths = ["BubbleSort", "MergeSort", "LLQuickSort", "InsertionSort", "SelectionSort", "TimSort", "PseudoTimSort", "HeapSort", "LSDRadixSort","SlowSort", "StoogeSort"]
     }
 
     getSortsPaths() {
@@ -16,10 +16,17 @@ export class Sorts {
         return new Sort(this.arrayVisualizer)
     }
 
-    runSort(sortName, low, high, bucketsNum) {
+    runSort(sortName, low, high) {
         this.arrayVisualizer.getDelays().resetDelays()
         let sort = this.getSortObject(sortName)
         let warnLen = sort.getWarnLen()
+        let bucketsNum = 10
+        if(sort.isNeedBucketsNum){
+            bucketsNum = parseInt(prompt("Enter the base:", "10"))
+            if(isNaN(bucketsNum)){
+                return;
+            }
+        }
         if (warnLen !== -1 && this.arrayVisualizer.getArrLength() > warnLen && !window.confirm("WARNING!!!\nThe array size(" + this.arrayVisualizer.getArrLength() + ") " +
             "more than recommended(" + warnLen + ")\nApplication may freeze\nDo you want continue?")) {
             return

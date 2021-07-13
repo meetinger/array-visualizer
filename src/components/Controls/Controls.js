@@ -54,7 +54,7 @@ export class Controls extends React.Component {
     }
 
     sortArray(sortName){
-        this.sorts.runSort(sortName, 0, this.arrayVisualizer.getArrLength()-1, 10)
+        this.sorts.runSort(sortName, 0, this.arrayVisualizer.getArrLength()-1)
     }
 
     stopSort(){
