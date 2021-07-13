@@ -98,7 +98,7 @@ export class Writes{
         //         value: value
         //     }
         // )
-        this.writeWithDelay(index, value, this.array, true, this.Delays.getDelayInc(), true)
+        this.writeWithDelay(index, value, this.arrayVisualizer.getMainArray(), true, this.Delays.getDelayInc(), true)
     }
 
     createAuxArray(len, isPseudo = true){
