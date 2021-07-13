@@ -46,7 +46,7 @@ export class Controls extends React.Component {
     }
 
     initArray(func){
-        this.arrayVisualizer.initArray(func, this.arrayVisualizer.arrLength, true)
+        this.arrayVisualizer.initArray(func, this.arrayVisualizer.getArrLength(), true)
     }
 
     shuffleArray(func){

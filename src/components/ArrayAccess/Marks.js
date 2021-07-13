@@ -96,7 +96,6 @@ export class Marks{
 
     markUnmarkMany(markIndexes, markArgs) {
         this.markMany(markIndexes, markArgs, true)
-        // this.Delays.push(setTimeout(this.unmarkMany.bind(this), this.delays.Unmark += this.Delays.getDelayInc() / 100, markIndexes, false, true))
         this.Delays.push(setTimeout(this.unmarkMany.bind(this), this.Delays.incDelay("Unmark", this.Delays.getDelayInc() / 100), markIndexes, false, true))
     }
 
