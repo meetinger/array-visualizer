@@ -29,6 +29,9 @@ export class Writes{
         let tmp = tmpArr[a]
         tmpArr[a] = tmpArr[b]
         tmpArr[b] = tmp
+        // let tmp = tmpArr[a]
+        // tmpArr[a] = tmpArr[b].copy()
+        // tmpArr[b] = tmp.copy()
         if (mark) {
             this.Marks.markUnmarkMany([a, b], {type: "Default"})
         }

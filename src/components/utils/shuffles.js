@@ -16,6 +16,21 @@ export let shuffles = {
         return instructions
     },
 
+    stableShuffle: function (len) {
+        let instructions = []
+        for (let i = 0; i < len; ++i) {
+            let randomIndex = randomInt(i+1, len)
+            instructions.push(
+                {
+                    cmd: "swap",
+                    a: i,
+                    b:randomIndex
+                }
+            )
+        }
+        return instructions
+    },
+
     almostSorted: function (len) {
         let instructions = []
         const amount = 0.1

@@ -117,6 +117,10 @@ export class Controls extends React.Component {
         this.arrayVisualizer.setVisualStyle(val)
     }
 
+    toggleRainbow(val){
+        this.arrayVisualizer.getMarks().setRainbow(val)
+    }
+
     render() {
         return (
             <div id={styles.controlsContainer}>
@@ -151,6 +155,10 @@ export class Controls extends React.Component {
                                                id="enableMarksCB"
                                                name="enableMarksCB" defaultChecked={true}/>
                                         <label htmlFor="enableMarksCB">Enable Marks</label>
+                                    </div>
+                                    <div className={styles.checkBoxContainer}>
+                                        <button onClick={this.toggleRainbow.bind(this, true)}>Paint to Rainbow</button>
+                                        <button onClick={this.toggleRainbow.bind(this, false)}>Clear Color</button>
                                     </div>
                                 </div>
                             </div>

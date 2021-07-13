@@ -17,7 +17,7 @@ export function ArrayWindow(props) {
         for (let i = 0; i < objLength(array); ++i) {
             let styleSheet = {
                 height: array[i].getValue() / mainArray.length * 100 + "%",
-                backgroundColor: "rgb(" + array[i].getColor() + ")",
+                backgroundColor: "rgb(" + array[i].getColorForRender() + ")",
                 ...border
             }
             arr.push(<div key={i} style={styleSheet} className={styles.bar}/>);
@@ -35,7 +35,7 @@ export function ArrayWindow(props) {
             let height = (value===-1) ? {height: 0} : {}
             let styleSheet = {
                 bottom: "calc(" + value / mainArray.length * 100 + "% - 0.25rem)",
-                backgroundColor: "rgb(" + array[i].getColor() + ")",
+                backgroundColor: "rgb(" + array[i].getColorForRender() + ")",
                 ...height
             }
             arr.push(<div className={styles.dotContainer}>

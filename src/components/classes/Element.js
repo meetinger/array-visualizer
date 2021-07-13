@@ -9,8 +9,9 @@ const colors = {
 export class Element{
 
     value;
-    color;
     type;
+    color;
+    markColor;
 
     // constructor(args){
     //     this.value = args.value;
@@ -18,11 +19,13 @@ export class Element{
     //     this.color = args.color || colors[args.type];
     // }
 
-    constructor(value, type, color) {
-            this.value = value;
-            this.type = type;
-            this.color = color;
+    constructor(value, type, color, markColor) {
+        this.value = value;
+        this.type = type;
+        this.color = color;
+        this.markColor = markColor;
     }
+
 
     getValue(){
         return this.value;
@@ -34,8 +37,24 @@ export class Element{
     getColor(){
         return this.color;
     }
+
     setColor(color){
         this.color = color;
+    }
+
+    getMarkColor(){
+        return this.markColor;
+    }
+    setMarkColor(color){
+        this.markColor = color;
+    }
+
+    getColorForRender(){
+        if(this.type === "Default"){
+            return this.markColor
+        }else{
+            return this.color
+        }
     }
 
     getType(){
@@ -43,5 +62,9 @@ export class Element{
     }
     setType(type){
         this.type = type;
+    }
+
+    copy(){
+        return new Element(this.value, this.type, this.color, this.markColor)
     }
 }
