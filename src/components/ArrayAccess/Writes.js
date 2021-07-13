@@ -69,12 +69,12 @@ export class Writes{
         if(isPseudo) {
             let pseudoAuxArrays = this.arrayVisualizer.getPseudoAuxArrays()
             let auxArrIndex = pseudoAuxArrays.length
-            pseudoAuxArrays.push(this.arrayVisualizer.initArray(() => 0, len, false))
+            pseudoAuxArrays.push(this.arrayVisualizer.initArray(() => -1, len, false))
             this.createAuxArrayWithDelay(len, this.Delays.getDelayInc(), false)
             return auxArrIndex
         }else{
             let tmpArr = this.arrayVisualizer.getAuxArrays()
-            tmpArr.push(this.arrayVisualizer.initArray(() => 0, len, false))
+            tmpArr.push(this.arrayVisualizer.initArray(() => -1, len, false))
             this.arrayVisualizer.setState({
                     auxArrays: tmpArr
                 }

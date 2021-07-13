@@ -30,9 +30,12 @@ export function ArrayWindow(props) {
         }
     } else if (visualStyle === "dots") {
         for (let i = 0; i < array.length; ++i) {
+            let value = array[i].getValue()
+            let height = (value===-1) ? {height: 0} : {}
             let styleSheet = {
-                bottom: "calc(" + array[i].getValue() / mainArray.length * 100 + "% - 0.25rem)",
+                bottom: "calc(" + value / mainArray.length * 100 + "% - 0.25rem)",
                 backgroundColor: "rgb(" + array[i].getColor() + ")",
+                ...height
             }
             arr.push(<div className={styles.dotContainer}>
                 <div key={i} style={styleSheet} className={styles.dot}/>
