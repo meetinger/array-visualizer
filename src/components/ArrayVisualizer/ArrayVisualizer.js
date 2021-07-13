@@ -238,7 +238,7 @@ export class ArrayVisualizer extends React.Component {
     stopSort(){
         // this.resetDelay()
         this.Delays.resetDelays()
-        this.unmarkMany(Array.from(Array(this.getArrLength()).keys()), false, true)
+        this.Marks.unmarkMany(Array.from(Array(this.getArrLength()).keys()), false, true)
         this.setState({
                 auxArrays: []
             }

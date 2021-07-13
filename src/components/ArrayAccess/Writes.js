@@ -20,8 +20,6 @@ export class Writes{
         this.Sounds = arrayVisualizer.getSounds()
         this.Delays = arrayVisualizer.getDelays()
         this.Marks = arrayVisualizer.getMarks()
-        console.log("IN CONSTRUCTOR")
-        console.log(this.arrayVisualizer.getPseudoArray())
     }
 
 
@@ -37,7 +35,6 @@ export class Writes{
         if(playSound) {
             this.Sounds.playSound(arr[b].getValue());
         }
-        console.log(arr)
         let tmpArr = arr
         let tmp = tmpArr[a]
         tmpArr[a] = tmpArr[b]
@@ -103,14 +100,16 @@ export class Writes{
 
     createAuxArray(len, isPseudo = true){
         if(isPseudo) {
-            let auxArrIndex = this.arrayVisualizer.getPseudoAuxArrays().length
-            this.arrayVisualizer.getPseudoAuxArrays().push(this.arrayVisualizer.initArray(() => 0, len, false))
+            let pseudoAuxArrays = this.arrayVisualizer.getPseudoAuxArrays()
+            let auxArrIndex = pseudoAuxArrays.length
+            pseudoAuxArrays.push(this.arrayVisualizer.initArray(() => 0, len, false))
             // this.instructions.push(
             //     {
             //         cmd: "createAuxArray",
             //         len: len
             //     }
             // )
+            this.createAuxArrayWithDelay(len, this.Delays.getDelayInc(), false)
             return auxArrIndex
         }else{
             let tmpArr = this.arrayVisualizer.getAuxArrays()
@@ -167,7 +166,7 @@ export class Writes{
             //     }
             // )
             // )
-            this.auxWriteWithDelay(index, value, arrIndex, this.Delays.incDelay("Write", this.Delays.getDelayInc()), false, true)
+            this.auxWriteWithDelay(index, value, arrIndex, this.Delays.getDelayInc(), false, true)
         }else{
             this.arrayVisualizer.getAuxArrays()[arrIndex][index].setValue(value)
             let tmp = this.arrayVisualizer.getAuxArrays()
