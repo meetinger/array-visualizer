@@ -188,12 +188,13 @@ export class ArrayVisualizer extends React.Component {
             sortName: "Shuffle"
         })
 
-        let instructions = func(this.getArrLength());
-        for(let i of instructions){
-            if(i.cmd === "swap"){
-                this.Writes.swapWithDelay(i.a, i.b, this.state.array, true, this.Delays.getDelayInc()/5, true)
-            }
-        }
+        func(this);
+        // let instructions = func(this);
+        // for(let i of instructions){
+        //     if(i.cmd === "swap"){
+        //         this.Writes.swapWithDelay(i.a, i.b, this.state.array, true, this.Delays.getDelayInc()/5, true)
+        //     }
+        // }
 
     }
 

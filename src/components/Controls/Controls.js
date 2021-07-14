@@ -51,6 +51,7 @@ export class Controls extends React.Component {
 
     shuffleArray(func) {
         this.arrayVisualizer.shuffleArray(func)
+        // func(this.arrayVisualizer)
     }
 
     sortArray(sortName) {
@@ -153,7 +154,7 @@ export class Controls extends React.Component {
                                         <input onChange={this.toggleEnableMarks.bind(this)} type="checkbox"
                                                id="enableMarksCB"
                                                name="enableMarksCB" defaultChecked={true}/>
-                                        <label htmlFor="enableMarksCB">Enable Marks</label>
+                                        <label htmlFor="enableMarksCB">Enable Marks(Disable to reduce lags)</label>
                                     </div>
                                     <div className={styles.checkBoxContainer}>
                                         <button onClick={this.toggleRainbow.bind(this, true)}>Paint to Rainbow</button>
