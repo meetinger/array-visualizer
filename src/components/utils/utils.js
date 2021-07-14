@@ -38,9 +38,9 @@ export function deepArrayCopy(arr){
     for(let i of arr){
         let value = i.getValue();
         let type = i.getType();
-        let markColor = i.getMarkColor();
         let color = i.getColor();
-        out.push(new Element(value, type, markColor, color))
+        let markColor = i.getMarkColor();
+        out.push(new Element(value, type, color, markColor))
     }
     return out;
 }

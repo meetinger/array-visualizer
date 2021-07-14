@@ -109,7 +109,6 @@ export class Controls extends React.Component {
 
     toggleEnableMarks() {
         let element = document.getElementById("enableMarksCB")
-        console.log(element.checked)
         this.arrayVisualizer.setEnableMarks(element.checked)
     }
 
