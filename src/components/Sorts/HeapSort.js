@@ -12,10 +12,10 @@ export class HeapSort extends Sort{
         let l = 2 * i + 1;
         let r = 2 * i + 2;
 
-        if (l < n && this.Reads.compare(l, largest, ">")) {
+        if (l < n && this.Reads.compareInArr(l, largest) > 0) {
             largest = l;
         }
-        if (r < n && this.Reads.compare(r, largest, ">")) {
+        if (r < n && this.Reads.compareInArr(r, largest) > 0) {
             largest = r;
         }
 

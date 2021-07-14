@@ -9,7 +9,7 @@ export class BubbleSort extends Sort{
         let len = this.arrLength;
         for (let i = 0; i < len; i++) {
             for (let j = 0; j < len - i - 1; j++) {
-                if (this.Reads.compare(j, j + 1, ">")) {
+                if (this.Reads.compareInArr(j, j + 1) > 0) {
                     this.Writes.swap(j, j + 1)
                 }
             }

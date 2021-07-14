@@ -1,4 +1,5 @@
 import {Sort} from "./Sort";
+import {Element} from "../classes/Element";
 
 export class LSDRadixSort extends Sort{
     constructor(arrayVisualizer) {
@@ -18,7 +19,7 @@ export class LSDRadixSort extends Sort{
         // find the relevant radices to process for efficiency
         for (idx1 = 0;idx1 < len1;idx1++) {
             // radices[arr[idx1].toString().length] = 0;
-            radices[this.Reads.read(idx1).toString().length] = 0;
+            radices[this.Reads.readValue(idx1).toString().length] = 0;
         }
 
         // loop for each radix. For each radix we put all the items
@@ -28,7 +29,7 @@ export class LSDRadixSort extends Sort{
             len1 = this.arrLength;
             for (idx1 = 0;idx1 < len1;idx1++) {
                 // curr = arr[idx1];
-                curr = this.Reads.read(idx1)
+                curr = this.Reads.readValue(idx1)
                 // item length is used to find its current radix value
                 currLen = curr.toString().length;
                 // only put the item in a radix bucket if the item
@@ -63,7 +64,8 @@ export class LSDRadixSort extends Sort{
                     len1 = currBucket.length;
                     for (idx3 = 0;idx3 < len1;idx3++) {
                         // arr[idx1++] = currBucket[idx3];
-                        this.Writes.write(idx1++, currBucket[idx3])
+                        this.Writes.write(idx1++, new Element(currBucket[idx3], "Default", [255,255,255], [0,0,0]))
+                        // this.Reads.get(idx1++).setValue(currBucket[idx3])
                     }
                 }
             }

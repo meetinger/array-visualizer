@@ -8,16 +8,16 @@ export class LRQuickSort extends Sort{
 
     quickSort(p, r){
         let pivot = Math.trunc(p + (r - p + 1) / 2);
-        let x = this.Reads.read(pivot);
+        let x = this.Reads.readValue(pivot);
 
         let i = p;
         let j = r;
 
         while (i <= j) {
-            while (this.Reads.read(i) < x){
+            while (this.Reads.readValue(i) < x){
                 i++;
             }
-            while (this.Reads.read(j) > x){
+            while (this.Reads.readValue(j) > x){
                 j--;
             }
 

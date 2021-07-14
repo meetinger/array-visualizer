@@ -72,7 +72,7 @@ export class ArrayVisualizer extends React.Component {
     initArray(func, length, setToState=false) {
         let arr = []
         for (let i = 0; i < length; ++i) {
-            let element = new Element(func(i, length), 0, [255, 255, 255])
+            let element = new Element(func(i, length), "Unmarked", [255, 255, 255], [0,0,0,0])
             arr.push(element)
         }
         if(setToState){

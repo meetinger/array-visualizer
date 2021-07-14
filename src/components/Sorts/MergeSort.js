@@ -17,11 +17,11 @@ export class MergeSort extends Sort{
 
         for (let i = 0; i < leftArrayLen; i++) {
             // leftArray[i] = this.Reads.read(low + i)
-            this.Writes.auxWrite(i, this.Reads.read(low + i), leftArrayIndex)
+            this.Writes.auxWrite(i, this.Reads.get(low + i), leftArrayIndex)
         }
         for (let i = 0; i < rightArrayLen; i++) {
             // rightArray[i] = this.Reads.read(mid + i + 1);
-            this.Writes.auxWrite(i, this.Reads.read(mid + i + 1), rightArrayIndex)
+            this.Writes.auxWrite(i, this.Reads.get(mid + i + 1), rightArrayIndex)
         }
 
         let leftIndex = 0;
@@ -30,18 +30,18 @@ export class MergeSort extends Sort{
         for (let i = low; i < high + 1; i++) {
             if (leftIndex < leftArrayLen && rightIndex < rightArrayLen) {
                 // if (leftArray[leftIndex] < rightArray[rightIndex]) {
-                if (this.Reads.auxRead(leftIndex, leftArrayIndex) < this.Reads.auxRead(rightIndex, rightArrayIndex)) {
-                    this.Writes.write(i, this.Reads.auxRead(leftIndex, leftArrayIndex))
+                if (this.Reads.compareValues(this.Reads.auxGet(leftIndex, leftArrayIndex), this.Reads.auxGet(rightIndex, rightArrayIndex)) < 0) {
+                    this.Writes.write(i, this.Reads.auxGet(leftIndex, leftArrayIndex))
                     leftIndex++;
                 } else {
-                    this.Writes.write(i, this.Reads.auxRead(rightIndex, rightArrayIndex))
+                    this.Writes.write(i, this.Reads.auxGet(rightIndex, rightArrayIndex))
                     rightIndex++;
                 }
             } else if (leftIndex < leftArrayLen) {
-                this.Writes.write(i, this.Reads.auxRead(leftIndex, leftArrayIndex))
+                this.Writes.write(i, this.Reads.auxGet(leftIndex, leftArrayIndex))
                 leftIndex++;
             } else if (rightIndex < rightArrayLen) {
-                this.Writes.write(i, this.Reads.auxRead(rightIndex, rightArrayIndex))
+                this.Writes.write(i, this.Reads.auxGet(rightIndex, rightArrayIndex))
                 rightIndex++;
             }
         }

@@ -1,6 +1,6 @@
-import {randomInt} from "../utils/utils";
+import {HSL2RGB, randomInt} from "../utils/utils";
 
-const colors = {
+export const colors = {
     "Unmarked": [255, 255, 255],
     "Default": [255, 0, 0],
     "Additional": [randomInt(0, 256), randomInt(0, 256), randomInt(0, 256)],
@@ -39,7 +39,7 @@ export class Marks{
         }
 
         tmpArr[index].setType(type)
-        tmpArr[index].setColor(color)
+        tmpArr[index].setMarkColor(color)
         if (saveArr) {
             this.arrayVisualizer.setState({
                 array: tmpArr
@@ -66,7 +66,7 @@ export class Marks{
 
     unmark(index, saveArr = true) {
         let tmpArr = this.arrayVisualizer.getMainArray()
-        tmpArr[index].setColor(colors["Unmarked"])
+        // tmpArr[index].setMarkColor(colors["Unmarked"])
         tmpArr[index].setType("Unmarked")
         if (saveArr) {
             this.arrayVisualizer.setState({
@@ -96,6 +96,25 @@ export class Marks{
         }
     }
 
+    setRainbow(val){
+        let tmpArr = this.arrayVisualizer.getMainArray()
+        if(val){
+            for(let i = 0; i < tmpArr.length; ++i){
+                let hsl = [i / tmpArr.length, 0.8, 0.5]
+                console.log(hsl)
+                let rgb = HSL2RGB(hsl[0], hsl[1], hsl[2])
+                tmpArr[i].setColor(rgb)
+                console.log(rgb)
+            }
+        }else{
+            for(let i of tmpArr){
+                i.setColor([255, 255, 255])
+            }
+        }
+        this.arrayVisualizer.setState({
+            array: tmpArr
+        })
+    }
 
     markUnmarkMany(markIndexes, markArgs) {
         this.markMany(markIndexes, markArgs, true)

@@ -7,7 +7,7 @@ export class StoogeSort extends Sort{
     }
 
     StoogeSort(i, j) {
-        if (this.Reads.compare(i, j, ">")) {
+        if (this.Reads.compareInArr(i, j) > 0) {
             this.Writes.swap(i, j)
         }
         if (j - i > 1) {
