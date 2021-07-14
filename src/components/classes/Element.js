@@ -71,4 +71,8 @@ export class Element{
             return new Element(this.value, this.type, this.color, this.markColor)
         }
     }
+
+    toString(){
+        return this.value.toString()
+    }
 }
