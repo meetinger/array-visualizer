@@ -44,7 +44,7 @@ export class Reads{
     }
 
 
-    auxRead(index, arrIndex, isPseudo = true){
+    auxReadValue(index, arrIndex, isPseudo = true){
         if(isPseudo){
             return this.arrayVisualizer.getPseudoAuxArrays()[arrIndex][index].getValue()
         }else {
