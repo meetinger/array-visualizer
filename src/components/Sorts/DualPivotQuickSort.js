@@ -32,6 +32,9 @@ export class DualPivotQuickSort extends Sort {
         if (med2 >= right) {
             med2 = right - 1;
         }
+
+
+        // if(Reads.compareValues(array[med1], array[med2]) == -1) {
         if (this.Reads.compareInArr(med1, med2) < 0) {
             this.Writes.swap(med1, left);
             this.Writes.swap(med2, right);
@@ -52,19 +55,19 @@ export class DualPivotQuickSort extends Sort {
         for (let k = less; k <= great; k++) {
 
             // if (this.Reads.read(k) < pivot1) {
-            if (this.Reads.compareValues(this.Reads.readValue(k), pivot1) < 0) {
+            if (this.Reads.compareValues(this.Reads.get(k), pivot1) < 0) {
 
                 this.Writes.swap(k, less++);
             // } else if (this.Reads.read(k) > pivot2) {
-            } else if (this.Reads.compareValues(this.Reads.readValue(k), pivot2) > 0) {
+            } else if (this.Reads.compareValues(this.Reads.get(k), pivot2) > 0) {
                 // while (k < great && this.Reads.read(great) > pivot2) {
-                while (k < great && this.Reads.compareValues(this.Reads.readValue(great), pivot2) > 0) {
+                while (k < great && this.Reads.compareValues(this.Reads.get(great), pivot2) > 0) {
                     great--;
                 }
                 this.Writes.swap(k, great--);
 
                 // if (this.Reads.read(k) < pivot1) {
-                if (this.Reads.compareValues(this.Reads.readValue(k), pivot2) < 0) {
+                if (this.Reads.compareValues(this.Reads.get(k), pivot1) < 0) {
                     this.Writes.swap(k, less++);
                 }
             }
