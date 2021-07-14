@@ -5,7 +5,7 @@ export let shuffles = {
         let len = arrayVisualizer.getArrLength()
         for (let i = 0; i < len; ++i) {
             let randomIndex = randomInt(i, len)
-            arrayVisualizer.getWrites().swap(i, randomIndex)
+            arrayVisualizer.getWrites().swapWithDelay(i, randomIndex, arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc()/5, true)
         }
         // return instructions
     },
@@ -16,14 +16,14 @@ export let shuffles = {
         for (let i = 0; i < len * AMOUNT; ++i) {
             let randomIndexA = randomInt(i, len)
             let randomIndexB = randomInt(i, len)
-            arrayVisualizer.getWrites().swap(randomIndexA, randomIndexB)
+            arrayVisualizer.getWrites().swapWithDelay(randomIndexA, randomIndexB, arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc()/5, true)
         }
     },
     //
     Reverse: function (arrayVisualizer){
         let len = arrayVisualizer.getArrLength()
         for (let i = 0; i < Math.trunc(len/2); ++i){
-            arrayVisualizer.getWrites().swap(i, len-i-1)
+            arrayVisualizer.getWrites().swapWithDelay(i, len-i-1, arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc()/5, true)
         }
     },
     BlockShuffle: function (arrayVisualizer) {
@@ -34,7 +34,7 @@ export let shuffles = {
         for (let i = 0; i < GAP_FACTOR-1; ++i) {
             let factor = randomInt(i+1, GAP_FACTOR)
             for(let j = 0; j < gap; ++j){
-                arrayVisualizer.getWrites().swap(j+i*gap, j+factor*gap)
+                arrayVisualizer.getWrites().swapWithDelay(j+i*gap, j+factor*gap, arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc()/5, true)
             }
         }
         return instructions
@@ -50,7 +50,7 @@ export let shuffles = {
             temp[--j] = Reads.get(i)
         }
         for(let i = 0; i < len; i++){
-            arrayVisualizer.getWrites().write(i, temp[i]);
+            arrayVisualizer.getWrites().writeWithDelay(i, temp[i], arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc()/5, true)
         }
     },
     InversedPipeOrgan: function (arrayVisualizer){
@@ -64,7 +64,7 @@ export let shuffles = {
             temp[--j] = Reads.get(len-i-1)
         }
         for(let i = 0; i < len; i++){
-            arrayVisualizer.getWrites().write(i, temp[i]);
+            arrayVisualizer.getWrites().writeWithDelay(i, temp[i], arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc()/5, true)
         }
     }
 }
