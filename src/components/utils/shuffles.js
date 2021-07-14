@@ -1,7 +1,7 @@
 import {randomInt} from "./utils";
 
 export let shuffles = {
-    fullShuffle: function (len) {
+    FullShuffle: function (len) {
         let instructions = []
         for (let i = 0; i < len; ++i) {
             let randomIndex = randomInt(i, len)
@@ -16,7 +16,7 @@ export let shuffles = {
         return instructions
     },
 
-    almostSorted: function (len) {
+    AlmostSorted: function (len) {
         let instructions = []
         const AMOUNT = 0.1
         for (let i = 0; i < len * AMOUNT; ++i) {
@@ -33,7 +33,7 @@ export let shuffles = {
         return instructions
     },
 
-    reverse: function (len){
+    Reverse: function (len){
         let instructions = []
         for (let i = 0; i < Math.trunc(len/2); ++i){
             instructions.push(
@@ -46,7 +46,7 @@ export let shuffles = {
         }
         return instructions
     },
-    stableShuffle: function (len) {
+    BlockShuffle: function (len) {
         const GAP_FACTOR = 10
         let gap = len/GAP_FACTOR
         let instructions = []
