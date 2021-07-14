@@ -101,10 +101,8 @@ export class Marks{
         if(val){
             for(let i = 0; i < tmpArr.length; ++i){
                 let hsl = [i / tmpArr.length, 0.8, 0.5]
-                console.log(hsl)
                 let rgb = HSL2RGB(hsl[0], hsl[1], hsl[2])
                 tmpArr[i].setColor(rgb)
-                console.log(rgb)
             }
         }else{
             for(let i of tmpArr){
