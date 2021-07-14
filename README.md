@@ -9,5 +9,6 @@ This project is written on ReactJS
 3. Many sorting algorithms
 4. Visuals settings
 5. Different Init and Shuffle array methods
+6. Color support
 
 ## [Try it Now!](https://meetinger.github.io/array-visualizer/)
