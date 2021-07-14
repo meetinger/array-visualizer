@@ -44,10 +44,10 @@ export let shuffles = {
         let Reads = arrayVisualizer.getReads()
         let temp = new Array(len);
         for(let i = 0, j = 0; i < len; i+=2){
-            temp[j++] = Reads.get(i)
+            temp[j++] = Reads.get(i, arrayVisualizer.getMainArray())
         }
         for(let i = 1, j = len; i < len ;i+=2) {
-            temp[--j] = Reads.get(i)
+            temp[--j] = Reads.get(i, arrayVisualizer.getMainArray())
         }
         for(let i = 0; i < len; i++){
             arrayVisualizer.getWrites().writeWithDelay(i, temp[i], arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc()/5, true)
@@ -58,10 +58,10 @@ export let shuffles = {
         let Reads = arrayVisualizer.getReads()
         let temp = new Array(len);
         for(let i = 0, j = 0; i < len; i+=2){
-            temp[j++] = Reads.get(len-i-1)
+            temp[j++] = Reads.get(len-i-1, arrayVisualizer.getMainArray())
         }
         for(let i = 1, j = len; i < len ;i+=2) {
-            temp[--j] = Reads.get(len-i-1)
+            temp[--j] = Reads.get(len-i-1, arrayVisualizer.getMainArray())
         }
         for(let i = 0; i < len; i++){
             arrayVisualizer.getWrites().writeWithDelay(i, temp[i], arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc()/5, true)
