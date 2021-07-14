@@ -9,7 +9,7 @@ export class LLQuickSort extends Sort{
         let pivot = hi;
         let i = lo;
         for (let j = lo; j < hi; j++) {
-            if (this.Reads.compare(j, pivot, "<")) {
+            if (this.Reads.compareInArr(j, pivot) < 0) {
                 this.Writes.swap(i, j);
                 i++;
             }
