@@ -1,4 +1,5 @@
 import {randomInt} from "./utils";
+import {HeapSort} from "../Sorts/HeapSort";
 
 export let shuffles = {
     FullShuffle: function (arrayVisualizer) {
@@ -65,6 +66,13 @@ export let shuffles = {
         }
         for(let i = 0; i < len; i++){
             arrayVisualizer.getWrites().writeWithDelay(i, temp[i], arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc()/5, true)
+        }
+    },
+    Heap: function (arrayVisualizer){
+        let n = arrayVisualizer.getArrLength()
+        let heapSort = new HeapSort(arrayVisualizer)
+        for (let i = Math.trunc(n / 2) - 1; i >= 0; i--) {
+            heapSort.heapify(n, i);
         }
     }
 }
