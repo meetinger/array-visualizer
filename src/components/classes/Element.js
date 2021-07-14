@@ -45,8 +45,8 @@ export class Element{
     getMarkColor(){
         return this.markColor;
     }
-    setMarkColor(color){
-        this.markColor = color;
+    setMarkColor(markColor){
+        this.markColor = markColor;
     }
 
     getColorForRender(){
@@ -64,7 +64,11 @@ export class Element{
         this.type = type;
     }
 
-    copy(){
-        return new Element(this.value, this.type, this.color, this.markColor)
+    copy(unMark = true){
+        if(unMark){
+            return new Element(this.value, "Unmarked", this.color, [0,0,0])
+        }else{
+            return new Element(this.value, this.type, this.color, this.markColor)
+        }
     }
 }

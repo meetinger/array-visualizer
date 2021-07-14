@@ -38,9 +38,9 @@ export class BitonicSort extends Sort{
                     let ij = i ^ j;
 
                     if((ij) > i && ij < sortLength) {
-                        if((((i & k) === 0) === m) && this.Reads.compare(i, ij, ">"))
+                        if((((i & k) === 0) === m) && this.Reads.compareInArr(i, ij) > 0)
                             this.Writes.swap(i, ij);
-                        if((((i & k) !== 0) === m) && this.Reads.compare(i, ij, "<"))
+                        if((((i & k) !== 0) === m) && this.Reads.compareInArr(i, ij) < 0)
                             this.Writes.swap(i, ij);
                     }
                 }
