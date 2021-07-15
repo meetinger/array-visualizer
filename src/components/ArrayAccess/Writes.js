@@ -1,4 +1,4 @@
-import {Element} from "../classes/Element";
+
 import {objLength} from "../utils/utils";
 
 export class Writes{

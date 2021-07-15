@@ -14,6 +14,12 @@ export function ArrayWindow(props) {
 
     let len = objLength(array)
 
+    const sizeStyle = {width: "100%", height: height + "%"};
+
+    if (len === 0) {
+        return <div style={sizeStyle}/>
+    }
+
     if (visualStyle === "bars") {
         let border = borderEnabled ? {} : {border: "none"}
         for (let i = 0; i < len; ++i) {
@@ -24,11 +30,11 @@ export function ArrayWindow(props) {
             }
             arr.push(<div key={i} style={styleSheet} className={styles.bar}/>);
         }
+        let styleSheet = {
+            height: "0%",
+            backgroundColor: "rgb(255,255,255)",
+        }
         for (let i = len; i < mainArray.length; ++i) {
-            let styleSheet = {
-                height: "0%",
-                backgroundColor: "rgb(255,255,255)",
-            }
             arr.push(<div key={i} style={styleSheet} className={styles.bar}/>);
         }
     } else if (visualStyle === "dots") {
@@ -44,24 +50,22 @@ export function ArrayWindow(props) {
                 <div key={i} style={styleSheet} className={styles.dot}/>
             </div>);
         }
+        let styleSheet = {
+            bottom: 0,
+            backgroundColor: "rgb(0, 0, 0)",
+        }
         for (let i = len; i < mainArray.length; ++i) {
-            let styleSheet = {
-                bottom: 0,
-                backgroundColor: "rgb(0, 0, 0)",
-            }
             arr.push(<div className={styles.dotContainer}>
                 <div key={i} style={styleSheet} className={styles.dot}/>
             </div>);
         }
     }
-    if (len === 0) {
-        return <div/>
-    }
     return (
-        <div style={{width: "100%", height: height + "%"}}>
+        <div style={sizeStyle}>
             <div className={styles.arrayContainer}>
                 {arr}
             </div>
         </div>
     )
 }
+
