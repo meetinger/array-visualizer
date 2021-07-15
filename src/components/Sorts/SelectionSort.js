@@ -10,12 +10,12 @@ export class SelectionSort extends Sort{
         for (let i=0; i < this.arrLength; i++) {
             let minIndex = i
             for (let j=i; j < this.arrLength; j++) {
-                if (this.Reads.compare(j, minIndex, "<")) {
+                if (this.Reads.compareInArr(j, minIndex) < 0) {
                     minIndex = j
                 }
             }
 
-            if (this.Reads.compare(i, minIndex, ">")) {
+            if (this.Reads.compareInArr(i, minIndex) > 0) {
                 this.Writes.swap(i, minIndex);
             }
         }
