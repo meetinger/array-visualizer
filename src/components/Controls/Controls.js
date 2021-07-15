@@ -26,6 +26,7 @@ export class Controls extends React.Component {
             let len = slider.value
             this.arrayVisualizer.updateArrLength(len)
         }
+
     }
 
     toggleControlShow() {

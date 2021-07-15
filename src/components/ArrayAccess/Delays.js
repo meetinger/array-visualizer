@@ -17,9 +17,14 @@ export class Delays {
             CreateAuxArray: 0,
             RemoveAuxArray: 0
         }
-        this.delayIncFactor = 3000
+        this.delayIncFactor = 3000-arrayVisualizer.getArrLength()*3
         // console.log(arrayVisualizer.getArrLength())
         this.delayInc = this.delayIncFactor/arrayVisualizer.getArrLength()
+    }
+
+    updateDelayInc(){
+        this.delayIncFactor = 3000-this.arrayVisualizer.getArrLength()*3
+        this.delayInc = this.delayIncFactor/this.arrayVisualizer.getArrLength()
     }
 
     push(timeout){

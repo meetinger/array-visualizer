@@ -229,7 +229,8 @@ export class ArrayVisualizer extends React.Component {
         this.pseudoArray = deepArrayCopy(this.state.array)
 
         this.Sorts.arrLength = this.getArrLength()
-        this.updateDelayInc(this.delayIncConst)
+        // this.updateDelayInc(this.delayIncConst)
+        this.Delays.updateDelayInc();
     }
 
     genArrayWindows(){
