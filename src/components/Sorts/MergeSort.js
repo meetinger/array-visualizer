@@ -1,63 +1,50 @@
 import {Sort} from "./Sort";
+import {Writes} from "../ArrayAccess/Writes";
 
-export class MergeSort extends Sort{
+export class MergeSort extends Sort {
     constructor(arrayVisualizer) {
         super(arrayVisualizer);
         this.sortName = "MergeSort"
     }
-    merge(low, mid, high) {
-        // let leftArray = new Array(mid - low + 1);
-        // let rightArray = new Array(high - mid);
 
-        let leftArrayLen = mid - low + 1
-        let rightArrayLen = high - mid
-
-        let leftArrayIndex = this.Writes.createAuxArray(leftArrayLen);
-        let rightArrayIndex = this.Writes.createAuxArray(rightArrayLen);
-
-        for (let i = 0; i < leftArrayLen; i++) {
-            // leftArray[i] = this.Reads.read(low + i)
-            this.Writes.auxWrite(i, this.Reads.get(low + i), leftArrayIndex)
-        }
-        for (let i = 0; i < rightArrayLen; i++) {
-            // rightArray[i] = this.Reads.read(mid + i + 1);
-            this.Writes.auxWrite(i, this.Reads.get(mid + i + 1), rightArrayIndex)
+    merge(tmp, start, mid, end) {
+        if (start === mid) {
+            return
         }
 
-        let leftIndex = 0;
-        let rightIndex = 0;
+        this.merge(tmp, start, Math.trunc((mid + start) / 2), mid);
+        this.merge(tmp, mid, Math.trunc((mid + end) / 2), end);
 
-        for (let i = low; i < high + 1; i++) {
-            if (leftIndex < leftArrayLen && rightIndex < rightArrayLen) {
-                // if (leftArray[leftIndex] < rightArray[rightIndex]) {
-                if (this.Reads.compareValues(this.Reads.auxGet(leftIndex, leftArrayIndex), this.Reads.auxGet(rightIndex, rightArrayIndex)) < 0) {
-                    this.Writes.write(i, this.Reads.auxGet(leftIndex, leftArrayIndex))
-                    leftIndex++;
-                } else {
-                    this.Writes.write(i, this.Reads.auxGet(rightIndex, rightArrayIndex))
-                    rightIndex++;
-                }
-            } else if (leftIndex < leftArrayLen) {
-                this.Writes.write(i, this.Reads.auxGet(leftIndex, leftArrayIndex))
-                leftIndex++;
-            } else if (rightIndex < rightArrayLen) {
-                this.Writes.write(i, this.Reads.auxGet(rightIndex, rightArrayIndex))
-                rightIndex++;
+        let low = start
+        let high = mid
+
+        for (let nxt = 0; nxt < end - start; nxt++) {
+            if (low >= mid && high >= end) break;
+
+            if (low < mid && high >= end) {
+                this.Writes.auxWrite(nxt, this.Reads.get(low++), tmp)
+            } else if (low >= mid && high < end) {
+                this.Writes.auxWrite(nxt, this.Reads.get(high++), tmp)
+            } else if (this.Reads.compareInArr(low, high) <= 0) {
+                this.Writes.auxWrite(nxt, this.Reads.get(low++), tmp)
+            } else {
+                this.Writes.auxWrite(nxt, this.Reads.get(high++), tmp)
             }
         }
-        // console.log(leftArray)
-        this.Writes.removeAuxArray(leftArrayIndex)
-        // console.log(rightArray)
-        this.Writes.removeAuxArray(rightArrayIndex)
+        for (let i = 0; i < end - start; i++) {
+            this.Writes.write(start + i, this.Reads.auxGet(i, tmp))
+        }
+
     }
 
     MergeSort(low, high) {
-        if (high <= low) return;
+        let tmp = this.Writes.createAuxArray(low - high)
 
-        let mid = Math.trunc((low + high) / 2)
-        this.MergeSort(low, mid);
-        this.MergeSort(mid + 1, high);
-        this.merge(low, mid, high);
+        let mid = low + (Math.trunc((high - low) / 2))
+
+        this.merge(tmp, low, mid, high+1)
+
+        this.Writes.removeAuxArray(tmp)
     }
 
     runSort(low, high) {
