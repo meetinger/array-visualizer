@@ -28,9 +28,9 @@ export class LSDRadixSort extends Sort {
             for (let i = 0; i < len; i++) {
                 let stabVal = Math.max(0, Math.min(this.Reads.readValue(i), len - 1))
                 let digit = Math.trunc(stabVal / (bucketsNum ** p) % bucketsNum)
-                console.log(digit)
+                // console.log(digit)
                 registers[digit].push(this.Reads.get(i))
-
+                //PseudoWrite
             }
 
 
@@ -55,7 +55,7 @@ export class LSDRadixSort extends Sort {
                 tempWrite[pos] = true
             }
             for (let i = 0; i < len; i++) {
-                if (!tempWrite) {
+                if (!tempWrite[i]) {
                     this.Writes.write(i, this.Reads.auxGet(i, tempArray))
                 }
             }
