@@ -1,79 +1,72 @@
 import {Sort} from "./Sort";
 import {Element} from "../classes/Element";
 
-export class LSDRadixSort extends Sort{
+export class LSDRadixSort extends Sort {
     constructor(arrayVisualizer) {
         super(arrayVisualizer);
         this.sortName = "LSD RadixSort"
-        this.isNeedBucketsNum = false;
+        this.isNeedBucketsNum = true;
     }
-    LSDRadixSort(len2) {
-        // let idx1, idx2, idx3, len1, len2, radix, radixKey;
-        let idx1, idx2, idx3, len1, radix, radixKey;
-        let radices = {}, buckets = {}, num, curr;
-        let currLen, radixStr, currBucket;
 
-        len1 = this.arrLength;
-        // len2 = 10;  // radix sort uses ten buckets
+    LSDRadixSort(bucketsNum) {
+        let len = this.arrayVisualizer.getArrLength()
+        let max = this.Reads.readValue(0);
+        for (let i = 1; i < len; ++i) {
+            let tmp = this.Reads.readValue(i)
+            if (max < tmp) {
+                max = tmp
+            }
+        }
+        let highestPower = Math.log(max) / Math.log(bucketsNum);
 
-        // find the relevant radices to process for efficiency
-        for (idx1 = 0;idx1 < len1;idx1++) {
-            // radices[arr[idx1].toString().length] = 0;
-            radices[this.Reads.readValue(idx1).toString().length] = 0;
+        let registers = new Array(bucketsNum)
+        for (let i = 0; i < bucketsNum; i++) {
+            registers[i] = [];
         }
 
-        // loop for each radix. For each radix we put all the items
-        // in buckets, and then pull them out of the buckets.
-        for (radix in radices) {
-            // put each array item in a bucket based on its radix value
-            len1 = this.arrLength;
-            for (idx1 = 0;idx1 < len1;idx1++) {
-                // curr = arr[idx1];
-                curr = this.Reads.readValue(idx1)
-                // item length is used to find its current radix value
-                currLen = curr.toString().length;
-                // only put the item in a radix bucket if the item
-                // key is as long as the radix
-                if (currLen >= radix) {
-                    // radix starts from beginning of key, so need to
-                    // adjust to get redix values from start of stringified key
-                    radixKey = curr.toString()[currLen - radix];
-                    // create the bucket if it does not already exist
-                    if (!buckets.hasOwnProperty(radixKey)) {
-                        buckets[radixKey] = [];
-                    }
-                    // put the array value in the bucket
-                    buckets[radixKey].push(curr);
-                } else {
-                    if (!buckets.hasOwnProperty('0')) {
-                        buckets['0'] = [];
-                    }
-                    buckets['0'].push(curr);
+        for (let p = 0; p <= highestPower; p++) {
+            for (let i = 0; i < len; i++) {
+                let stabVal = Math.max(0, Math.min(this.Reads.readValue(i), len - 1))
+                let digit = Math.trunc(stabVal / (bucketsNum ** p) % bucketsNum)
+                console.log(digit)
+                registers[digit].push(this.Reads.get(i))
+
+            }
+
+
+            let tempArray = this.Writes.createAuxArray(len)
+            let tempWrite = new Array(len)
+            let radix = registers.length
+
+
+            let total = 0;
+            for (let index = 0; index < registers.length; index++) {
+                for (let i = 0; i < registers[index].length; i++) {
+                    this.Writes.auxWrite(total++, registers[index][i], tempArray)
+                }
+                registers[index] = []
+            }
+
+            for (let i = 0; i < len; i++) {
+                let register = i % radix
+                let pos = (register * Math.trunc(len / radix) + Math.trunc(i / radix))
+
+                this.Writes.write(pos, this.Reads.auxGet(pos, tempArray))
+                tempWrite[pos] = true
+            }
+            for (let i = 0; i < len; i++) {
+                if (!tempWrite) {
+                    this.Writes.write(i, this.Reads.auxGet(i, tempArray))
                 }
             }
-            // for current radix, items are in buckets, now put them
-            // back in the array based on their buckets
-            // this index moves us through the array as we insert items
-            idx1 = 0;
-            // go through all the buckets
-            for (idx2 = 0;idx2 < len2;idx2++) {
-                // only process buckets with items
-                if (buckets[idx2] != null) {
-                    currBucket = buckets[idx2];
-                    // insert all bucket items into array
-                    len1 = currBucket.length;
-                    for (idx3 = 0;idx3 < len1;idx3++) {
-                        // arr[idx1++] = currBucket[idx3];
-                        this.Writes.write(idx1++, new Element(currBucket[idx3], "Default", [255,255,255], [0,0,0]))
-                        // this.Reads.get(idx1++).setValue(currBucket[idx3])
-                    }
-                }
-            }
-            buckets = {};
+
+            this.Writes.removeAuxArray(tempArray)
+
         }
+
     }
 
     runSort(low, high, bucketsNum) {
-        this.LSDRadixSort(10)
+        this.LSDRadixSort(bucketsNum)
     }
 }

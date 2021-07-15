@@ -23,9 +23,9 @@ export class Sorts {
         this.arrayVisualizer.nullify()
         let sort = this.getSortObject(sortName)
         let warnLen = sort.getWarnLen()
-        let bucketsNum = 10
+        let bucketsNum = 4
         if (sort.isNeedBucketsNum) {
-            bucketsNum = parseInt(prompt("Enter the base:", "10"))
+            bucketsNum = parseInt(prompt("Enter the base:", "4"))
             if (isNaN(bucketsNum)) {
                 return;
             }
