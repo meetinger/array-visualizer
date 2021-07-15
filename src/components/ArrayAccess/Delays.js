@@ -4,7 +4,7 @@ export class Delays {
     delays
     delayIncFactor
     delayInc
-
+    DELAY_INC_CONST
 
     constructor(arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer
@@ -17,13 +17,14 @@ export class Delays {
             CreateAuxArray: 0,
             RemoveAuxArray: 0
         }
-        this.delayIncFactor = 3000-arrayVisualizer.getArrLength()*3
-        // console.log(arrayVisualizer.getArrLength())
-        this.delayInc = this.delayIncFactor/arrayVisualizer.getArrLength()
+        this.DELAY_INC_CONST = 3000
+        this.updateDelayInc()
+        // this.delayIncFactor = this.DELAY_INC_CONST-arrayVisualizer.getArrLength()*3
+        // this.delayInc = this.delayIncFactor/arrayVisualizer.getArrLength()
     }
 
     updateDelayInc(){
-        this.delayIncFactor = 3000-this.arrayVisualizer.getArrLength()*3
+        this.delayIncFactor = this.DELAY_INC_CONST-this.arrayVisualizer.getArrLength()*3
         this.delayInc = this.delayIncFactor/this.arrayVisualizer.getArrLength()
     }
 

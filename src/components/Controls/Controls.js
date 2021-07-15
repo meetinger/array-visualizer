@@ -1,11 +1,10 @@
 import React from 'react';
 import styles from "./Controls.module.scss";
 import {initFunctions} from "../utils/initFunctions";
-import {getAllMethods} from "../utils/utils";
 import {shuffles} from "../utils/shuffles";
 
 
-export class Controls extends React.Component {
+export class Controls extends React.PureComponent {
     isControlShow
     arrayVisualizer
     sorts
