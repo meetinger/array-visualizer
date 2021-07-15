@@ -20,7 +20,6 @@ export let shuffles = {
             arrayVisualizer.getWrites().swapWithDelay(randomIndexA, randomIndexB, arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc()/5, true)
         }
     },
-    //
     Reverse: function (arrayVisualizer){
         let len = arrayVisualizer.getArrLength()
         for (let i = 0; i < Math.trunc(len/2); ++i){
@@ -31,14 +30,12 @@ export let shuffles = {
         const GAP_FACTOR = 10
         let len = arrayVisualizer.getArrLength()
         let gap = len/GAP_FACTOR
-        let instructions = []
         for (let i = 0; i < GAP_FACTOR-1; ++i) {
             let factor = randomInt(i+1, GAP_FACTOR)
             for(let j = 0; j < gap; ++j){
                 arrayVisualizer.getWrites().swapWithDelay(j+i*gap, j+factor*gap, arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc()/5, true)
             }
         }
-        return instructions
     },
     PipeOrgan: function (arrayVisualizer){
         let len = arrayVisualizer.getArrLength()
