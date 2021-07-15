@@ -75,5 +75,11 @@ export let shuffles = {
         for (let i = Math.trunc(n / 2) - 1; i >= 0; i--) {
             heapSort.heapify(n, i);
         }
+    },
+    QuickSortKiller: function (arrayVisualizer){
+        let len = arrayVisualizer.getArrLength()
+        for(let j = len-len%2-2, i = j-1; i >= 0; i-=2, j--) {
+            arrayVisualizer.getWrites().swapWithDelay(i, j, arrayVisualizer.getMainArray(), true, arrayVisualizer.getDelays().getDelayInc() / 5, true)
+        }
     }
 }
