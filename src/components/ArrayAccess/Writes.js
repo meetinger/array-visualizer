@@ -17,7 +17,14 @@ export class Writes{
 
 
     swapWithDelay(a, b, arr = this.arrayVisualizer.getPseudoArray(), mark, delay = this.Delays.getDelayInc(), playSound) {
-        this.Delays.push(setTimeout(this.swapInArr.bind(this), this.Delays.incDelay("Write", delay), a, b, arr, mark, playSound))
+        // this.Delays.push(setTimeout(this.swapInArr.bind(this), this.Delays.incDelay("Write", delay), a, b, arr, mark, playSound))
+        this.Delays.push(setTimeout(()=>{
+            this.swapInArr(a, b, arr, mark, playSound)
+            let curWrites = this.arrayVisualizer.getState().mainWrites + 2;
+            this.arrayVisualizer.setState({
+                mainWrites: curWrites
+            })
+        }, this.Delays.incDelay("Write", delay)))
     }
 
 
@@ -35,10 +42,10 @@ export class Writes{
         if (mark) {
             this.Marks.markUnmarkMany([a, b], {type: "Default"})
         }
-        let curWrites = this.arrayVisualizer.getState().writes + 2;
-        this.arrayVisualizer.setState({
-            writes: curWrites
-        })
+        // let curWrites = this.arrayVisualizer.getState().writes + 2;
+        // this.arrayVisualizer.setState({
+        //     writes: curWrites
+        // })
     }
 
     swap(a, b, arr = this.arrayVisualizer.getPseudoArray()) {
@@ -69,14 +76,21 @@ export class Writes{
         if (mark) {
             this.Marks.markUnmarkMany([index], {type: "Default"})
         }
-        let curWrites = this.arrayVisualizer.getState().writes + 1;
-        this.arrayVisualizer.setState({
-            writes: curWrites
-        })
+        // let curWrites = this.arrayVisualizer.getState().mainWrites + 1;
+        // this.arrayVisualizer.setState({
+        //     mainWrites: curWrites
+        // })
     }
 
     writeWithDelay(index, toWrite, arr = this.arrayVisualizer.getPseudoArray(), mark, delay = this.Delays.getDelayInc(), playSound = true) {
-        this.Delays.push(setTimeout(this.writeInArr.bind(this), this.Delays.incDelay("Write", delay), index, toWrite, arr, mark, playSound))
+        // this.Delays.push(setTimeout(this.writeInArr.bind(this), this.Delays.incDelay("Write", delay), index, toWrite, arr, mark, playSound))
+        this.Delays.push(setTimeout(()=>{
+            this.writeInArr(index, toWrite, arr, mark, playSound)
+            let curWrites = this.arrayVisualizer.getState().mainWrites + 1;
+            this.arrayVisualizer.setState({
+                mainWrites: curWrites
+            })
+        }, this.Delays.incDelay("Write", delay)))
     }
 
     write(index, toWrite, arr = this.arrayVisualizer.getPseudoArray()) {
@@ -137,6 +151,10 @@ export class Writes{
         }else{
             this.arrayVisualizer.getAuxArrays()[arrIndex][index] = toWrite.copy()
             let tmp = this.arrayVisualizer.getAuxArrays()
+            let curWrites = this.arrayVisualizer.getState().auxWrites + 1;
+            this.arrayVisualizer.setState({
+                auxWrites: curWrites
+            })
             this.arrayVisualizer.setState({
                 auxArrays: tmp
             })
