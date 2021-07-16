@@ -35,9 +35,9 @@ export class Writes{
         if (mark) {
             this.Marks.markUnmarkMany([a, b], {type: "Default"})
         }
-        let curWrites = this.arrayVisualizer.getState().writes;
+        let curWrites = this.arrayVisualizer.getState().writes + 2;
         this.arrayVisualizer.setState({
-            writes: curWrites + 2
+            writes: curWrites
         })
     }
 
@@ -69,9 +69,9 @@ export class Writes{
         if (mark) {
             this.Marks.markUnmarkMany([index], {type: "Default"})
         }
-        let curWrites = this.arrayVisualizer.getState().writes;
+        let curWrites = this.arrayVisualizer.getState().writes + 1;
         this.arrayVisualizer.setState({
-            writes: curWrites + 1
+            writes: curWrites
         })
     }
 
