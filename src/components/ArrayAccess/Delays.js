@@ -15,7 +15,8 @@ export class Delays {
             Comp: 0,
             Unmark: 0,
             CreateAuxArray: 0,
-            RemoveAuxArray: 0
+            RemoveAuxArray: 0,
+            Other: 0
         }
         this.DELAY_INC_CONST = 3000
         this.updateDelayInc()
@@ -43,7 +44,8 @@ export class Delays {
             Comp: 0,
             Unmark: 0,
             CreateAuxArray: 0,
-            RemoveAuxArray: 0
+            RemoveAuxArray: 0,
+            Other: 0
         }
         for (let i of this.timeoutArray) {
             clearTimeout(i);
@@ -55,11 +57,15 @@ export class Delays {
         this.delays[name] = value
     }
 
-    incDelay(name, inc=this.delayIncFactor){
+    incDelay(name, inc=this.delayInc){
         return this.delays[name]+=inc
     }
 
     getDelayInc(){
         return this.delayInc
+    }
+
+    getDelays(){
+        return this.delays
     }
 }

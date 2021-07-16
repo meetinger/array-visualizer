@@ -27,7 +27,7 @@ export let shuffles = {
         }
     },
     BlockShuffle: function (arrayVisualizer) {
-        const GAP_FACTOR = 10
+        const GAP_FACTOR = 5
         let len = arrayVisualizer.getArrLength()
         let gap = len/GAP_FACTOR
         for (let i = 0; i < GAP_FACTOR-1; ++i) {

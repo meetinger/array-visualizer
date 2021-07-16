@@ -1,11 +1,22 @@
+import {Delays} from "../ArrayAccess/Delays";
+
 export class Sorts {
     arrayVisualizer;
     sortsPaths
+    Delays
+    Sounds
+    Marks
+
 
     constructor(arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer
+
+        this.Delays = arrayVisualizer.getDelays()
+        this.Sounds = arrayVisualizer.getSounds()
+        this.Marks = arrayVisualizer.getMarks()
+
         this.sortsPaths = ["BubbleSort", "MergeSort", "LLQuickSort", "LRQuickSort",
-            "DualPivotQuickSort", "InsertionSort", "SelectionSort", "TimSort", "PseudoTimSort",
+            "DualPivotQuickSort", "InsertionSort", "SelectionSort", "GnomeSort", "TimSort", "PseudoTimSort",
             "HeapSort", "LSDRadixSort", "BitonicSort", "SlowSort", "StoogeSort", "GrailSort"]
     }
 
@@ -51,6 +62,35 @@ export class Sorts {
         this.arrayVisualizer.setSortName(sort.getSortName())
         this.arrayVisualizer.backupArray()
         sort.runSort(low, high, bucketsNum, bufferSize)
-        this.arrayVisualizer.sortClickEvent()
+        // this.arrayVisualizer.sortClickEvent()
+        console.log(this.Delays.getDelays().Write)
+        setTimeout(()=>(this.checkSort()), this.Delays.getDelays().Write+this.Delays.getDelayInc()*5)
+    }
+
+    checkSort(){
+        let isSorted = true
+        let array = this.arrayVisualizer.getMainArray()
+        for(let i = 1; i < array.length; ++i){
+            if(array[i-1].getValue() > array[i].getValue()){
+                isSorted=false
+                break;
+            }
+        }
+        for (let i = 0; i < array.length; ++i) {
+            this.Delays.push(setTimeout(()=>{
+                if(isSorted) {
+                    this.Sounds.playSound(array[i].getValue())
+                    this.Marks.mark(i, {type: "Sorted", color: [0, 255, 0]}, true)
+                }else {
+                    this.Marks.mark(i, {type: "Default", color: [255, 0, 0]}, true)
+                }
+            }, this.Delays.incDelay("Other", this.Delays.getDelayInc()*0.75)))
+        }
+        setTimeout(()=>{
+            this.Marks.clearAllMarks()
+            this.Delays.resetDelays()
+            this.arrayVisualizer.forceMainArrayUpdate()
+        }, (this.Delays.getDelayInc())*(array.length+2)*0.75)
+
     }
 }

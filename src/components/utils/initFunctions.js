@@ -20,7 +20,7 @@ export let initFunctions = {
     //     }
     // },
     manySimular: function (x, length){
-        const GAP_FACTOR = 10
+        const GAP_FACTOR = 5
         let divider = Math.trunc(length/GAP_FACTOR)
         return Math.trunc(x/divider)*divider
     }
