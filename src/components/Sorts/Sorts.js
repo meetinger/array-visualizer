@@ -49,6 +49,7 @@ export class Sorts {
 
         this.arrayVisualizer.initPseudoArray()
         this.arrayVisualizer.setSortName(sort.getSortName())
+        this.arrayVisualizer.backupArray()
         sort.runSort(low, high, bucketsNum, bufferSize)
         this.arrayVisualizer.sortClickEvent()
     }

@@ -56,6 +56,8 @@ export class ArrayVisualizer extends React.Component {
         this.Marks = new Marks(this)
         this.Reads = new Reads(this)
 
+        this.prevArray = []
+
         this.Writes = new Writes(this)
         this.pseudoAuxArrays = []
         this.Sorts = new Sorts(this);
@@ -187,7 +189,7 @@ export class ArrayVisualizer extends React.Component {
         this.setState({
             sortName: "Shuffle"
         })
-
+        this.backupArray()
         func(this);
         // let instructions = func(this);
         // for(let i of instructions){
@@ -197,6 +199,17 @@ export class ArrayVisualizer extends React.Component {
         // }
 
     }
+
+    restoreArray(){
+        this.setState({
+            array: deepArrayCopy(this.prevArray)
+        })
+    }
+
+    backupArray(){
+        this.prevArray = deepArrayCopy(this.state.array)
+    }
+
 
     setSortName(sortName){
         this.setState({

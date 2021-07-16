@@ -121,6 +121,10 @@ export class Controls extends React.PureComponent {
         this.arrayVisualizer.getMarks().setRainbow(val)
     }
 
+    restoreArray(){
+        this.arrayVisualizer.restoreArray()
+    }
+
     render() {
         return (
             <div id={styles.controlsContainer}>
@@ -180,6 +184,7 @@ export class Controls extends React.PureComponent {
                         <div>
                             <div className={styles.sectionHeader}>Init Array</div>
                             <div>{this.genInitFunctions()}</div>
+                            <div><button onClick={this.restoreArray.bind(this)}>RESTORE ARRAY</button></div>
                         </div>
 
                         <div>
