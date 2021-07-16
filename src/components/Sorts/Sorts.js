@@ -86,11 +86,11 @@ export class Sorts {
                 }
             }, this.Delays.incDelay("Other", this.Delays.getDelayInc()/2)))
         }
-        setTimeout(()=>{
+        this.Delays.push(setTimeout(()=>{
             this.Marks.clearAllMarks()
             this.Delays.resetDelays()
             this.arrayVisualizer.forceMainArrayUpdate()
-        }, (this.Delays.getDelayInc())*(array.length+2)/2)
+        }, (this.Delays.getDelayInc())*(array.length+2)/2))
 
     }
 }

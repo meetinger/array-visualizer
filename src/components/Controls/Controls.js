@@ -56,12 +56,14 @@ export class Controls extends React.PureComponent {
     }
 
     sortArray(sortName) {
+        this.stopSort()
         this.sorts.runSort(sortName, 0, this.arrayVisualizer.getArrLength() - 1)
     }
 
     stopSort() {
         this.arrayVisualizer.stopSort()
-        this.arrayVisualizer.nullify()
+        // this.Delays.resetDelays()
+        // this.arrayVisualizer.nullify()
     }
 
     abortSort() {
