@@ -4,18 +4,15 @@ export class Sort {
     Reads
     Writes
 
-    createAuxArray
-    removeAuxArray
-
-    auxRead
-    auxWrite
-
     arrLength;
 
     sortName;
     warnLen;
     isDisabled;
     isNeedBucketsNum;
+    isNeedBuffer;
+
+
 
 
     constructor(arrayVisualizer) {
