@@ -24,7 +24,7 @@ export class Delays {
     }
 
     updateDelayInc(){
-        this.delayIncFactor = this.DELAY_INC_CONST-this.arrayVisualizer.getArrLength()*3
+        this.delayIncFactor = this.DELAY_INC_CONST
         this.delayInc = this.delayIncFactor/this.arrayVisualizer.getArrLength()
     }
 
