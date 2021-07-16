@@ -35,9 +35,21 @@ export class Sorts {
             "more than recommended(" + warnLen + ")\nApplication may freeze\nDo you want continue?")) {
             return
         }
+
+        bucketsNum = Math.max(4, bucketsNum)
+
+        let bufferSize = 0
+        if (sort.isNeedBuffer) {
+            bufferSize = parseInt(prompt("Enter the buffer size:", "0"))
+            if (isNaN(bufferSize)) {
+                return;
+            }
+        }
+        bufferSize = Math.max(0, bufferSize)
+
         this.arrayVisualizer.initPseudoArray()
         this.arrayVisualizer.setSortName(sort.getSortName())
-        sort.runSort(low, high, bucketsNum)
+        sort.runSort(low, high, bucketsNum, bufferSize)
         this.arrayVisualizer.sortClickEvent()
     }
 }

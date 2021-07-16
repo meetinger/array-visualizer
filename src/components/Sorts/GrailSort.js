@@ -60,11 +60,15 @@ const Subarray = {
 // Current status: Finished. Potentially 100% working... Passing most tests, some tests capped by V8 Engine memory allocation limits
 
 export class GrailSort extends Sort {
-    static GRAIL_STATIC_EXT_BUF_LEN = 512;
+    // static GRAIL_STATIC_EXT_BUF_LEN = 512;
+
+    externalBuffer
+    externalBufferLen
 
     constructor(arrayVisualizer) {
         super(arrayVisualizer);
         this.sortName = "GrailSort"
+        this.isNeedBuffer = true;
     }
 
     grailSwap(a, b) {
@@ -98,9 +102,9 @@ export class GrailSort extends Sort {
             for (let i = 0; i < copyLen; i++) {
                 this.Writes.auxWrite(destPos + i, this.Reads.get(srcPos + i), destArray)
             }
-        } else if (destArray === -1 && srcArray !== 0) {
+        } else if (srcArray !== -1 && destArray === -1) {
             for (let i = 0; i < copyLen; i++) {
-                this.Writes.write(destPos + i, this.Reads.auxGet(srcPos + i, destArray))
+                this.Writes.write(destPos + i, this.Reads.auxGet(srcPos + i, srcArray))
             }
         }
 
@@ -337,7 +341,7 @@ export class GrailSort extends Sort {
 
         if (buffer != left) {
             while (left < middle) {
-                this.Writes(buffer, this.Reads.get(left))
+                this.Writes.write(buffer, this.Reads.get(left))
                 buffer++;
                 left++;
             }
@@ -1146,8 +1150,16 @@ export class GrailSort extends Sort {
 
         this.grailCommonSort(array, start, length, buffer, bufferLen);
     }*/
-    runSort(low, high, bucketsNum) {
-        this.grailSortInPlace(low, high + 1)
+    runSort(low, high, bucketsNum, bufferSize) {
+        // this.grailSortInPlace(low, high + 1)
+        if(bufferSize === 0){
+            this.grailSortInPlace(low, high + 1)
+        }else{
+            let buffer = this.Writes.createAuxArray(bufferSize)
+            console.log("WITH BUFFER!!!")
+            this.grailCommonSort(low, high + 1, buffer, bufferSize)
+            this.Writes.removeAuxArray(buffer)
+        }
     }
 }
 

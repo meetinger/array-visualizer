@@ -38,6 +38,6 @@ export class Sort {
         return this.warnLen
     }
 
-    runSort(low, high, bucketsNum){
+    runSort(low, high, bucketsNum, bufferSize){
     }
 }
