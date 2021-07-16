@@ -50,6 +50,7 @@ export class Controls extends React.PureComponent {
     }
 
     shuffleArray(func) {
+        this.stopSort()
         this.arrayVisualizer.shuffleArray(func)
         // func(this.arrayVisualizer)
     }
