@@ -50,10 +50,15 @@ export class Element{
     }
 
     getColorForRender(){
-        if(this.type === "Default"){
-            return this.markColor
-        }else{
+        // if(this.type === "Default"){
+        //     return this.markColor
+        // }else{
+        //     return this.color
+        // }
+        if(this.type === "Unmarked"){
             return this.color
+        }else {
+            return this.markColor
         }
     }
 

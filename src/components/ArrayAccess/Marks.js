@@ -30,12 +30,13 @@ export class Marks{
             // console.log(color)
         }
         //Default
-        else if (!args.type || args.type === "Default") {
+        else if (args.type === "Default") {
             type = "Default"
             color = colors["Default"]
         } else {
             type = args.type
             color = args.color
+            // console.log(color)
         }
 
         tmpArr[index].setType(type)

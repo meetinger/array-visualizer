@@ -7,7 +7,7 @@ export class Sounds{
         this.Delays = arrayVisualizer.getDelays()
         this.ctx = new (window.AudioContext || window.webkitAudioContext)();
     }
-    async playSound(value) {
+    playSound(value) {
         let osc = this.ctx.createOscillator();
         osc.type = 'sine';
 

@@ -14,10 +14,12 @@ export class LRQuickSort extends Sort{
         let j = r;
 
         while (i <= j) {
-            while (this.Reads.readValue(i) < x){
+            // while (this.Reads.readValue(i) < x){
+            while (this.Reads.compareValues(this.Reads.get(i), x) < 0){
                 i++;
             }
-            while (this.Reads.readValue(j) > x){
+            // while (this.Reads.get(j) > x){
+            while (this.Reads.compareValues(this.Reads.get(j), x) > 0){
                 j--;
             }
 
