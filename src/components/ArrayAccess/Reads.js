@@ -39,7 +39,7 @@ export class Reads{
         let tmpB
         if(typeof a === "object"){
             tmpA = a.getValue()
-            let index = this.arrayVisualizer.getMainArray().findIndex(element => {return element.getValue() === tmpA})
+            let index = this.arrayVisualizer.getPseudoArray().findIndex(element => {return element.getValue() === tmpA})
             if(index !== -1){
                 toMark.push(index)
             }
@@ -49,7 +49,7 @@ export class Reads{
 
         if(typeof b === "object"){
             tmpB = b.getValue()
-            let index = this.arrayVisualizer.getMainArray().findIndex(element => {return element.getValue() === tmpB})
+            let index = this.arrayVisualizer.getPseudoArray().findIndex(element => {return element.getValue() === tmpB})
             if(index !== -1) {
                 toMark.push(index)
             }

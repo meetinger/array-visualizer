@@ -60,6 +60,7 @@ export class Controls extends React.PureComponent {
 
     stopSort() {
         this.arrayVisualizer.stopSort()
+        this.arrayVisualizer.nullify()
     }
 
     abortSort() {
