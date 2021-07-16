@@ -67,7 +67,7 @@ export class Reads{
     }
 
     compareWithDelay(toMark, toSound, delay = this.Delays.getDelayInc()/5){
-        setTimeout(this.compareStub.bind(this), this.Delays.incDelay("Write", delay), toMark, toSound)
+        this.Delays.push(setTimeout(this.compareStub.bind(this), this.Delays.incDelay("Write", delay), toMark, toSound))
     }
 
     compareStub(toMark = [], toSound = []){
