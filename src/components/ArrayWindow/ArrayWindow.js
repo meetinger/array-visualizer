@@ -11,41 +11,10 @@ export class ArrayWindow extends React.PureComponent {
     visualStyle
     arrayLen
     sizeStyle
-    isTimerEnded
-    isRunNeed
+    tmp
 
     constructor(props) {
         super(props);
-        this.setProps(props)
-        this.state = {
-            renderedArray: this.renderArray()
-        }
-        this.isTimerEnded = true
-        this.isRunNeed = false
-    }
-    componentDidMount() {
-        //50 FPS
-        // setInterval(this.throttled.bind(this), 15)
-    }
-    throttled(){
-        this.isRunNeed = true
-        if(this.isTimerEnded){
-            this.isTimerEnded=false
-            this.updateState()
-            setTimeout(()=>{
-                this.isTimerEnded=true;
-                if(this.isRunNeed){
-                    this.updateState()
-                }
-                }, 30)
-        }
-    }
-    updateState(){
-        this.setState({
-            renderedArray: this.renderArray()
-        })
-    }
-    setProps(props){
         this.array = props.array
         this.mainArray = props.mainArray
         this.height = props.height
@@ -54,12 +23,34 @@ export class ArrayWindow extends React.PureComponent {
         this.visualStyle = this.visualProps.style
         this.arrayLen = this.array.length
         this.sizeStyle = {width: "100%", height: this.height + "%"};
+        this.state = {
+            renderedArray: this.renderArray()
+        }
+    }
+    componentDidMount() {
+        //50 FPS
+        setInterval(this.updateState.bind(this), 20)
+    }
+    updateState(){
+        this.setState({
+            renderedArray: this.renderArray()
+        })
     }
     componentWillReceiveProps(nextProps, nextContext){
-        if(this.isTimerEnded){
-            this.setProps(nextProps)
+        this.array = nextProps.array
+        this.mainArray = nextProps.mainArray
+        this.height = nextProps.height
+        this.visualProps = nextProps.visualProps
+        this.borderEnabled = this.visualProps.barsStroke
+        this.visualStyle = this.visualProps.style
+        this.sizeStyle = {width: "100%", height: this.height + "%"};
+        let len = this.array.length
+        if(len !== this.arrayLen){
+            this.arrayLen = len
+            this.updateState()
         }
-        this.throttled()
+
+
     }
 
     renderArray() {
