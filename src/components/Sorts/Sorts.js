@@ -64,7 +64,7 @@ export class Sorts {
         sort.runSort(low, high, bucketsNum, bufferSize)
         // this.arrayVisualizer.sortClickEvent()
         console.log(this.Delays.getDelays().Write)
-        setTimeout(()=>(this.checkSort()), this.Delays.getDelays().Write+this.Delays.getDelayInc()*5)
+        this.Delays.push(setTimeout(()=>(this.checkSort()), this.Delays.getDelays().Write+this.Delays.getDelayInc()*5))
     }
 
     checkSort(){
