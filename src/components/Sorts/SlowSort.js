@@ -4,7 +4,7 @@ export class SlowSort extends Sort{
     constructor(arrayVisualizer) {
         super(arrayVisualizer);
         this.sortName = "SlowSort"
-        this.warnLen = 120
+        this.warnLen = 50
     }
 
     SlowSort(i, j) {

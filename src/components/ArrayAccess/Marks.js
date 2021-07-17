@@ -117,11 +117,11 @@ export class Marks{
 
     markUnmarkMany(markIndexes, markArgs) {
         this.markMany(markIndexes, markArgs, true)
-        this.Delays.push(setTimeout(this.unmarkMany.bind(this), this.Delays.incDelay("Unmark", this.Delays.getDelayInc() / 100), markIndexes, false, true))
+        this.Delays.push(setTimeout(this.unmarkMany.bind(this), this.Delays.incDelay("Unmark", this.Delays.getDelayInc() / 500), markIndexes, false, true))
     }
 
     clearAllMarks(){
-        this.markUnmarkMany(Array.from(Array(this.arrayVisualizer.getArrLength()).keys()), false, true)
+        this.unmarkMany(Array.from(Array(this.arrayVisualizer.getArrLength()).keys()), false, true)
     }
 
 }

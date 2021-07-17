@@ -4,6 +4,7 @@ export class StoogeSort extends Sort{
     constructor(arrayVisualizer) {
         super(arrayVisualizer);
         this.sortName = "StoogeSort"
+        this.warnLen = 60
     }
 
     StoogeSort(i, j) {

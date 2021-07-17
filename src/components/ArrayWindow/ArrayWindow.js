@@ -21,14 +21,15 @@ export class ArrayWindow extends React.PureComponent {
         this.visualProps = props.visualProps
         this.borderEnabled = this.visualProps.barsStroke
         this.visualStyle = this.visualProps.style
-        this.arrayLen = objLength(this.array)
+        this.arrayLen = this.array.length
         this.sizeStyle = {width: "100%", height: this.height + "%"};
         this.state = {
             renderedArray: this.renderArray()
         }
     }
     componentDidMount() {
-        setInterval(this.updateState.bind(this), 16)
+        //50 FPS
+        setInterval(this.updateState.bind(this), 20)
     }
     updateState(){
         this.setState({
@@ -43,7 +44,7 @@ export class ArrayWindow extends React.PureComponent {
         this.borderEnabled = this.visualProps.barsStroke
         this.visualStyle = this.visualProps.style
         this.sizeStyle = {width: "100%", height: this.height + "%"};
-        let len = objLength(this.array)
+        let len = this.array.length
         if(len !== this.arrayLen){
             this.arrayLen = len
             this.updateState()

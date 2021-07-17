@@ -47,7 +47,8 @@ export class ArrayVisualizer extends React.Component {
             array: this.initArray(initFunctions.linear, this.DEFAULT_ARR_LEN),
             sortName: "",
             comparisons: 0,
-            writes: 0,
+            maiWrites: 0,
+            auxWrites: 0,
             auxArrays: {}
         }
         this.pseudoArray = deepArrayCopy(this.state.array)
@@ -91,7 +92,8 @@ export class ArrayVisualizer extends React.Component {
         this.setState(
             {
                 comparisons: 0,
-                writes: 0
+                mainWrites: 0,
+                auxWrites: 0
             }
         )
         // eslint-disable-next-line react/no-direct-mutation-state
@@ -262,7 +264,7 @@ export class ArrayVisualizer extends React.Component {
     render() {
         return (
             <div>
-                <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} writes={this.state.writes} arrLength={this.getArrLength()}/>
+                <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} mainWrites={this.state.mainWrites} auxWrites={this.state.auxWrites} arrLength={this.getArrLength()}/>
                 <div style={{height: "100vh"}}>
                 {/*<div>*/}
                     {this.genArrayWindows()}

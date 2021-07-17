@@ -255,7 +255,8 @@ export class TimSort extends Sort {
                 const mid = (left + right) >>> 1
 
                 // if (compare(pivot, array[mid]) < 0) {
-                if (pivot.getValue() < this.Reads.readValue(mid)) {
+                // if (pivot.getValue() < this.Reads.readValue(mid)) {
+                if (this.Reads.compareValues(pivot, this.Reads.get(mid)) < 0) {
                     right = mid
                 } else {
                     left = mid + 1
@@ -323,7 +324,8 @@ export class TimSort extends Sort {
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint + offset]) > 0
-                    && value > this.Reads.readValue(start + hint + offset)
+                    // && value > this.Reads.readValue(start + hint + offset)
+                    && (this.Reads.compareValues(value, this.Reads.get(start+hint+offset)) > 0)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -347,8 +349,9 @@ export class TimSort extends Sort {
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint - offset]) <= 0
-                    // && value <= this.Reads.readValue(start + hint + offset)
-                    && value <= this.Reads.readValue(start + hint - offset)
+                    // && value <= this.Reads.readValue(start + hint - offset)
+                    // && value <= this.Reads.readValue(start + hint - offset)
+                    && (this.Reads.compareValues(value, this.Reads.get(start + hint - offset)) <= 0)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -378,7 +381,8 @@ export class TimSort extends Sort {
                 const m = lastOffset + ((offset - lastOffset) >>> 1)
 
                 // if (compare(value, array[start + m]) > 0) {
-                if (value > this.Reads.readValue(start + m)) {
+                // if (value > this.Reads.readValue(start + m)) {
+                if (this.Reads.compareValues(value, this.Reads.get(start+m))>0) {
                     lastOffset = m + 1
                 } else {
                     offset = m
@@ -386,13 +390,15 @@ export class TimSort extends Sort {
             }
         } else {
             // if (compare(value, array[start + hint]) > 0) {
-            if (value > this.Reads.auxReadValue(start + hint, this.tmp)) {
+            // if (value > this.Reads.auxReadValue(start + hint, this.tmp)) {
+            if (this.Reads.compareValues(value, this.Reads.auxReadValue(start + hint, this.tmp)) > 0) {
                 maxOffset = length - hint
 
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint + offset]) > 0
-                    && value > this.Reads.auxReadValue(start + hint + offset, this.tmp)
+                    // && value > this.Reads.auxReadValue(start + hint + offset, this.tmp)
+                    && (this.Reads.compareValues(value, this.Reads.auxReadValue(start + hint + offset, this.tmp))>0)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -416,8 +422,9 @@ export class TimSort extends Sort {
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint - offset]) <= 0
-                    // && value <= this.Reads.auxRead(start + hint + offset, this.tmp)
-                    && value <= this.Reads.auxReadValue(start + hint - offset, this.tmp)
+                    // && value <= this.Reads.auxRead(start + hint - offset, this.tmp)
+                    // && value <= this.Reads.auxReadValue(start + hint - offset, this.tmp)
+                    && (this.Reads.compareValues(value, this.Reads.auxReadValue(start + hint - offset, this.tmp)) <= 0)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -447,7 +454,8 @@ export class TimSort extends Sort {
                 const m = lastOffset + ((offset - lastOffset) >>> 1)
 
                 // if (compare(value, array[start + m]) > 0) {
-                if (value > this.Reads.auxReadValue(start + m, this.tmp)) {
+                // if (value > this.Reads.auxReadValue(start + m, this.tmp)) {
+                if (this.Reads.compareValues(value, this.Reads.auxReadValue(start + m, this.tmp))>0) {
                     lastOffset = m + 1
                 } else {
                     offset = m
@@ -479,13 +487,15 @@ export class TimSort extends Sort {
 
         if (!isAux) {
             // if (compare(value, array[start + hint]) < 0) {
-            if (value < this.Reads.readValue(start + hint)) {
+            // if (value < this.Reads.readValue(start + hint)) {
+            if (this.Reads.compareValues(value, this.Reads.get(start+hint)) < 0) {
                 maxOffset = hint + 1
 
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint - offset]) < 0
-                    && value < this.Reads.readValue(start + hint - offset)
+                    // && value < this.Reads.readValue(start + hint - offset)
+                    && (this.Reads.compareValues(value, this.Reads.get(start + hint - offset)) < 0)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -511,7 +521,8 @@ export class TimSort extends Sort {
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint + offset]) >= 0
-                    && value >= this.Reads.readValue(start + hint + offset)
+                    // && value >= this.Reads.readValue(start + hint + offset)
+                    && (this.Reads.compareValues(value, this.Reads.get(start + hint + offset))>=0)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -542,7 +553,8 @@ export class TimSort extends Sort {
                 const m = lastOffset + ((offset - lastOffset) >>> 1)
 
                 // if (compare(value, array[start + m]) < 0) {
-                if (value < this.Reads.readValue(start + m)) {
+                // if (value < this.Reads.readValue(start + m)) {
+                if (this.Reads.compareValues(value, this.Reads.get(start+m)) < 0){
                     offset = m
                 } else {
                     lastOffset = m + 1
@@ -552,13 +564,15 @@ export class TimSort extends Sort {
         } else {
             //AUX
             // if (compare(value, array[start + hint]) < 0) {
-            if (value < this.Reads.auxReadValue(start + hint, this.tmp)) {
+            // if (value < this.Reads.auxReadValue(start + hint, this.tmp)) { WARN
+            if (this.Reads.compareValues(value, this.Reads.auxReadValue(start + hint, this.tmp))<0) {
                 maxOffset = hint + 1
 
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint - offset]) < 0
-                    && value < this.Reads.auxReadValue(start + hint - offset, this.tmp)
+                    // && value < this.Reads.auxReadValue(start + hint - offset, this.tmp) WARN
+                    && (this.Reads.compareValues(value, this.Reads.auxReadValue(start + hint - offset, this.tmp))<0)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -584,7 +598,8 @@ export class TimSort extends Sort {
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint + offset]) >= 0
-                    && value >= this.Reads.auxReadValue(start + hint + offset, this.tmp)
+                    // && value >= this.Reads.auxReadValue(start + hint + offset, this.tmp)
+                    && (this.Reads.compareInArr(value, this.Reads.auxReadValue(start + hint + offset, this.tmp))>=0)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -615,7 +630,8 @@ export class TimSort extends Sort {
                 const m = lastOffset + ((offset - lastOffset) >>> 1)
 
                 // if (compare(value, array[start + m]) < 0) {
-                if (value < this.Reads.auxReadValue(start + m, this.tmp)) {
+                // if (value < this.Reads.auxReadValue(start + m, this.tmp)) {
+                if (this.Reads.compareValues(value, this.Reads.auxReadValue(start + m, this.tmp))<0) {
                     offset = m
                 } else {
                     lastOffset = m + 1
@@ -797,7 +813,7 @@ export class TimSort extends Sort {
         if (--length2 === 0) {
             for (i = 0; i < length1; i++) {
                 // array[dest + i] = tmp[cursor1 + i]
-                this.Writes.write(dest + i, this.Reads.auxReadValue(cursor1 + i, this.tmp))
+                this.Writes.write(dest + i, this.Reads.auxGet(cursor1 + i, this.tmp))
             }
             return
         }
@@ -809,7 +825,7 @@ export class TimSort extends Sort {
                 this.Writes.write(dest + i, this.Reads.get(cursor2 + i))
             }
             // array[dest + length2] = tmp[cursor1]
-            this.Writes.write(dest + length2, this.Reads.auxReadValue(cursor1, this.tmp))
+            this.Writes.write(dest + length2, this.Reads.auxGet(cursor1, this.tmp))
             return
         }
 
@@ -822,7 +838,8 @@ export class TimSort extends Sort {
 
             do {
                 // if (compare(array[cursor2], tmp[cursor1]) < 0) {
-                if (this.Reads.readValue(cursor2) < this.Reads.auxReadValue(cursor1, this.tmp)) {
+                // if (this.Reads.readValue(cursor2) < this.Reads.auxReadValue(cursor1, this.tmp)) {
+                if (this.Reads.compareValues(this.Reads.get(cursor2), this.Reads.auxReadValue(cursor1, this.tmp)) < 0) {
                     // array[dest] = array[cursor2]
                     this.Writes.write(dest, this.Reads.get(cursor2))
                     dest++
@@ -1033,7 +1050,8 @@ export class TimSort extends Sort {
 
             do {
                 // if (compare(tmp[cursor2], array[cursor1]) < 0) {
-                if (this.Reads.auxReadValue(cursor2, this.tmp) < this.Reads.readValue(cursor1)) {
+                // if (this.Reads.auxReadValue(cursor2, this.tmp) < this.Reads.readValue(cursor1)) {
+                if (this.Reads.compareValues(this.Reads.auxReadValue(cursor2, this.tmp), this.Reads.get(cursor1))<0) {
                     // array[dest] = array[cursor1]
                     this.Writes.write(dest, this.Reads.get(cursor1))
                     dest--

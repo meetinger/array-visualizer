@@ -1,5 +1,6 @@
 import {randomInt} from "./utils";
 import {HeapSort} from "../Sorts/HeapSort";
+import {GAP_FACTOR} from "./initFunctions";
 
 export let shuffles = {
     FullShuffle: function (arrayVisualizer) {
@@ -27,7 +28,6 @@ export let shuffles = {
         }
     },
     BlockShuffle: function (arrayVisualizer) {
-        const GAP_FACTOR = 10
         let len = arrayVisualizer.getArrLength()
         let gap = len/GAP_FACTOR
         for (let i = 0; i < GAP_FACTOR-1; ++i) {

@@ -19,6 +19,7 @@ export class Controls extends React.PureComponent {
     }
 
     updateArrLength() {
+        this.stopSort()
         let slider = document.getElementById(styles.slider)
 
         if (slider !== null) {
@@ -50,16 +51,20 @@ export class Controls extends React.PureComponent {
     }
 
     shuffleArray(func) {
+        this.stopSort()
         this.arrayVisualizer.shuffleArray(func)
         // func(this.arrayVisualizer)
     }
 
     sortArray(sortName) {
+        this.stopSort()
         this.sorts.runSort(sortName, 0, this.arrayVisualizer.getArrLength() - 1)
     }
 
     stopSort() {
         this.arrayVisualizer.stopSort()
+        // this.Delays.resetDelays()
+        // this.arrayVisualizer.nullify()
     }
 
     abortSort() {
