@@ -37,18 +37,22 @@ export class Sorts {
         let warnLen = sort.getWarnLen()
         let bucketsNum = 4
         if (sort.isNeedBucketsNum) {
-            bucketsNum = parseInt(prompt("Enter the base:", "4"))
+            bucketsNum = parseInt(prompt("Enter the buckets num:", "4"))
             if (isNaN(bucketsNum)) {
                 return;
             }
+            if (bucketsNum < 2){
+                alert("WARNING!!!\nUncorrected buckets num was entered!\nThe buckets num will be set to 2")
+            }
         }
+        bucketsNum = Math.max(2, bucketsNum)
+
         if (warnLen !== -1 && this.arrayVisualizer.getArrLength() > warnLen &&
             !window.confirm("WARNING!!!\nThe array size(" + this.arrayVisualizer.getArrLength() + ") " +
                 "more than recommended(" + warnLen + ")\nApplication may freeze\nDo you want continue?")) {
             return
-        }
 
-        bucketsNum = Math.max(4, bucketsNum)
+        }
 
         let bufferSize = 0
         if (sort.isNeedBuffer) {
@@ -64,7 +68,7 @@ export class Sorts {
         this.arrayVisualizer.backupArray()
         sort.runSort(low, high, bucketsNum, bufferSize)
         // this.arrayVisualizer.sortClickEvent()
-        console.log(this.Delays.getDelays().Write)
+        // console.log(this.Delays.getDelays().Write)
         this.Delays.push(setTimeout(() => (this.checkSort()), this.Delays.getDelays().Write + this.Delays.getDelayInc() * 5))
     }
 
