@@ -95,7 +95,7 @@ export class Sorts {
             this.Marks.clearAllMarks()
             this.Delays.resetDelays()
             this.arrayVisualizer.forceMainArrayUpdate()
-        }, (this.Delays.getDelayInc()) * (array.length + 2) / 3))
+        }, (this.Delays.getDelayInc()) * (array.length) / 3))
 
     }
 }
