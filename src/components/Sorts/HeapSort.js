@@ -6,40 +6,46 @@ export class HeapSort extends Sort{
         this.sortName = "HeapSort"
     }
 
-    heapify(n, i) {
-        let largest = i;
+    siftDown(root, dist, start) {
 
-        let l = 2 * i + 1;
-        let r = 2 * i + 2;
 
-        if (l < n && this.Reads.compareInArr(l, largest) > 0) {
-            largest = l;
-        }
-        if (r < n && this.Reads.compareInArr(r, largest) > 0) {
-            largest = r;
-        }
-
-        if (largest !== i) {
-            this.Writes.swap(i, largest);
-            this.heapify(n, largest);
-        }
+    while (root <= dist / 2) {
+        let leaf = 2 * root;
+        if (leaf < dist && this.Reads.compareInArr(start + leaf - 1, start + leaf) < 0) {
+        leaf++;
     }
 
-    HeapSort() {
-        let n = this.arrLength;
-
-
-        for (let i = Math.trunc(n / 2) - 1; i >= 0; i--) {
-            this.heapify(n, i);
-        }
-
-        for (let i = n - 1; i >= 0; i--) {
-            this.Writes.swap(0, i);
-            this.heapify(i, 0)
-        }
+    if (this.Reads.compareInArr(start + root - 1, start + leaf - 1) < 0) {
+        this.Writes.swap(start + root - 1, start + leaf - 1, );
+        root = leaf;
     }
+else break;
+}
+}
+
+heapify(low, high) {
+    let length = high - low;
+    for (let i = length / 2; i >= 1; i--) {
+        this.siftDown(i, length, low);
+    }
+}
+
+// This version of heap sort works for max and min variants, alongside sorting
+// partial ranges of an array.
+heapSort(start, length) {
+    this.heapify(start, length);
+
+    for (let i = length - start; i > 1; i--) {
+        this.Writes.swap(start, start + i - 1);
+        this.siftDown(1, i - 1, start);
+    }
+
+    // if(!isMax) {
+    //     this.Writes.reversal(arr, start, start + length - 1, 1, true, false);
+    // }
+}
 
     runSort(low, high) {
-        this.HeapSort(low, high)
+        this.heapSort(low, high+1)
     }
 }

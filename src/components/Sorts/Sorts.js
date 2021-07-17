@@ -15,9 +15,10 @@ export class Sorts {
         this.Sounds = arrayVisualizer.getSounds()
         this.Marks = arrayVisualizer.getMarks()
 
-        this.sortsPaths = ["BubbleSort", "MergeSort", "LLQuickSort", "LRQuickSort",
+        this.sortsPaths = ["BubbleSort", "MergeSort", "LLQuickSort", "LRQuickSort", "HeapSort",
             "DualPivotQuickSort", "InsertionSort", "SelectionSort", "GnomeSort", "TimSort", "PseudoTimSort",
-            "HeapSort", "LSDRadixSort", "BitonicSort", "SlowSort", "StoogeSort", "GrailSort"]
+            "IntroSort", "LSDRadixSort", "BitonicSort", "SlowSort", "StoogeSort", "GrailSort"]
+
     }
 
     getSortsPaths() {
@@ -43,7 +44,7 @@ export class Sorts {
         }
         if (warnLen !== -1 && this.arrayVisualizer.getArrLength() > warnLen &&
             !window.confirm("WARNING!!!\nThe array size(" + this.arrayVisualizer.getArrLength() + ") " +
-            "more than recommended(" + warnLen + ")\nApplication may freeze\nDo you want continue?")) {
+                "more than recommended(" + warnLen + ")\nApplication may freeze\nDo you want continue?")) {
             return
         }
 
@@ -64,33 +65,33 @@ export class Sorts {
         sort.runSort(low, high, bucketsNum, bufferSize)
         // this.arrayVisualizer.sortClickEvent()
         console.log(this.Delays.getDelays().Write)
-        this.Delays.push(setTimeout(()=>(this.checkSort()), this.Delays.getDelays().Write+this.Delays.getDelayInc()*5))
+        this.Delays.push(setTimeout(() => (this.checkSort()), this.Delays.getDelays().Write + this.Delays.getDelayInc() * 5))
     }
 
-    checkSort(){
+    checkSort() {
         let isSorted = true
         let array = this.arrayVisualizer.getMainArray()
-        for(let i = 1; i < array.length; ++i){
-            if(array[i-1].getValue() > array[i].getValue()){
-                isSorted=false
+        for (let i = 1; i < array.length; ++i) {
+            if (array[i - 1].getValue() > array[i].getValue()) {
+                isSorted = false
                 break;
             }
         }
         for (let i = 0; i < array.length; ++i) {
-            this.Delays.push(setTimeout(()=>{
-                if(isSorted) {
+            this.Delays.push(setTimeout(() => {
+                if (isSorted) {
                     this.Sounds.playSound(array[i].getValue())
                     this.Marks.mark(i, {type: "Sorted", color: [0, 255, 0]}, true)
-                }else {
+                } else {
                     this.Marks.mark(i, {type: "Default", color: [255, 0, 0]}, true)
                 }
-            }, this.Delays.incDelay("Other", this.Delays.getDelayInc()/2)))
+            }, this.Delays.incDelay("Other", this.Delays.getDelayInc() / 2)))
         }
-        this.Delays.push(setTimeout(()=>{
+        this.Delays.push(setTimeout(() => {
             this.Marks.clearAllMarks()
             this.Delays.resetDelays()
             this.arrayVisualizer.forceMainArrayUpdate()
-        }, (this.Delays.getDelayInc())*(array.length+2)/2))
+        }, (this.Delays.getDelayInc()) * (array.length + 2) / 2))
 
     }
 }
