@@ -85,13 +85,13 @@ export class Sorts {
                 } else {
                     this.Marks.mark(i, {type: "Default", color: [255, 0, 0]}, true)
                 }
-            }, this.Delays.incDelay("Other", this.Delays.getDelayInc() / 2)))
+            }, this.Delays.incDelay("Other", this.Delays.getDelayInc() / 3)))
         }
         this.Delays.push(setTimeout(() => {
             this.Marks.clearAllMarks()
             this.Delays.resetDelays()
             this.arrayVisualizer.forceMainArrayUpdate()
-        }, (this.Delays.getDelayInc()) * (array.length + 2) / 2))
+        }, (this.Delays.getDelayInc()) * (array.length + 2) / 3))
 
     }
 }
