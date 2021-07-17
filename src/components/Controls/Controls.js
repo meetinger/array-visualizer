@@ -19,6 +19,7 @@ export class Controls extends React.PureComponent {
     }
 
     updateArrLength() {
+        this.stopSort()
         let slider = document.getElementById(styles.slider)
 
         if (slider !== null) {
