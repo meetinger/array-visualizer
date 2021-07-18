@@ -57,6 +57,9 @@ export class ArrayWindow extends React.PureComponent {
         let tmp = []
         if (this.visualStyle === "bars") {
             let border = this.borderEnabled ? {} : {border: "none"}
+            if(window.innerWidth / this.mainArray.length < 5){
+                border = {border: "none"}
+            }
             for (let i = 0; i < this.arrayLen; ++i) {
                 let styleSheet = {
                     height: this.array[i].getValue() / this.mainArray.length * 100 + "%",
