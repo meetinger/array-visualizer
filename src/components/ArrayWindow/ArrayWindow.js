@@ -11,7 +11,7 @@ export class ArrayWindow extends React.PureComponent {
     visualStyle
     arrayLen
     sizeStyle
-    tmp
+    updateTimer
 
     constructor(props) {
         super(props);
@@ -29,8 +29,13 @@ export class ArrayWindow extends React.PureComponent {
     }
     componentDidMount() {
         //40 FPS
-        setInterval(this.updateState.bind(this), 25)
+        this.updateTimer = setInterval(this.updateState.bind(this), 25)
     }
+
+    componentWillUnmount() {
+        clearInterval(this.updateTimer)
+    }
+
     updateState(){
         this.setState({
             renderedArray: this.renderArray()
