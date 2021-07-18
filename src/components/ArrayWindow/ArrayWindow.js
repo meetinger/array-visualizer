@@ -28,8 +28,8 @@ export class ArrayWindow extends React.PureComponent {
         }
     }
     componentDidMount() {
-        //50 FPS
-        setInterval(this.updateState.bind(this), 20)
+        //40 FPS
+        setInterval(this.updateState.bind(this), 25)
     }
     updateState(){
         this.setState({
