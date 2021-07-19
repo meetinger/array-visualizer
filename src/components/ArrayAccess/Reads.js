@@ -19,11 +19,7 @@ export class Reads{
     }
 
     compareInArr(a, b, arr = this.arrayVisualizer.getPseudoArray()) {
-        let curComparisons = this.arrayVisualizer.getState().comparisons + 1
-        this.arrayVisualizer.setState({
-            comparisons: curComparisons
-        })
-        this.compareWithDelay([a,b], [])
+        // this.compareWithDelay([a,b], [])
         return this.compareValues(arr[a], arr[b])
     }
 
@@ -33,6 +29,7 @@ export class Reads{
 
     //TODO: add marks
     compareValues(a, b){
+        this.Delays.incOperationsCounter(1)
         let toMark = []
         let toSound = []
         let tmpA

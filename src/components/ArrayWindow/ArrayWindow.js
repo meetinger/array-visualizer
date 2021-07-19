@@ -41,7 +41,7 @@ export class ArrayWindow extends React.PureComponent {
             renderedArray: this.renderArray()
         })
     }
-    componentWillReceiveProps(nextProps, nextContext){
+    componentDidUpdate(nextProps, nextContext){
         this.array = nextProps.array
         this.mainArray = nextProps.mainArray
         this.height = nextProps.height

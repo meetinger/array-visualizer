@@ -6,7 +6,7 @@ export class Delays {
     delayInc
     DELAY_INC_CONST
     sortFinishedTime
-
+    operationsCounter
 
     constructor(arrayVisualizer) {
         this.arrayVisualizer = arrayVisualizer
@@ -54,6 +54,7 @@ export class Delays {
         }
         this.timeoutArray = []
         this.sortFinishedTime = 0
+        this.operationsCounter = 0
     }
 
     setDelay(name, value){
@@ -76,13 +77,17 @@ export class Delays {
         this.sortFinishedTime = time
     }
 
+    incOperationsCounter(val=1){
+        this.operationsCounter+=val;
+    }
+
     updateSortTime(){
         let state = this.arrayVisualizer.getState()
         let mainWrites = state.mainWrites
         let auxWrites = state.auxWrites
         let comparisons = state.comparisons
         this.arrayVisualizer.setState({
-            sortTime: (mainWrites+auxWrites+comparisons)/this.timeoutArray.length*this.sortFinishedTime
+            sortTime: (mainWrites+auxWrites+comparisons)/this.operationsCounter*this.sortFinishedTime
         })
     }
 }

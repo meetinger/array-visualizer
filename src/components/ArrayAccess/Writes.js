@@ -35,6 +35,8 @@ export class Writes{
     swapInArr(a, b, arr = this.arrayVisualizer.getPseudoArray(), mark = true, playSound = false) {
         if(playSound) {
             this.Sounds.playSound(arr[b].getValue());
+        }else {
+            this.Delays.incOperationsCounter(2)
         }
         let tmpArr = arr
         // let tmp = tmpArr[a]
@@ -75,6 +77,8 @@ export class Writes{
     writeInArr(index, toWrite, arr = this.arrayVisualizer.getPseudoArray(), mark = true, playSound = false) {
         if(playSound) {
             this.Sounds.playSound(toWrite.getValue())
+        }else{
+            this.Delays.incOperationsCounter(1)
         }
         arr[index] = toWrite.copy(true)
         if (mark) {
@@ -193,6 +197,7 @@ export class Writes{
             this.Sounds.playSound(toWrite.getValue())
         }
         if(isPseudo){
+            this.Delays.incOperationsCounter(1)
             this.arrayVisualizer.getPseudoAuxArrays()[arrIndex][index] = toWrite.copy()
             this.auxWriteWithDelay(index, toWrite, arrIndex, this.Delays.getDelayInc(), false, true)
         }else{
@@ -200,11 +205,10 @@ export class Writes{
             let tmp = this.arrayVisualizer.getAuxArrays()
             let curWrites = this.arrayVisualizer.getState().auxWrites + 1;
             this.arrayVisualizer.setState({
-                auxWrites: curWrites
-            })
-            this.arrayVisualizer.setState({
+                auxWrites: curWrites,
                 auxArrays: tmp
             })
+            this.Delays.updateSortTime()
         }
     }
 

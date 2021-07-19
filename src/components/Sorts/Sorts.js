@@ -31,7 +31,7 @@ export class Sorts {
     }
 
     runSort(sortName, low, high) {
-        this.arrayVisualizer.getDelays().resetDelays()
+        this.Delays.resetDelays()
         this.arrayVisualizer.nullify()
         let sort = this.getSortObject(sortName)
         let warnLen = sort.getWarnLen()
@@ -70,6 +70,8 @@ export class Sorts {
         let start = performance.now()
         sort.runSort(low, high, bucketsNum, bufferSize)
         let end = performance.now()
+
+        // console.log("Sort time: " + (end-start).toFixed(2)+" ms")
 
         this.Delays.setSortFinishedTime(end-start)
 
