@@ -116,6 +116,6 @@ export class IntroSort extends Sort {
     runSort(low, high) {
         this.introsortLoop(low, high + 1, this.floorLogBaseTwo(high-low+1))
         let insertionSort = new InsertionSort(this.arrayVisualizer)
-        insertionSort.runSort(low, high)
+        insertionSort.runSort(low, high + 1)
     }
 }
