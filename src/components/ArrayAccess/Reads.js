@@ -78,6 +78,7 @@ export class Reads{
         for(let i of toSound){
             this.Sounds.playSound(i)
         }
+        this.Delays.updateSortTime()
         // console.log(toMark)
         // this.Marks.markUnmarkMany(toMark,{type: "Additional", color: [0,255,0]})
         this.Marks.markUnmarkMany(toMark,{type: "Default"})

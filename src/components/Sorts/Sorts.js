@@ -66,7 +66,13 @@ export class Sorts {
         this.arrayVisualizer.initPseudoArray()
         this.arrayVisualizer.setSortName(sort.getSortName())
         this.arrayVisualizer.backupArray()
+
+        let start = performance.now()
         sort.runSort(low, high, bucketsNum, bufferSize)
+        let end = performance.now()
+
+        this.Delays.setSortFinishedTime(end-start)
+
         // this.arrayVisualizer.sortClickEvent()
         // console.log(this.Delays.getDelays().Write)
         this.Delays.push(setTimeout(() => (this.checkSort()), this.Delays.getDelays().Write + this.Delays.getDelayInc() * 5))

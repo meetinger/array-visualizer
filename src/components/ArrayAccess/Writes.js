@@ -23,6 +23,7 @@ export class Writes{
         // this.Delays.push(setTimeout(this.swapInArr.bind(this), this.Delays.incDelay("Write", delay), a, b, arr, mark, playSound))
         this.Delays.push(setTimeout(()=>{
             this.swapInArr(a, b, arr, mark, playSound)
+            this.Delays.updateSortTime()
             let curWrites = this.arrayVisualizer.getState().mainWrites + 2;
             this.arrayVisualizer.setState({
                 mainWrites: curWrites
@@ -88,6 +89,7 @@ export class Writes{
     writeWithDelay(index, toWrite, arr = this.arrayVisualizer.getPseudoArray(), mark, delay = this.Delays.getDelayInc(), playSound = true) {
         // this.Delays.push(setTimeout(this.writeInArr.bind(this), this.Delays.incDelay("Write", delay), index, toWrite, arr, mark, playSound))
         this.Delays.push(setTimeout(()=>{
+            this.Delays.updateSortTime()
             this.writeInArr(index, toWrite, arr, mark, playSound)
             let curWrites = this.arrayVisualizer.getState().mainWrites + 1;
             this.arrayVisualizer.setState({
