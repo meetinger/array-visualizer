@@ -6,12 +6,15 @@ export class Writes{
     Sounds
     Delays
     Marks
+    Reads
+
 
     constructor(arrayVisualizer){
         this.arrayVisualizer = arrayVisualizer
         this.Sounds = arrayVisualizer.getSounds()
         this.Delays = arrayVisualizer.getDelays()
         this.Marks = arrayVisualizer.getMarks()
+        this.Reads = arrayVisualizer.getReads()
     }
 
 
@@ -96,6 +99,48 @@ export class Writes{
     write(index, toWrite, arr = this.arrayVisualizer.getPseudoArray()) {
         this.writeInArr(index, toWrite, arr, false, false)
         this.writeWithDelay(index, toWrite, this.arrayVisualizer.getMainArray(), true, this.Delays.getDelayInc(), true)
+    }
+
+
+    arrayCopy(srcArray, srcPos, destArray, destPos, copyLen) {
+
+        if (srcArray === -1 && destArray === -1) {
+            for (let i = 0; i < copyLen; i++) {
+                this.write(destPos + i, this.Reads.get(srcPos + i))
+            }
+        } else if (srcArray !== -1 && destArray !== -1) {
+            for (let i = 0; i < copyLen; i++) {
+                this.auxWrite(destPos + i, this.Reads.auxGet(srcPos + i, srcArray), destArray)
+            }
+        } else if (srcArray === -1 && destArray !== -1) {
+            for (let i = 0; i < copyLen; i++) {
+                this.auxWrite(destPos + i, this.Reads.get(srcPos + i), destArray)
+            }
+        } else if (srcArray !== -1 && destArray === -1) {
+            for (let i = 0; i < copyLen; i++) {
+                this.write(destPos + i, this.Reads.auxGet(srcPos + i, srcArray))
+            }
+        }
+    }
+
+    reverseArrayCopy(srcArray, srcPos, destArray, destPos, copyLen){
+        if (srcArray === -1 && destArray === -1) {
+            for (let i = copyLen - 1; i >= 0; i--) {
+                this.write(destPos + i, this.Reads.get(srcPos + i))
+            }
+        } else if (srcArray !== -1 && destArray !== -1) {
+            for (let i = copyLen - 1; i >= 0; i--) {
+                this.auxWrite(destPos + i, this.Reads.auxGet(srcPos + i, srcArray), destArray)
+            }
+        } else if (srcArray === -1 && destArray !== -1) {
+            for (let i = copyLen - 1; i >= 0; i--) {
+                this.auxWrite(destPos + i, this.Reads.get(srcPos + i), destArray)
+            }
+        } else if (srcArray !== -1 && destArray === -1) {
+            for (let i = copyLen - 1; i >= 0; i--) {
+                this.write(destPos + i, this.Reads.auxGet(srcPos + i, srcArray))
+            }
+        }
     }
 
     createAuxArray(len, isPseudo = true){
