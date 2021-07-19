@@ -69,9 +69,7 @@ export let shuffles = {
         let n = arrayVisualizer.getArrLength()
         arrayVisualizer.initPseudoArray()
         let heapSort = new HeapSort(arrayVisualizer)
-        for (let i = Math.trunc(n / 2) - 1; i >= 0; i--) {
-            heapSort.heapify(n, i);
-        }
+        heapSort.heapify(0, n)
     },
     QuickSortKiller: function (arrayVisualizer){
         let len = arrayVisualizer.getArrLength()
