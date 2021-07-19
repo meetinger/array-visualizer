@@ -11,7 +11,7 @@ export class ArrayWindow extends React.PureComponent {
     visualStyle
     arrayLen
     sizeStyle
-    tmp
+    updateTimer
 
     constructor(props) {
         super(props);
@@ -28,9 +28,14 @@ export class ArrayWindow extends React.PureComponent {
         }
     }
     componentDidMount() {
-        //50 FPS
-        setInterval(this.updateState.bind(this), 20)
+        //40 FPS
+        this.updateTimer = setInterval(this.updateState.bind(this), 25)
     }
+
+    componentWillUnmount() {
+        clearInterval(this.updateTimer)
+    }
+
     updateState(){
         this.setState({
             renderedArray: this.renderArray()
@@ -57,6 +62,9 @@ export class ArrayWindow extends React.PureComponent {
         let tmp = []
         if (this.visualStyle === "bars") {
             let border = this.borderEnabled ? {} : {border: "none"}
+            if(window.innerWidth / this.mainArray.length < 5){
+                border = {border: "none"}
+            }
             for (let i = 0; i < this.arrayLen; ++i) {
                 let styleSheet = {
                     height: this.array[i].getValue() / this.mainArray.length * 100 + "%",

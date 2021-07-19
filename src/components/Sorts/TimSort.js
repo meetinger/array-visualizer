@@ -554,7 +554,7 @@ export class TimSort extends Sort {
 
                 // if (compare(value, array[start + m]) < 0) {
                 // if (value < this.Reads.readValue(start + m)) {
-                if (this.Reads.compareValues(value, this.Reads.get(start+m)) < 0){
+                if ((this.Reads.compareValues(value, this.Reads.get(start+m)))< 0){
                     offset = m
                 } else {
                     lastOffset = m + 1
