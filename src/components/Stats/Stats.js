@@ -9,6 +9,7 @@ export function Stats(props){
             <div>Comparisons: {props.comparisons}</div>
             <div>Writes to main array: {props.mainWrites}</div>
             <div>Writes to auxiliary arrays: {props.auxWrites}</div>
+            <div>Sort time: {props.sortTime.toFixed(2)} ms</div>
         </div>
     )
 }

@@ -127,6 +127,7 @@ export class Controls extends React.PureComponent {
     }
 
     restoreArray(){
+        this.stopSort()
         this.arrayVisualizer.restoreArray()
     }
 

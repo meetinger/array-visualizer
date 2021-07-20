@@ -13,7 +13,7 @@ export class DualPivotQuickSort extends Sort {
         // insertion sort for tiny array
         if (length < 4) {
             let insertSorter = new InsertionSort(this.arrayVisualizer)
-            insertSorter.runSort(left, right)
+            insertSorter.runSort(left, right+1)
             return;
         }
         // if(length === 1){
