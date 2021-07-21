@@ -65,11 +65,13 @@ export class ArrayWindow extends React.PureComponent {
             this.arrayLen = len
             this.cancelAndUpdate()
         }
-        if(++this.updateCounter%100===0){
-            this.updateState()
+        //workaround for firefox
+        if(++this.updateCounter%50===0){
+            this.cancelAndUpdate()
             this.updateCounter=1
         }
         // this.updateState()
+        // this.cancelAndUpdate()
     }
 
     renderArray() {
@@ -128,6 +130,14 @@ export class ArrayWindow extends React.PureComponent {
                 </div>);
             }
         }
+        //workaround
+        let workAroundStyle = {
+            width: 0,
+            height: 100+"%",
+            backgroundColor: "black"
+        }
+        tmp.push(<div key={this.mainArray.length+1} style={workAroundStyle} className={styles.bar}/>);
+
         return tmp
     }
 

@@ -126,6 +126,11 @@ export class Controls extends React.PureComponent {
         this.arrayVisualizer.getMarks().setRainbow(val)
     }
 
+    toggleShowStats(){
+        let element = document.getElementById("showStatsCB")
+        this.arrayVisualizer.setShowStats(element.checked)
+    }
+
     restoreArray(){
         this.stopSort()
         this.arrayVisualizer.restoreArray()
@@ -165,6 +170,12 @@ export class Controls extends React.PureComponent {
                                                id="enableMarksCB"
                                                name="enableMarksCB" defaultChecked={true}/>
                                         <label htmlFor="enableMarksCB">Enable Marks(Disable to reduce lags)</label>
+                                    </div>
+                                    <div className={styles.checkBoxContainer}>
+                                        <input onChange={this.toggleShowStats.bind(this)} type="checkbox"
+                                               id="showStatsCB"
+                                               name="showStatsCB" defaultChecked={true}/>
+                                        <label htmlFor="showStatsCB">Show stats</label>
                                     </div>
                                     <div className={styles.checkBoxContainer}>
                                         <button onClick={this.toggleRainbow.bind(this, true)}>Paint to Rainbow</button>

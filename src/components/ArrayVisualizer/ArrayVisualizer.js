@@ -29,6 +29,7 @@ export class ArrayVisualizer extends React.Component {
     Sorts
     delayIncConst
     showAuxArrays
+    showStats
     enableBarsStroke
     visualStyle
     enableMarks
@@ -64,6 +65,7 @@ export class ArrayVisualizer extends React.Component {
         this.pseudoAuxArrays = []
         this.Sorts = new Sorts(this);
         this.showAuxArrays = true
+        this.showStats = true
         this.enableBarsStroke = true
         this.enableMarks = true
         this.visualStyle = {
@@ -106,6 +108,11 @@ export class ArrayVisualizer extends React.Component {
 
     setShowAuxArrays(val){
         this.showAuxArrays = val
+    }
+
+    setShowStats(val){
+        this.showStats = val
+        this.forceMainArrayUpdate()
     }
 
     setEnableBarsStroke(val){
@@ -263,10 +270,16 @@ export class ArrayVisualizer extends React.Component {
         return tmp
     }
 
+    genStats(){
+        if(this.showStats){
+            return <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} mainWrites={this.state.mainWrites} auxWrites={this.state.auxWrites} arrLength={this.getArrLength()} sortTime={this.state.sortTime}/>
+        }
+    }
+
     render() {
         return (
             <div>
-                <Stats sortName={this.state.sortName} comparisons={this.state.comparisons} mainWrites={this.state.mainWrites} auxWrites={this.state.auxWrites} arrLength={this.getArrLength()} sortTime={this.state.sortTime}/>
+                {this.genStats()}
                 <div style={{height: "100vh"}}>
                 {/*<div>*/}
                     {this.genArrayWindows()}
