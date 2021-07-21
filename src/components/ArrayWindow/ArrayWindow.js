@@ -74,19 +74,20 @@ export class ArrayWindow extends React.PureComponent {
 
     renderArray() {
         let tmp = []
+        //removed flex-box for optimization
         if (this.visualStyle === "bars") {
             let border = this.borderEnabled ? {} : {border: "none"}
             let offset = 2
-            if(window.innerWidth / this.mainArray.length < 5){
+            if(document.documentElement.clientWidth / this.mainArray.length < 5){
                 border = {border: "none"}
                 offset = 0
             }
             let width = {
-                width: window.innerWidth/this.mainArray.length - offset + "px"
+                width: document.documentElement.clientWidth/this.mainArray.length - offset + "px"
             }
             for (let i = 0; i < this.arrayLen; ++i) {
                 let styleSheet = {
-                    height: this.array[i].getValue() / this.mainArray.length * 100 + "%",
+                    height: this.array[i].getValue() / (this.mainArray.length-1) * 100 + "%",
                     backgroundColor: "rgb(" + this.array[i].getColorForRender() + ")",
                     ...border,
                     ...width
@@ -102,6 +103,9 @@ export class ArrayWindow extends React.PureComponent {
                 tmp.push(<div key={i} style={styleSheet} className={styles.bar}/>);
             }
         } else if (this.visualStyle === "dots") {
+            let width = {
+                width: document.documentElement.clientWidth/this.mainArray.length + "px"
+            }
             for (let i = 0; i < this.arrayLen; ++i) {
                 let value = this.array[i].getValue()
                 let height = (value === -1) ? {height: 0} : {}
@@ -110,7 +114,7 @@ export class ArrayWindow extends React.PureComponent {
                     backgroundColor: "rgb(" + this.array[i].getColorForRender() + ")",
                     ...height
                 }
-                tmp.push(<div className={styles.dotContainer}>
+                tmp.push(<div style={width} className={styles.dotContainer}>
                     <div key={i} style={styleSheet} className={styles.dot}/>
                 </div>);
             }
