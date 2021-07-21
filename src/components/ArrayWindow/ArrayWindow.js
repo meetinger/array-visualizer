@@ -83,6 +83,7 @@ export class ArrayWindow extends React.PureComponent {
             let styleSheet = {
                 height: "0%",
                 backgroundColor: "rgb(255,255,255)",
+                ...border
             }
             for (let i = this.arrayLen; i < this.mainArray.length; ++i) {
                 tmp.push(<div key={i} style={styleSheet} className={styles.bar}/>);
