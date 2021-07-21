@@ -128,6 +128,14 @@ export class ArrayWindow extends React.PureComponent {
                 </div>);
             }
         }
+        //workaround
+        let workAroundStyle = {
+            width: 0,
+            height: 100+"%",
+            backgroundColor: "black"
+        }
+        tmp.push(<div key={this.mainArray.length+1} style={workAroundStyle} className={styles.bar}/>);
+
         return tmp
     }
 
