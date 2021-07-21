@@ -13,6 +13,8 @@ export class ArrayWindow extends React.PureComponent {
     sizeStyle
     updateInterval
     updateAnimFrame
+    updateCounter
+
 
     constructor(props) {
         super(props);
@@ -24,6 +26,7 @@ export class ArrayWindow extends React.PureComponent {
         this.visualStyle = this.visualProps.style
         this.arrayLen = this.array.length
         this.sizeStyle = {width: "100%", height: this.height + "%"};
+        this.updateCounter = 1
         this.state = {
             renderedArray: this.renderArray()
         }
@@ -62,21 +65,31 @@ export class ArrayWindow extends React.PureComponent {
             this.arrayLen = len
             this.cancelAndUpdate()
         }
-
+        if(++this.updateCounter%100===0){
+            this.updateState()
+            this.updateCounter=1
+        }
+        // this.updateState()
     }
 
     renderArray() {
         let tmp = []
         if (this.visualStyle === "bars") {
             let border = this.borderEnabled ? {} : {border: "none"}
+            let offset = 2
             if(window.innerWidth / this.mainArray.length < 5){
                 border = {border: "none"}
+                offset = 0
+            }
+            let width = {
+                width: window.innerWidth/this.mainArray.length - offset + "px"
             }
             for (let i = 0; i < this.arrayLen; ++i) {
                 let styleSheet = {
                     height: this.array[i].getValue() / this.mainArray.length * 100 + "%",
                     backgroundColor: "rgb(" + this.array[i].getColorForRender() + ")",
-                    ...border
+                    ...border,
+                    ...width
                 }
                 tmp.push(<div key={i} style={styleSheet} className={styles.bar}/>);
             }
