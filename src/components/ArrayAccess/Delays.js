@@ -20,7 +20,7 @@ export class Delays {
             RemoveAuxArray: 0,
             Other: 0
         }
-        this.DELAY_INC_CONST = 3000
+        this.DELAY_INC_CONST = 5000
         this.updateDelayInc()
         // this.delayIncFactor = this.DELAY_INC_CONST-arrayVisualizer.getArrLength()*3
         // this.delayInc = this.delayIncFactor/arrayVisualizer.getArrLength()
