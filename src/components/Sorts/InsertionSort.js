@@ -4,6 +4,7 @@ export class InsertionSort extends Sort{
     constructor(arrayVisualizer) {
         super(arrayVisualizer);
         this.sortName = "InsertionSort"
+        this.warnLen = 350
     }
 
     InsertionSort(start, end) {

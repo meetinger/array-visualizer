@@ -11,7 +11,8 @@ export class ArrayWindow extends React.PureComponent {
     visualStyle
     arrayLen
     sizeStyle
-    updateTimer
+    updateInterval
+    updateAnimFrame
 
     constructor(props) {
         super(props);
@@ -28,13 +29,20 @@ export class ArrayWindow extends React.PureComponent {
         }
     }
     componentDidMount() {
-        //40 FPS
-        this.updateTimer = setInterval(this.updateState.bind(this), 25)
+        this.updateInterval = setInterval(()=>{
+            this.cancelAndUpdate()
+        }, 25)
     }
 
     componentWillUnmount() {
-        clearInterval(this.updateTimer)
+        cancelAnimationFrame(this.updateAnimFrame)
     }
+
+    cancelAndUpdate(){
+        cancelAnimationFrame(this.updateAnimFrame)
+        this.updateAnimFrame = requestAnimationFrame(this.updateState.bind(this))
+    }
+
 
     updateState(){
         this.setState({
@@ -52,9 +60,8 @@ export class ArrayWindow extends React.PureComponent {
         let len = this.array.length
         if(len !== this.arrayLen){
             this.arrayLen = len
-            this.updateState()
+            this.cancelAndUpdate()
         }
-
 
     }
 
@@ -76,6 +83,7 @@ export class ArrayWindow extends React.PureComponent {
             let styleSheet = {
                 height: "0%",
                 backgroundColor: "rgb(255,255,255)",
+                ...border
             }
             for (let i = this.arrayLen; i < this.mainArray.length; ++i) {
                 tmp.push(<div key={i} style={styleSheet} className={styles.bar}/>);

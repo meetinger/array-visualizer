@@ -4,6 +4,7 @@ export class BubbleSort extends Sort{
     constructor(arrayVisualizer) {
         super(arrayVisualizer);
         this.sortName = "BubbleSort"
+        this.warnLen = 200
     }
     BubbleSort() {
         let len = this.arrLength;

@@ -5,6 +5,7 @@ export class GnomeSort extends Sort {
     constructor(arrayVisualizer) {
         super(arrayVisualizer);
         this.sortName = "GnomeSort"
+        this.warnLen = 250
     }
 
     GnomeSort() {

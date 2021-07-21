@@ -584,7 +584,8 @@ export class TimSort extends Sort {
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint + offset]) >= 0
-                    && value >= this.Reads.auxReadValue(start + hint + offset, this.tmp)
+                    // && value >= this.Reads.auxReadValue(start + hint + offset, this.tmp)
+                    && (this.Reads.compareValues(value, this.Reads.auxReadValue(start + hint + offset, this.tmp))>=0)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
