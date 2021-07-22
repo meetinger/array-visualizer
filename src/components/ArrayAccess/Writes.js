@@ -84,7 +84,7 @@ export class Writes{
 
     write(index, toWrite, arrIndex=-1) {
         this.writeInArr(index, toWrite, this.arrayVisualizer.getArray(arrIndex, true), false, false)
-        this.writeWithDelay(index, toWrite, arrIndex, true, this.Delays.getDelayInc(), true)
+        this.writeWithDelay(index, toWrite, arrIndex, arrIndex === -1, this.Delays.getDelayInc(), true)
     }
 
 
