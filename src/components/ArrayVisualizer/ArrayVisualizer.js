@@ -264,9 +264,8 @@ export class ArrayVisualizer extends React.Component {
             for (let i = len - 1; i >= 0; i--) {
                 tmp.push(
                     <ArrayWindow key={len - i} array={this.state.auxArrays[i]}
-                                 mainArray={this.state.array} height={100 / (1 + len)} visualProps = {this.visualStyle} index={len - i} />
+                                 mainArray={this.state.array} height={100 / (1 + len)} visualProps = {this.visualStyle} />
                 )
-                console.log("GEN INDEX:"+(len - i))
             }
         }
         return tmp
@@ -285,7 +284,7 @@ export class ArrayVisualizer extends React.Component {
                 <div style={{height: "100vh"}}>
                 {/*<div>*/}
                     {this.genArrayWindows()}
-                    <ArrayWindow array={this.state.array} mainArray={this.state.array} height={this.showAuxArrays ? 100/(1+objLength(this.state.auxArrays)) : 100} visualProps={this.visualStyle} index={0}/>
+                    <ArrayWindow array={this.state.array} mainArray={this.state.array} height={this.showAuxArrays ? 100/(1+objLength(this.state.auxArrays)) : 100} visualProps={this.visualStyle}/>
                 </div>
                 <div>
                     <Controls arrayVisualizer={this} sorts={this.Sorts}/>

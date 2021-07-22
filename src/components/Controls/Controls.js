@@ -144,7 +144,7 @@ export class Controls extends React.PureComponent {
                     <div>
                         <div>
                             <div className={styles.sectionHeader}>Array Size</div>
-                            <input id={styles.slider} type="range" min="10" max="500"
+                            <input id={styles.slider} type="range" min="10" max="1000"
                                    defaultValue={this.arrayVisualizer.DEFAULT_ARR_LEN}
                                    step="10"
                                    onChange={this.updateArrLength.bind(this)}/>
