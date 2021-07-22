@@ -93,9 +93,9 @@ export class Sorts {
             this.Delays.push(setTimeout(() => {
                 if (isSorted) {
                     this.Sounds.playSound(array[i].getValue())
-                    this.Marks.mark(i, {type: "Sorted", color: [0, 255, 0]}, true)
+                    this.Marks.mark(i, {type: "Sorted", color: [0, 255, 0]}, -1, true)
                 } else {
-                    this.Marks.mark(i, {type: "Default", color: [255, 0, 0]}, true)
+                    this.Marks.mark(i, {type: "Default", color: [255, 0, 0]}, -1, true)
                 }
             }, this.Delays.incDelay("Other", this.Delays.getDelayInc() / 3)))
         }
