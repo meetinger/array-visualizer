@@ -43,11 +43,9 @@ export class ArrayWindow extends React.PureComponent {
 
     componentWillUnmount() {
         cancelAnimationFrame(this.updateAnimFrame)
-        let canvasArr = document.getElementsByClassName(styles.canvas)
-        let containerArr = document.getElementsByClassName(styles.arrayContainer)
 
-        let canvas = canvasArr[canvasArr.length - this.index-1]
-        let container = containerArr[containerArr.length - this.index-1]
+        let canvas = this.canvasRef.current
+        let container = this.containerRef.current
 
         let containerWidth = container.clientWidth
         let containerHeight = container.clientHeight
