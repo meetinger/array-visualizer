@@ -82,7 +82,7 @@ export class Sorts {
 
     checkSort() {
         let isSorted = true
-        let array = this.arrayVisualizer.getMainArray()
+        let array = this.arrayVisualizer.getArray(-1, false)
         for (let i = 1; i < array.length; ++i) {
             if (array[i - 1].getValue() > array[i].getValue()) {
                 isSorted = false

@@ -14,16 +14,20 @@ export class Reads{
         this.Marks = arrayVisualizer.getMarks()
     }
 
-    readValue(index, arr = this.arrayVisualizer.getPseudoArray()) {
+    //TODO refactoring
+
+    readValue(index, arrIndex=-1) {
+        let arr = this.arrayVisualizer.getArray(arrIndex, true)
         return arr[index].getValue()
     }
 
-    compareInArr(a, b, arr = this.arrayVisualizer.getPseudoArray()) {
-        // this.compareWithDelay([a,b], [])
+    compareInArr(a, b, arrIndex=-1) {
+        let arr = this.arrayVisualizer.getArray(arrIndex, true)
         return this.compareValues(arr[a], arr[b])
     }
 
-    get(index, arr = this.arrayVisualizer.getPseudoArray()){
+    get(index, arrIndex=-1){
+        let arr = this.arrayVisualizer.getArray(arrIndex, true)
         return arr[index];
     }
 
@@ -36,7 +40,7 @@ export class Reads{
         let tmpB
         if(typeof a === "object"){
             tmpA = a.getValue()
-            let index = this.arrayVisualizer.getPseudoArray().findIndex(element => {return element.getValue() === tmpA})
+            let index = this.arrayVisualizer.getArray(-1, true).findIndex(element => {return element.getValue() === tmpA})
             if(index !== -1){
                 toMark.push(index)
             }
@@ -46,7 +50,7 @@ export class Reads{
 
         if(typeof b === "object"){
             tmpB = b.getValue()
-            let index = this.arrayVisualizer.getPseudoArray().findIndex(element => {return element.getValue() === tmpB})
+            let index = this.arrayVisualizer.getArray(-1, true).findIndex(element => {return element.getValue() === tmpB})
             if(index !== -1) {
                 toMark.push(index)
             }
@@ -81,20 +85,20 @@ export class Reads{
         this.Marks.markUnmarkMany(toMark,{type: "Default"})
     }
 
-    auxGet(index, arrIndex, isPseudo = true){
-        if(isPseudo){
-            return this.arrayVisualizer.getPseudoAuxArrays()[arrIndex][index]
-        }else {
-            return this.arrayVisualizer.getAuxArrays()[arrIndex][index]
-        }
-    }
-
-
-    auxReadValue(index, arrIndex, isPseudo = true){
-        if(isPseudo){
-            return this.arrayVisualizer.getPseudoAuxArrays()[arrIndex][index].getValue()
-        }else {
-            return this.arrayVisualizer.getAuxArrays()[arrIndex][index].getValue()
-        }
-    }
+    // auxGet(index, arrIndex, isPseudo = true){
+    //     if(isPseudo){
+    //         return this.arrayVisualizer.getPseudoAuxArrays()[arrIndex][index]
+    //     }else {
+    //         return this.arrayVisualizer.getAuxArrays()[arrIndex][index]
+    //     }
+    // }
+    //
+    //
+    // auxReadValue(index, arrIndex, isPseudo = true){
+    //     if(isPseudo){
+    //         return this.arrayVisualizer.getPseudoAuxArrays()[arrIndex][index].getValue()
+    //     }else {
+    //         return this.arrayVisualizer.getAuxArrays()[arrIndex][index].getValue()
+    //     }
+    // }
 }

@@ -22,7 +22,7 @@ export class Marks{
         }
         let type = "Default"
         let color = colors["Default"]
-        let tmpArr = this.arrayVisualizer.getMainArray()
+        let tmpArr = this.arrayVisualizer.getArray(-1, false)
         // Additional
         if (args.type === "Additional") {
             type = "Additional"
@@ -52,7 +52,7 @@ export class Marks{
     }
 
     markMany(indexes, args, saveArr) {
-        let tmpArr = this.arrayVisualizer.getMainArray()
+        let tmpArr = this.arrayVisualizer.getArray(-1, false)
         for (let i of indexes) {
             if (saveArr) {
                 this.mark(i, args, saveArr)
@@ -66,7 +66,7 @@ export class Marks{
     }
 
     unmark(index, saveArr = true) {
-        let tmpArr = this.arrayVisualizer.getMainArray()
+        let tmpArr = this.arrayVisualizer.getArray(-1, false)
         // tmpArr[index].setMarkColor(colors["Unmarked"])
         tmpArr[index].setType("Unmarked")
         if (saveArr) {
@@ -79,7 +79,7 @@ export class Marks{
     }
 
     unmarkMany(indexes, saveArr, saveOnce) {
-        let tmpArr = this.arrayVisualizer.getMainArray()
+        let tmpArr = this.arrayVisualizer.getArray(-1, false)
         for (let i of indexes) {
             if (saveArr) {
                 this.unmark(i, saveArr)
@@ -98,7 +98,7 @@ export class Marks{
     }
 
     setRainbow(val){
-        let tmpArr = this.arrayVisualizer.getMainArray()
+        let tmpArr = this.arrayVisualizer.getArray(-1, false)
         if(val){
             for(let i = 0; i < tmpArr.length; ++i){
                 let hsl = [i / tmpArr.length, 0.8, 0.5]

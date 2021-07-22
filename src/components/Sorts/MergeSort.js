@@ -22,23 +22,23 @@ export class MergeSort extends Sort {
             if (low >= mid && high >= end) break;
 
             if (low < mid && high >= end) {
-                this.Writes.auxWrite(nxt, this.Reads.get(low++), tmp)
+                this.Writes.write(nxt, this.Reads.get(low++), tmp)
             } else if (low >= mid && high < end) {
-                this.Writes.auxWrite(nxt, this.Reads.get(high++), tmp)
-            } else if (this.Reads.compareInArr(low, high) <= 0) {
-                this.Writes.auxWrite(nxt, this.Reads.get(low++), tmp)
+                this.Writes.write(nxt, this.Reads.get(high++), tmp)
+            } else if (this.Reads.compareInArr(low, high, -1) <= 0) {
+                this.Writes.write(nxt, this.Reads.get(low++), tmp)
             } else {
-                this.Writes.auxWrite(nxt, this.Reads.get(high++), tmp)
+                this.Writes.write(nxt, this.Reads.get(high++), tmp)
             }
         }
         for (let i = 0; i < end - start; i++) {
-            this.Writes.write(start + i, this.Reads.auxGet(i, tmp))
+            this.Writes.write(start + i, this.Reads.get(i, tmp))
         }
 
     }
 
     MergeSort(low, high) {
-        let tmp = this.Writes.createAuxArray(low - high)
+        let tmp = this.Writes.createAuxArray(0)
 
         let mid = low + (Math.trunc((high - low) / 2))
 

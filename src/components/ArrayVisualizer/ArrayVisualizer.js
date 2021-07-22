@@ -26,6 +26,8 @@ export class ArrayVisualizer extends React.Component {
     pseudoArray;
     pseudoAuxArrays;
 
+    static MAIN_ARRAY = -1
+
     Sorts
     delayIncConst
     showAuxArrays
@@ -62,7 +64,7 @@ export class ArrayVisualizer extends React.Component {
         this.prevArray = []
 
         this.Writes = new Writes(this)
-        this.pseudoAuxArrays = []
+        this.pseudoAuxArrays = {}
         this.Sorts = new Sorts(this);
         this.showAuxArrays = true
         this.showStats = true
@@ -140,10 +142,6 @@ export class ArrayVisualizer extends React.Component {
         return this;
     }
 
-    getPseudoArray() {
-        return this.pseudoArray;
-    }
-
     getState(){
         return this.state
     }
@@ -152,12 +150,23 @@ export class ArrayVisualizer extends React.Component {
         return this.state.array.length;
     }
 
-    getMainArray(){
-        return this.state.array
+    getArray(arrIndex, isPseudo = false){
+        if(arrIndex === -1){
+            return isPseudo ? this.pseudoArray : this.state.array
+        }else{
+            if(isPseudo){
+                return this.pseudoAuxArrays[arrIndex]
+            }else{
+                console.log("Non-Pseudo Aux Arrays:")
+                console.log(this.state.auxArrays)
+                // throw new Error("LOL")
+                return this.state.auxArrays[arrIndex]
+            }
+        }
     }
 
-    getPseudoAuxArrays(){
-        return this.pseudoAuxArrays
+    getAuxArrays(isPseudo){
+        return isPseudo ? this.pseudoAuxArrays : this.state.auxArrays
     }
 
     getDelays(){
@@ -170,10 +179,6 @@ export class ArrayVisualizer extends React.Component {
 
     getMarks(){
         return this.Marks;
-    }
-
-    getAuxArrays(){
-        return this.state.auxArrays
     }
 
     getReads(){
@@ -262,6 +267,7 @@ export class ArrayVisualizer extends React.Component {
         if(this.showAuxArrays) {
             let len = objLength(this.state.auxArrays)
             for (let i = len - 1; i >= 0; i--) {
+                // console.log(this.state.auxArrays[i])
                 tmp.push(
                     <ArrayWindow key={len - i} array={this.state.auxArrays[i]}
                                  mainArray={this.state.array} height={100 / (1 + len)} visualProps = {this.visualStyle} />
@@ -282,7 +288,6 @@ export class ArrayVisualizer extends React.Component {
             <div>
                 {this.genStats()}
                 <div style={{height: "100vh"}}>
-                {/*<div>*/}
                     {this.genArrayWindows()}
                     <ArrayWindow array={this.state.array} mainArray={this.state.array} height={this.showAuxArrays ? 100/(1+objLength(this.state.auxArrays)) : 100} visualProps={this.visualStyle}/>
                 </div>

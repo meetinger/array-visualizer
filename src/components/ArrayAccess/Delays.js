@@ -90,4 +90,9 @@ export class Delays {
             sortTime: (mainWrites+auxWrites+comparisons)/this.operationsCounter*this.sortFinishedTime
         })
     }
+
+    sleep(ms){
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
 }
