@@ -15,11 +15,12 @@ export class ArrayWindow extends React.PureComponent {
     updateAnimFrame
     updateCounter
     index
+    canvasRef
+    containerRef
 
     constructor(props) {
         super(props);
         this.array = props.array
-        this.index = props.index
         this.mainArray = props.mainArray
         this.height = props.height
         this.visualProps = props.visualProps
@@ -28,6 +29,8 @@ export class ArrayWindow extends React.PureComponent {
         this.arrayLen = this.array.length
         this.sizeStyle = {width: "100%", height: this.height + "%"};
         this.updateCounter = 1
+        this.canvasRef = React.createRef()
+        this.containerRef = React.createRef()
         this.state = {
             renderedArray: this.renderArray()
         }
@@ -40,6 +43,19 @@ export class ArrayWindow extends React.PureComponent {
 
     componentWillUnmount() {
         cancelAnimationFrame(this.updateAnimFrame)
+        let canvasArr = document.getElementsByClassName(styles.canvas)
+        let containerArr = document.getElementsByClassName(styles.arrayContainer)
+
+        let canvas = canvasArr[canvasArr.length - this.index-1]
+        let container = containerArr[containerArr.length - this.index-1]
+
+        let containerWidth = container.clientWidth
+        let containerHeight = container.clientHeight
+        canvas.width = containerWidth
+        canvas.height = containerHeight
+        let ctx = canvas.getContext('2d')
+        ctx.clearRect(0, 0, containerWidth, containerHeight);
+
     }
 
     cancelAndUpdate(){
@@ -49,7 +65,6 @@ export class ArrayWindow extends React.PureComponent {
 
     componentWillReceiveProps(nextProps, nextContext){
         this.array = nextProps.array
-        // this.index = nextProps.index
         this.mainArray = nextProps.mainArray
         this.height = nextProps.height
         this.visualProps = nextProps.visualProps
@@ -72,21 +87,18 @@ export class ArrayWindow extends React.PureComponent {
     renderArray() {
         const rem = parseInt(getComputedStyle(document.documentElement).fontSize)
 
-        let canvasArr = document.getElementsByClassName(styles.canvas)
-        let containerArr = document.getElementsByClassName(styles.arrayContainer)
-
-        let canvas = canvasArr[canvasArr.length - this.index-1]
-        let container = containerArr[containerArr.length - this.index-1]
+        let canvas = this.canvasRef.current
+        let container = this.containerRef.current
 
         if(canvas==null){
             return
         }
         let containerWidth = container.clientWidth
         let containerHeight = container.clientHeight
-        console.log("INDEX: "+this.index+"\nHEIGHT: "+containerHeight)
         canvas.width = containerWidth
         canvas.height = containerHeight
         let ctx = canvas.getContext('2d')
+        // ctx.clearRect(0, 0, containerWidth, containerHeight);
         ctx.imageSmoothingEnabled= false
         ctx.filter = "none"
         let offset = containerWidth/this.mainArray.length
@@ -130,8 +142,8 @@ export class ArrayWindow extends React.PureComponent {
 
     render() {
             return <div style={this.sizeStyle}>
-                <div className={styles.arrayContainer}>
-                    <canvas className={styles.canvas}/>
+                <div ref={this.containerRef} className={styles.arrayContainer}>
+                    <canvas ref={this.canvasRef} className={styles.canvas}/>
                 </div>
             </div>
     }
