@@ -16,7 +16,7 @@ export class Sorts {
         this.Marks = arrayVisualizer.getMarks()
 
         this.sortsPaths = ["BubbleSort", "CombSort", "MergeSort", "LLQuickSort", "LRQuickSort", "HeapSort",
-            "DualPivotQuickSort", "GnomeSort", "InsertionSort", "ShellSort", "SelectionSort", "TimSort", "PseudoTimSort",
+            "DualPivotQuickSort", "GnomeSort", "InsertionSort", "BinaryInsertionSort", "ShellSort", "SelectionSort", "TimSort", "PseudoTimSort",
             "IntroSort", "LSDRadixSort", "BitonicSort", "SlowSort", "StoogeSort", "GrailSort", "WikiSort"]
 
     }
