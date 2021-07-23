@@ -311,19 +311,18 @@ export class TimSort extends Sort {
      */
 
 
-    gallopLeft(value, isAux, start, length, hint) {
+    gallopLeft(value, arrIndex, start, length, hint) {
         let lastOffset = 0
         let maxOffset = 0
         let offset = 1
-        if (!isAux) {
             // if (compare(value, array[start + hint]) > 0) {
-            if (value > this.Reads.readValue(start + hint)) {
+            if (value > this.Reads.readValue(start + hint, arrIndex)) {
                 maxOffset = length - hint
 
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint + offset]) > 0
-                    && value > this.Reads.readValue(start + hint + offset)
+                    && value > this.Reads.readValue(start + hint + offset, arrIndex)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -348,7 +347,7 @@ export class TimSort extends Sort {
                     offset < maxOffset
                     // && compare(value, array[start + hint - offset]) <= 0
                     // && value <= this.Reads.readValue(start + hint + offset)
-                    && value <= this.Reads.readValue(start + hint - offset)
+                    && value <= this.Reads.readValue(start + hint - offset, arrIndex)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -378,82 +377,13 @@ export class TimSort extends Sort {
                 const m = lastOffset + ((offset - lastOffset) >>> 1)
 
                 // if (compare(value, array[start + m]) > 0) {
-                if (value > this.Reads.readValue(start + m)) {
+                if (value > this.Reads.readValue(start + m, arrIndex)) {
                     lastOffset = m + 1
                 } else {
                     offset = m
                 }
             }
-        } else {
-            // if (compare(value, array[start + hint]) > 0) {
-            if (value > this.Reads.auxReadValue(start + hint, this.tmp)) {
-                maxOffset = length - hint
 
-                while (
-                    offset < maxOffset
-                    // && compare(value, array[start + hint + offset]) > 0
-                    && value > this.Reads.auxReadValue(start + hint + offset, this.tmp)
-                    ) {
-                    lastOffset = offset
-                    offset = (offset << 1) + 1
-
-                    if (offset <= 0) {
-                        offset = maxOffset
-                    }
-                }
-
-                if (offset > maxOffset) {
-                    offset = maxOffset
-                }
-
-                // Make offsets relative to start
-                lastOffset += hint
-                offset += hint
-
-                // value <= array[start + hint]
-            } else {
-                maxOffset = hint + 1
-                while (
-                    offset < maxOffset
-                    // && compare(value, array[start + hint - offset]) <= 0
-                    // && value <= this.Reads.auxRead(start + hint + offset, this.tmp)
-                    && value <= this.Reads.auxReadValue(start + hint - offset, this.tmp)
-                    ) {
-                    lastOffset = offset
-                    offset = (offset << 1) + 1
-
-                    if (offset <= 0) {
-                        offset = maxOffset
-                    }
-                }
-                if (offset > maxOffset) {
-                    offset = maxOffset
-                }
-
-                // Make offsets relative to start
-                const tmp = lastOffset
-                lastOffset = hint - offset
-                offset = hint - tmp
-            }
-
-            /*
-             * Now array[start+lastOffset] < value <= array[start+offset], so value
-             * belongs somewhere in the range (start + lastOffset, start + offset]. Do a
-             * binary search, with invariant array[start + lastOffset - 1] < value <=
-             * array[start + offset].
-             */
-            lastOffset++
-            while (lastOffset < offset) {
-                const m = lastOffset + ((offset - lastOffset) >>> 1)
-
-                // if (compare(value, array[start + m]) > 0) {
-                if (value > this.Reads.auxReadValue(start + m, this.tmp)) {
-                    lastOffset = m + 1
-                } else {
-                    offset = m
-                }
-            }
-        }
         return offset
     }
 
@@ -472,20 +402,19 @@ export class TimSort extends Sort {
      */
 
 
-    gallopRight(value, isAux, start, length, hint) {
+    gallopRight(value, arrIndex, start, length, hint) {
         let lastOffset = 0
         let maxOffset = 0
         let offset = 1
 
-        if (!isAux) {
             // if (compare(value, array[start + hint]) < 0) {
-            if (value < this.Reads.readValue(start + hint)) {
+            if (value < this.Reads.readValue(start + hint, arrIndex)) {
                 maxOffset = hint + 1
 
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint - offset]) < 0
-                    && value < this.Reads.readValue(start + hint - offset)
+                    && value < this.Reads.readValue(start + hint - offset, arrIndex)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -511,7 +440,7 @@ export class TimSort extends Sort {
                 while (
                     offset < maxOffset
                     // && compare(value, array[start + hint + offset]) >= 0
-                    && value >= this.Reads.readValue(start + hint + offset)
+                    && value >= this.Reads.readValue(start + hint + offset, arrIndex)
                     ) {
                     lastOffset = offset
                     offset = (offset << 1) + 1
@@ -542,87 +471,14 @@ export class TimSort extends Sort {
                 const m = lastOffset + ((offset - lastOffset) >>> 1)
 
                 // if (compare(value, array[start + m]) < 0) {
-                if (value < this.Reads.readValue(start + m)) {
+                if (value < this.Reads.readValue(start + m, arrIndex)) {
                     offset = m
                 } else {
                     lastOffset = m + 1
                 }
             }
 
-        } else {
-            //AUX
-            // if (compare(value, array[start + hint]) < 0) {
-            if (value < this.Reads.auxReadValue(start + hint, this.tmp)) {
-                maxOffset = hint + 1
-
-                while (
-                    offset < maxOffset
-                    // && compare(value, array[start + hint - offset]) < 0
-                    && value < this.Reads.auxReadValue(start + hint - offset, this.tmp)
-                    ) {
-                    lastOffset = offset
-                    offset = (offset << 1) + 1
-
-                    if (offset <= 0) {
-                        offset = maxOffset
-                    }
-                }
-
-                if (offset > maxOffset) {
-                    offset = maxOffset
-                }
-
-                // Make offsets relative to start
-                const tmp = lastOffset
-                lastOffset = hint - offset
-                offset = hint - tmp
-
-                // value >= array[start + hint]
-            } else {
-                maxOffset = length - hint
-
-                while (
-                    offset < maxOffset
-                    // && compare(value, array[start + hint + offset]) >= 0
-                    // && value >= this.Reads.auxReadValue(start + hint + offset, this.tmp)
-                    && (this.Reads.compareValues(value, this.Reads.auxReadValue(start + hint + offset, this.tmp))>=0)
-                    ) {
-                    lastOffset = offset
-                    offset = (offset << 1) + 1
-
-                    if (offset <= 0) {
-                        offset = maxOffset
-                    }
-                }
-
-                if (offset > maxOffset) {
-                    offset = maxOffset
-                }
-
-                // Make offsets relative to start
-                lastOffset += hint
-                offset += hint
-            }
-
-            /*
-             * Now array[start+lastOffset] < value <= array[start+offset], so value
-             * belongs somewhere in the range (start + lastOffset, start + offset]. Do a
-             * binary search, with invariant array[start + lastOffset - 1] < value <=
-             * array[start + offset].
-             */
-            lastOffset++
-
-            while (lastOffset < offset) {
-                const m = lastOffset + ((offset - lastOffset) >>> 1)
-
-                // if (compare(value, array[start + m]) < 0) {
-                if (value < this.Reads.auxReadValue(start + m, this.tmp)) {
-                    offset = m
-                } else {
-                    lastOffset = m + 1
-                }
-            }
-        }
+        
 
         return offset
     }
@@ -710,7 +566,7 @@ export class TimSort extends Sort {
          * elements in run1 are already in place
          */
         // const k = gallopRight(array[start2], array, start1, length1, 0, compare)
-        const k = this.gallopRight(this.Reads.readValue(start2), false, start1, length1, 0)
+        const k = this.gallopRight(this.Reads.readValue(start2), -1, start1, length1, 0)
         start1 += k
         length1 -= k
 
@@ -733,7 +589,7 @@ export class TimSort extends Sort {
         length2 = this.gallopLeft(
             // array[start1 + length1 - 1],
             this.Reads.readValue(start1 + length1 - 1),
-            false,
+            -1,
             start2,
             length2,
             length2 - 1,
@@ -780,7 +636,7 @@ export class TimSort extends Sort {
 
         for (i = 0; i < length1; i++) {
             // tmp[i] = array[start1 + i]
-            this.Writes.auxWrite(i, this.Reads.get(start1 + i), this.tmp)
+            this.Writes.write(i, this.Reads.get(start1 + i), this.tmp)
         }
 
         let cursor1 = 0
@@ -798,7 +654,7 @@ export class TimSort extends Sort {
         if (--length2 === 0) {
             for (i = 0; i < length1; i++) {
                 // array[dest + i] = tmp[cursor1 + i]
-                this.Writes.write(dest + i, this.Reads.auxGet(cursor1 + i, this.tmp))
+                this.Writes.write(dest + i, this.Reads.get(cursor1 + i, this.tmp))
             }
             return
         }
@@ -810,7 +666,7 @@ export class TimSort extends Sort {
                 this.Writes.write(dest + i, this.Reads.get(cursor2 + i))
             }
             // array[dest + length2] = tmp[cursor1]
-            this.Writes.write(dest + length2, this.Reads.auxGet(cursor1, this.tmp))
+            this.Writes.write(dest + length2, this.Reads.get(cursor1, this.tmp))
             return
         }
 
@@ -823,7 +679,7 @@ export class TimSort extends Sort {
 
             do {
                 // if (compare(array[cursor2], tmp[cursor1]) < 0) {
-                if (this.Reads.readValue(cursor2) < this.Reads.auxReadValue(cursor1, this.tmp)) {
+                if (this.Reads.readValue(cursor2) < this.Reads.readValue(cursor1, this.tmp)) {
                     // array[dest] = array[cursor2]
                     this.Writes.write(dest, this.Reads.get(cursor2))
                     dest++
@@ -837,7 +693,7 @@ export class TimSort extends Sort {
                     }
                 } else {
                     // array[dest] = tmp[cursor1]
-                    this.Writes.write(dest, this.Reads.auxGet(cursor1, this.tmp))
+                    this.Writes.write(dest, this.Reads.get(cursor1, this.tmp))
 
                     dest++
                     cursor1++
@@ -856,13 +712,13 @@ export class TimSort extends Sort {
 
             do {
                 // count1 = gallopRight(array[cursor2], tmp, cursor1, length1, 0, compare)
-                count1 = this.gallopRight(this.Reads.readValue(cursor2), true, cursor1, length1, 0)
+                count1 = this.gallopRight(this.Reads.readValue(cursor2), this.tmp, cursor1, length1, 0)
 
                 if (count1 !== 0) {
                     for (i = 0; i < count1; i++) {
                         // array[dest + i] = tmp[cursor1 + i]
                         // results[dest + i] = tmpIndex[cursor1 + i]
-                        this.Writes.write(dest + i, this.Reads.auxGet(cursor1 + i, this.tmp))
+                        this.Writes.write(dest + i, this.Reads.get(cursor1 + i, this.tmp))
                     }
 
                     dest += count1
@@ -887,7 +743,7 @@ export class TimSort extends Sort {
                 }
 
                 // count2 = this.gallopLeft(tmp[cursor1], array, cursor2, length2, 0, compare)
-                count2 = this.gallopLeft(this.Reads.auxReadValue(cursor1, this.tmp), false, cursor2, length2, 0)
+                count2 = this.gallopLeft(this.Reads.readValue(cursor1, this.tmp), -1, cursor2, length2, 0)
 
                 if (count2 !== 0) {
                     for (i = 0; i < count2; i++) {
@@ -908,7 +764,7 @@ export class TimSort extends Sort {
                 // array[dest] = tmp[cursor1]
                 // results[dest] = tmpIndex[cursor1]
 
-                this.Writes.write(dest, this.Reads.auxGet(cursor1, this.tmp))
+                this.Writes.write(dest, this.Reads.get(cursor1, this.tmp))
 
                 dest++
                 cursor1++
@@ -949,14 +805,14 @@ export class TimSort extends Sort {
             }
             // array[dest + length2] = tmp[cursor1]
             // results[dest + length2] = tmpIndex[cursor1]
-            this.Writes.write(dest + length2, this.Reads.auxGet(cursor1, this.tmp))
+            this.Writes.write(dest + length2, this.Reads.get(cursor1, this.tmp))
         } else if (length1 === 0) {
             throw new Error('mergeLow preconditions were not respected')
         } else {
             for (i = 0; i < length1; i++) {
                 // array[dest + i] = tmp[cursor1 + i]
                 // results[dest + i] = tmpIndex[cursor1 + i]
-                this.Writes.write(dest + i, this.Reads.auxGet(cursor1 + i, this.tmp))
+                this.Writes.write(dest + i, this.Reads.get(cursor1 + i, this.tmp))
             }
         }
     }
@@ -983,7 +839,7 @@ export class TimSort extends Sort {
 
         for (i = 0; i < length2; i++) {
             // tmp[i] = array[start2 + i]
-            this.Writes.auxWrite(i, this.Reads.get(start2 + i), this.tmp)
+            this.Writes.write(i, this.Reads.get(start2 + i), this.tmp)
         }
 
         let cursor1 = start1 + length1 - 1
@@ -1003,7 +859,7 @@ export class TimSort extends Sort {
 
             for (i = 0; i < length2; i++) {
                 // array[customCursor + i] = tmp[i]
-                this.Writes.write(customCursor + i, this.Reads.auxGet(i, this.tmp))
+                this.Writes.write(customCursor + i, this.Reads.get(i, this.tmp))
             }
 
             return
@@ -1021,7 +877,7 @@ export class TimSort extends Sort {
             }
 
             // array[dest] = tmp[cursor2]
-            this.Writes.write(dest, this.Reads.auxGet(cursor2, this.tmp))
+            this.Writes.write(dest, this.Reads.get(cursor2, this.tmp))
             return
         }
 
@@ -1034,7 +890,7 @@ export class TimSort extends Sort {
 
             do {
                 // if (compare(tmp[cursor2], array[cursor1]) < 0) {
-                if (this.Reads.auxReadValue(cursor2, this.tmp) < this.Reads.readValue(cursor1)) {
+                if (this.Reads.readValue(cursor2, this.tmp) < this.Reads.readValue(cursor1)) {
                     // array[dest] = array[cursor1]
                     this.Writes.write(dest, this.Reads.get(cursor1))
                     dest--
@@ -1047,7 +903,7 @@ export class TimSort extends Sort {
                     }
                 } else {
                     // array[dest] = tmp[cursor2]
-                    this.Writes.write(dest, this.Reads.auxGet(cursor2, this.tmp))
+                    this.Writes.write(dest, this.Reads.get(cursor2, this.tmp))
                     dest--
                     cursor2--
                     count2++
@@ -1073,8 +929,8 @@ export class TimSort extends Sort {
                 //     compare
                 // )
                 count1 = length1 - this.gallopRight(
-                    this.Reads.auxReadValue(cursor2, this.tmp),
-                    false,
+                    this.Reads.readValue(cursor2, this.tmp),
+                    -1,
                     start1,
                     length1,
                     length1 - 1
@@ -1099,7 +955,7 @@ export class TimSort extends Sort {
                 }
 
                 // array[dest] = tmp[cursor2]
-                this.Writes.write(dest, this.Reads.auxGet(cursor2, this.tmp))
+                this.Writes.write(dest, this.Reads.get(cursor2, this.tmp))
 
                 dest--
                 cursor2--
@@ -1120,7 +976,7 @@ export class TimSort extends Sort {
 
                 count2 = length2 - this.gallopLeft(
                     this.Reads.readValue(cursor1),
-                    true,
+                    this.tmp,
                     0,
                     length2,
                     length2 - 1
@@ -1135,7 +991,7 @@ export class TimSort extends Sort {
 
                     for (i = 0; i < count2; i++) {
                         // array[customDest + i] = tmp[customCursor + i]
-                        this.Writes.write(customDest + i, this.Reads.auxGet(customCursor + i, this.tmp))
+                        this.Writes.write(customDest + i, this.Reads.get(customCursor + i, this.tmp))
                     }
 
                     if (length2 <= 1) {
@@ -1192,7 +1048,7 @@ export class TimSort extends Sort {
             // array[dest] = tmp[cursor2]
             // results[dest] = tmpIndex[cursor2]
 
-            this.Writes.write(dest, this.Reads.auxGet(cursor2, this.tmp))
+            this.Writes.write(dest, this.Reads.get(cursor2, this.tmp))
 
 
         } else if (length2 === 0) {
@@ -1201,7 +1057,7 @@ export class TimSort extends Sort {
             customCursor = dest - (length2 - 1)
             for (i = 0; i < length2; i++) {
                 // array[customCursor + i] = tmp[i]
-                this.Writes.write(customCursor + i, this.Reads.auxGet(i, this.tmp))
+                this.Writes.write(customCursor + i, this.Reads.get(i, this.tmp))
             }
         }
     }
