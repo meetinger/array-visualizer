@@ -354,7 +354,7 @@ export class WikiSort extends Sort {
         if (from === -1) {
             while (true) {
                 if (this.Reads.compareInArr(B_index, A_index) >= 0) {
-                    this.Writes.auxWrite(insert_index, this.Reads.get(A_index), into);
+                    this.Writes.write(insert_index, this.Reads.get(A_index), into);
 
 
                     A_index++;
@@ -365,7 +365,7 @@ export class WikiSort extends Sort {
                         break;
                     }
                 } else {
-                    this.Writes.auxWrite(insert_index, this.Reads.get(B_index), into);
+                    this.Writes.write(insert_index, this.Reads.get(B_index), into);
 
                     B_index++;
                     insert_index++;
@@ -380,9 +380,9 @@ export class WikiSort extends Sort {
             while (true) {
                 // if (this.Reads.compareInArr(B_index, A_index) >= 0) {
                 console.log("FROM: "+from)
-                if (this.Reads.compareValues(this.Reads.auxReadValue(B_index, from), this.Reads.auxReadValue(A_index, from)) >= 0) {
+                if (this.Reads.compareValues(this.Reads.readValue(B_index, from), this.Reads.readValue(A_index, from)) >= 0) {
 
-                    this.Writes.write(insert_index, this.Reads.auxGet(A_index, from));
+                    this.Writes.write(insert_index, this.Reads.get(A_index, from));
 
 
                     A_index++;
@@ -393,7 +393,7 @@ export class WikiSort extends Sort {
                         break;
                     }
                 } else {
-                    this.Writes.write(insert_index, this.Reads.auxGet(B_index, from));
+                    this.Writes.write(insert_index, this.Reads.get(B_index, from));
 
                     B_index++;
                     insert_index++;
@@ -418,8 +418,8 @@ export class WikiSort extends Sort {
 
         if (B.length() > 0 && A.length() > 0) {
             while (true) {
-                if (this.Reads.compareValues(this.Reads.get(B_index), this.Reads.auxGet(A_index, this.cache)) >= 0) {
-                    this.Writes.write(insert_index, this.Reads.auxGet(A_index, this.cache));
+                if (this.Reads.compareValues(this.Reads.get(B_index), this.Reads.get(A_index, this.cache)) >= 0) {
+                    this.Writes.write(insert_index, this.Reads.get(A_index, this.cache));
                     A_index++;
                     insert_index++;
                     if (A_index === A_last) break;
@@ -697,11 +697,11 @@ export class WikiSort extends Sort {
                         let A3 = new Range(0, A1.length());
                         let B3 = new Range(A1.length(), A1.length() + A2.length());
 
-                        if (this.Reads.compareValues(this.Reads.auxReadValue(B3.end - 1, this.cache), this.Reads.auxReadValue(A3.start, this.cache)) < 0) {
+                        if (this.Reads.compareValues(this.Reads.readValue(B3.end - 1, this.cache), this.Reads.readValue(A3.start, this.cache)) < 0) {
                             // the two ranges are in reverse order, so copy them in reverse order into the cache
                             this.Writes.arrayCopy(this.cache, A3.start, -1, A1.start + A2.length(), A3.length(), 1, true, false);
                             this.Writes.arrayCopy(this.cache, B3.start, -1, A1.start, B3.length(), 1, true, false);
-                        } else if (this.Reads.compareValues(this.Reads.auxReadValue(B3.start, this.cache), this.Reads.auxReadValue(A3.end - 1, this.cache)) < 0) {
+                        } else if (this.Reads.compareValues(this.Reads.readValue(B3.start, this.cache), this.Reads.readValue(A3.end - 1, this.cache)) < 0) {
                             // these two ranges weren't already in order, so merge them back into the array
                             this.MergeInto(this.cache, A3, B3, -1, A1.start, false);
                         } else {
