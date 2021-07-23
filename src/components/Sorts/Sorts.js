@@ -17,7 +17,7 @@ export class Sorts {
 
         this.sortsPaths = ["BubbleSort", "CombSort", "MergeSort", "LLQuickSort", "LRQuickSort", "HeapSort",
             "DualPivotQuickSort", "GnomeSort", "InsertionSort", "BinaryInsertionSort", "ShellSort", "SelectionSort", "TimSort", "PseudoTimSort",
-            "IntroSort", "LSDRadixSort", "BitonicSort", "SlowSort", "StoogeSort", "GrailSort", "WikiSort"]
+            "IntroSort", "LSDRadixSort", "BitonicSort", "SlowSort", "StoogeSort", "GrailSort", "WikiSort", "SimpleSort"]
 
     }
 

@@ -21,7 +21,7 @@ export class BinaryInsertionSort extends Sort{
             while (left < right) {
                 const mid = (left + right) >>> 1
 
-                if (pivot.getValue() < this.Reads.readValue(mid)) {
+                if (this.Reads.compareValues(pivot.getValue(), this.Reads.readValue(mid)) < 0) {
                     right = mid
                 } else {
                     left = mid + 1
