@@ -89,25 +89,7 @@ export class GrailSort extends Sort {
     //      within itself to a different destination, or
     //      to another array
     arraycopy(srcArray, srcPos, destArray, destPos, copyLen) {
-
-        if (srcArray === -1 && destArray === -1) {
-            for (let i = 0; i < copyLen; i++) {
-                this.Writes.write(destPos + i, this.Reads.get(srcPos + i))
-            }
-        } else if (srcArray !== -1 && destArray !== -1) {
-            for (let i = 0; i < copyLen; i++) {
-                this.Writes.auxWrite(destPos + i, this.Reads.auxGet(srcPos + i, srcArray), destArray)
-            }
-        } else if (srcArray === -1 && destArray !== -1) {
-            for (let i = 0; i < copyLen; i++) {
-                this.Writes.auxWrite(destPos + i, this.Reads.get(srcPos + i), destArray)
-            }
-        } else if (srcArray !== -1 && destArray === -1) {
-            for (let i = 0; i < copyLen; i++) {
-                this.Writes.write(destPos + i, this.Reads.auxGet(srcPos + i, srcArray))
-            }
-        }
-
+        this.Writes.arrayCopy(srcArray, srcPos, destArray, destPos, copyLen)
     }
 
     grailRotate(start, leftLen, rightLen) {
@@ -184,8 +166,8 @@ export class GrailSort extends Sort {
             // The second part of this conditional does the equal check we were just talking about; however,
             // if currentKey is larger than everything in the key-buffer (meaning insertPos == keysFound),
             // then that also tells us it wasn't *equal* to anything in the key-buffer. Magic! :) 
-            if (insertPos == keysFound || this.Reads.compareInArr(start + currentKey,
-                start + firstKey + insertPos) != 0) {
+            if (insertPos === keysFound || this.Reads.compareInArr(start + currentKey,
+                start + firstKey + insertPos) !== 0) {
 
                 // First, rotate the key-buffer over to currentKey's immediate left...
                 // (this helps save a TON of swaps/writes!!!)
@@ -264,7 +246,7 @@ export class GrailSort extends Sort {
         let buffer = start - bufferOffset;
 
         while (right < end) {
-            if (left == middle || this.Reads.compareInArr(left,
+            if (left === middle || this.Reads.compareInArr(left,
                 right) > 0) {
 
                 this.grailSwap(buffer, right);
@@ -276,7 +258,7 @@ export class GrailSort extends Sort {
             buffer++;
         }
 
-        if (buffer != left) {
+        if (buffer !== left) {
             this.grailBlockSwap(buffer, left, middle - left);
         }
     }
@@ -292,7 +274,7 @@ export class GrailSort extends Sort {
         let buffer = right + bufferOffset;
 
         while (left >= end) {
-            if (right == middle || this.Reads.compareInArr(left,
+            if (right === middle || this.Reads.compareInArr(left,
                 right) > 0) {
 
                 this.grailSwap(buffer, left);
@@ -304,7 +286,7 @@ export class GrailSort extends Sort {
             buffer--;
         }
 
-        if (right != buffer) {
+        if (right !== buffer) {
             while (right > middle) {
                 this.grailSwap(buffer, right);
                 buffer--;
@@ -327,7 +309,7 @@ export class GrailSort extends Sort {
         let buffer = start - bufferOffset;
 
         while (right < end) {
-            if (left == middle || this.Reads.compareInArr(left,
+            if (left === middle || this.Reads.compareInArr(left,
                 right) > 0) {
 
                 this.Writes.write(buffer, this.Reads.get(right))
@@ -339,7 +321,7 @@ export class GrailSort extends Sort {
             buffer++;
         }
 
-        if (buffer != left) {
+        if (buffer !== left) {
             while (left < middle) {
                 this.Writes.write(buffer, this.Reads.get(left))
                 buffer++;

@@ -16,13 +16,13 @@ export class Marks{
         this.Delays = arrayVisualizer.getDelays()
     }
 
-    mark(index, args, saveArr = true) {
+    mark(index, args, arrIndex = -1, saveArr = true) {
         if(!this.arrayVisualizer.getEnableMarks()){
             return;
         }
         let type = "Default"
         let color = colors["Default"]
-        let tmpArr = this.arrayVisualizer.getMainArray()
+        let tmpArr = this.arrayVisualizer.getArray(arrIndex, false)
         // Additional
         if (args.type === "Additional") {
             type = "Additional"
@@ -51,13 +51,13 @@ export class Marks{
         // console.log(color);
     }
 
-    markMany(indexes, args, saveArr) {
-        let tmpArr = this.arrayVisualizer.getMainArray()
+    markMany(indexes, args, arrIndex = -1, saveArr = false) {
+        let tmpArr = this.arrayVisualizer.getArray(arrIndex, false)
         for (let i of indexes) {
             if (saveArr) {
-                this.mark(i, args, saveArr)
+                this.mark(i, args, arrIndex, saveArr)
             } else {
-                tmpArr = this.mark(i, args, saveArr)
+                tmpArr = this.mark(i, args, arrIndex, saveArr)
             }
         }
         if (!saveArr) {
@@ -65,8 +65,8 @@ export class Marks{
         }
     }
 
-    unmark(index, saveArr = true) {
-        let tmpArr = this.arrayVisualizer.getMainArray()
+    unmark(index, arrIndex = -1, saveArr = true) {
+        let tmpArr = this.arrayVisualizer.getArray(arrIndex, false)
         // tmpArr[index].setMarkColor(colors["Unmarked"])
         tmpArr[index].setType("Unmarked")
         if (saveArr) {
@@ -78,13 +78,13 @@ export class Marks{
         }
     }
 
-    unmarkMany(indexes, saveArr, saveOnce) {
-        let tmpArr = this.arrayVisualizer.getMainArray()
+    unmarkMany(indexes, arrIndex = -1, saveArr, saveOnce) {
+        let tmpArr = this.arrayVisualizer.getArray(arrIndex, false)
         for (let i of indexes) {
             if (saveArr) {
-                this.unmark(i, saveArr)
+                this.unmark(i, arrIndex, saveArr)
             } else {
-                tmpArr = this.unmark(i, saveArr)
+                tmpArr = this.unmark(i, arrIndex, saveArr)
             }
         }
         if (saveOnce) {
@@ -98,7 +98,7 @@ export class Marks{
     }
 
     setRainbow(val){
-        let tmpArr = this.arrayVisualizer.getMainArray()
+        let tmpArr = this.arrayVisualizer.getArray(-1, false)
         if(val){
             for(let i = 0; i < tmpArr.length; ++i){
                 let hsl = [i / tmpArr.length, 0.8, 0.5]
@@ -115,13 +115,13 @@ export class Marks{
         })
     }
 
-    markUnmarkMany(markIndexes, markArgs) {
-        this.markMany(markIndexes, markArgs, true)
-        this.Delays.push(setTimeout(this.unmarkMany.bind(this), this.Delays.incDelay("Unmark", this.Delays.getDelayInc() / 500), markIndexes, false, true))
+    markUnmarkMany(markIndexes, markArgs, arrIndex = -1) {
+        this.markMany(markIndexes, markArgs, arrIndex, true)
+        this.Delays.push(setTimeout(this.unmarkMany.bind(this), this.Delays.incDelay("Unmark", this.Delays.getDelayInc() / 500), markIndexes, arrIndex, false, true))
     }
 
     clearAllMarks(){
-        this.unmarkMany(Array.from(Array(this.arrayVisualizer.getArrLength()).keys()), false, true)
+        this.unmarkMany(Array.from(Array(this.arrayVisualizer.getArrLength()).keys()), -1, false, true)
     }
 
 }

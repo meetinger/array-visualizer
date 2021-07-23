@@ -42,7 +42,7 @@ export class LSDRadixSort extends Sort {
             let total = 0;
             for (let index = 0; index < registers.length; index++) {
                 for (let i = 0; i < registers[index].length; i++) {
-                    this.Writes.auxWrite(total++, registers[index][i], tempArray)
+                    this.Writes.write(total++, registers[index][i], tempArray)
                 }
                 registers[index] = []
             }
@@ -51,12 +51,12 @@ export class LSDRadixSort extends Sort {
                 let register = i % radix
                 let pos = (register * Math.trunc(len / radix) + Math.trunc(i / radix))
 
-                this.Writes.write(pos, this.Reads.auxGet(pos, tempArray))
+                this.Writes.write(pos, this.Reads.get(pos, tempArray))
                 tempWrite[pos] = true
             }
             for (let i = 0; i < len; i++) {
                 if (!tempWrite[i]) {
-                    this.Writes.write(i, this.Reads.auxGet(i, tempArray))
+                    this.Writes.write(i, this.Reads.get(i, tempArray))
                 }
             }
 
