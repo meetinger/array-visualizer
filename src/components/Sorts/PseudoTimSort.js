@@ -25,12 +25,12 @@ export class PseudoTimSort extends Sort {
         for(let x = 0; x < len1; x++)
         {
             // left[x] = arr[l + x];
-            this.Writes.auxWrite(x, this.Reads.get(l + x), left)
+            this.Writes.write(x, this.Reads.get(l + x), left)
         }
         for(let x = 0; x < len2; x++)
         {
             // right[x] = arr[m + 1 + x];
-            this.Writes.auxWrite(x, this.Reads.get(m + 1 + x), right)
+            this.Writes.write(x, this.Reads.get(m + 1 + x), right)
         }
 
         let i = 0;
@@ -40,16 +40,16 @@ export class PseudoTimSort extends Sort {
         while (i < len1 && j < len2)
         {
             // if (left[i] <= right[j])
-            if(this.Reads.compareValues(this.Reads.auxGet(i, left), this.Reads.auxGet(j, right))<=0)
+            if(this.Reads.compareValues(this.Reads.get(i, left), this.Reads.get(j, right))<=0)
             {
                 // arr[k] = left[i];
-                this.Writes.write(k, this.Reads.auxGet(i, left))
+                this.Writes.write(k, this.Reads.get(i, left))
                 i++;
             }
             else
             {
                 // arr[k] = right[j];
-                this.Writes.write(k, this.Reads.auxGet(j, right))
+                this.Writes.write(k, this.Reads.get(j, right))
                 j++;
             }
             k++;
@@ -57,13 +57,13 @@ export class PseudoTimSort extends Sort {
 
         while (i < len1) {
             // arr[k] = left[i];
-            this.Writes.write(k, this.Reads.auxGet(i, left))
+            this.Writes.write(k, this.Reads.get(i, left))
             k++;
             i++;
         }
 
         while (j < len2) {
-            this.Writes.write(k, this.Reads.auxGet(j, right))
+            this.Writes.write(k, this.Reads.get(j, right))
             k++;
             j++;
         }
@@ -79,7 +79,7 @@ export class PseudoTimSort extends Sort {
         {
             let insertionSort = new InsertionSort(this.arrayVisualizer)
 
-            insertionSort.runSort(i, Math.min(
+            insertionSort.runSort(i, 1+Math.min(
                 (i + this.MIN_MERGE - 1), (n - 1)));
         }
 
