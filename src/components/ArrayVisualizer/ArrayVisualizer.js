@@ -255,10 +255,14 @@ export class ArrayVisualizer extends React.Component {
     }
 
     updateArrLength(len){
+        let tmpArr = this.initArray(initFunctions.linear, len)
+        // eslint-disable-next-line react/no-direct-mutation-state
+        this.state.array = tmpArr
         this.setState({
-            array: this.initArray(initFunctions.linear, len)
+            array: tmpArr
         })
-        this.pseudoArray = deepArrayCopy(this.state.array)
+
+        this.initPseudoArray()
 
         this.Sorts.arrLength = this.getArrLength()
         // this.updateDelayInc(this.delayIncConst)
