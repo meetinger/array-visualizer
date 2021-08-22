@@ -84,9 +84,12 @@ export class ArrayVisualizer extends React.Component {
             arr.push(element)
         }
         if(setToState){
+            // eslint-disable-next-line react/no-direct-mutation-state
+            this.state.array = arr;
             this.setState({
                 array: arr
             })
+            this.initPseudoArray()
         }else {
             return arr;
         }

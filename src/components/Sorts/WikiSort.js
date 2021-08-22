@@ -28,6 +28,8 @@ For more information, please refer to <http://unlicense.org>
  */
 
 // structure to represent ranges within the array
+import {Writes} from "../ArrayAccess/Writes";
+
 const {InsertionSort} = require("./InsertionSort");
 const {Sort} = require("./Sort");
 
@@ -271,9 +273,10 @@ export class WikiSort extends Sort {
         // Writes.reversal(array, range.start, range.end - 1, 1, true, false);
         let start = range.start
         let length = range.end - 1
-        for (let i = start; i < start + ((length - start + 1) / 2); i++) {
-            this.Writes.swap(i, start + length - i);
-        }
+        // for (let i = start; i < start + ((length - start + 1) / 2); i++) {
+        //     this.Writes.swap(i, start + length - i);
+        // }
+        this.Writes.reversal(start, length, -1)
     }
 
 // swap a series of values in the array

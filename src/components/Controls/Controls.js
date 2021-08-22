@@ -52,7 +52,9 @@ export class Controls extends React.PureComponent {
 
     shuffleArray(func) {
         this.stopSort()
+        this.arrayVisualizer.getDelays().setDelayIncFactor(this.arrayVisualizer.getDelays().DELAY_INC_CONST/10)
         this.arrayVisualizer.shuffleArray(func)
+        this.arrayVisualizer.getDelays().restoreDelayIncFactor()
         // func(this.arrayVisualizer)
     }
 

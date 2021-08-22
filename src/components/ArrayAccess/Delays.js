@@ -20,14 +20,27 @@ export class Delays {
             RemoveAuxArray: 0,
             Other: 0
         }
-        this.DELAY_INC_CONST = 1000
+        this.DELAY_INC_CONST = 3000
+        this.restoreDelayIncFactor()
         this.updateDelayInc()
         // this.delayIncFactor = this.DELAY_INC_CONST-arrayVisualizer.getArrLength()*3
         // this.delayInc = this.delayIncFactor/arrayVisualizer.getArrLength()
     }
 
-    updateDelayInc(){
+    setDelayIncFactor(val){
+        this.delayIncFactor = val
+        this.updateDelayInc()
+    }
+
+    // setDelay
+
+    restoreDelayIncFactor(){
         this.delayIncFactor = this.DELAY_INC_CONST
+        this.updateDelayInc()
+    }
+
+    updateDelayInc(){
+        // this.delayIncFactor = this.DELAY_INC_CONST
         this.delayInc = this.delayIncFactor/this.arrayVisualizer.getArrLength()
     }
 
