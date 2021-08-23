@@ -255,7 +255,8 @@ export class TimSort extends Sort {
                 const mid = (left + right) >>> 1
 
                 // if (compare(pivot, array[mid]) < 0) {
-                if (pivot.getValue() < this.Reads.readValue(mid)) {
+                // if (pivot.getValue() < this.Reads.readValue(mid)) {
+                if (this.Reads.compareValues(pivot, this.Reads.get(mid)) < 0) {
                     right = mid
                 } else {
                     left = mid + 1
