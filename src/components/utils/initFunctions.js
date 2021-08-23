@@ -23,5 +23,8 @@ export let initFunctions = {
     manySimular: function (x, length){
         let divider = Math.trunc(length/GAP_FACTOR)
         return Math.trunc(x/divider)*divider
+    },
+    sineWave: function (x, length){
+        return (Math.sin(x/length*Math.PI*2)*length+length)/2
     }
 }
