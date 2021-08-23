@@ -299,7 +299,7 @@ export class ArrayVisualizer extends React.Component {
                     <ArrayWindow array={this.state.array} mainArray={this.state.array} height={this.showAuxArrays ? 100/(1+objLength(this.state.auxArrays)) : 100} visualProps={this.visualStyle}/>
                 </div>
                 <div>
-                    <Controls arrayVisualizer={this} sorts={this.Sorts}/>
+                    <Controls arrayVisualizer={this} Sorts={this.Sorts}/>
                 </div>
             </div>
         )

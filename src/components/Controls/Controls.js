@@ -7,13 +7,13 @@ import {shuffles} from "../utils/shuffles";
 export class Controls extends React.PureComponent {
     isControlShow
     arrayVisualizer
-    sorts
+    Sorts
 
     constructor(props) {
         super(props);
         this.isControlShow = true;
         this.arrayVisualizer = props.arrayVisualizer
-        this.sorts = props.sorts
+        this.Sorts = props.Sorts
         this.arrayVisualizer.updateArrLength(this.arrayVisualizer.DEFAULT_ARR_LEN)
         // this.arrayVisualizer.initArray(initFunctions.linear)
     }
@@ -60,7 +60,7 @@ export class Controls extends React.PureComponent {
 
     sortArray(sortName) {
         this.stopSort()
-        this.sorts.runSort(sortName, 0, this.arrayVisualizer.getArrLength() - 1)
+        this.Sorts.runSort(sortName, 0, this.arrayVisualizer.getArrLength() - 1)
     }
 
     stopSort() {
@@ -87,7 +87,7 @@ export class Controls extends React.PureComponent {
 
     getSorts() {
         let tmp = []
-        let sortsNames = this.sorts.getSortsPaths()
+        let sortsNames = this.Sorts.getSortsPaths()
         for (let i of sortsNames) {
             tmp.push(
                 <button key={i} onClick={this.sortArray.bind(this, i)}>{i}</button>)
